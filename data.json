@@ -91,7 +91,7 @@
                 "vessel": "Spirit of Vancouver Island",
                 "scheduledDeparture": "9:00 PM",
                 "actualDeparture": "9:04 PM",
-                "arrivalTime": "ETA: 10:39 PM",
+                "arrivalTime": "10:30 PM",
                 "status": "On Time"
             }
         ]
@@ -166,15 +166,15 @@
                 "vessel": "Queen of Alberni",
                 "scheduledDeparture": "8:15 PM",
                 "actualDeparture": "8:28 PM",
-                "arrivalTime": "ETA: 10:28 PM",
+                "arrivalTime": "10:22 PM",
                 "status": "Heavy traffic volume"
             },
             {
                 "vessel": "Coastal Inspiration",
                 "scheduledDeparture": "10:45 PM",
-                "actualDeparture": "",
-                "arrivalTime": "",
-                "status": ""
+                "actualDeparture": "10:47 PM",
+                "arrivalTime": "ETA: 12:47 AM",
+                "status": "On Time"
             }
         ]
     },
@@ -311,7 +311,7 @@
                 "vessel": "Mayne Queen",
                 "scheduledDeparture": "7:55 PM",
                 "actualDeparture": "8:08 PM",
-                "arrivalTime": "ETA: 10:08 PM",
+                "arrivalTime": "...",
                 "status": "Sewage removal delays"
             }
         ]
@@ -752,9 +752,9 @@
             {
                 "vessel": "Queen of Cowichan",
                 "scheduledDeparture": "9:45 PM",
-                "actualDeparture": "",
-                "arrivalTime": "",
-                "status": ""
+                "actualDeparture": "10:38 PM",
+                "arrivalTime": "ETA: 11:18 PM",
+                "status": "Ongoing delays due to earlier mechanical issues"
             }
         ]
     },
