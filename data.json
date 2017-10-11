@@ -469,9 +469,9 @@
             {
                 "vessel": "Queen of Alberni",
                 "scheduledDeparture": "10:45 PM",
-                "actualDeparture": "",
-                "arrivalTime": "",
-                "status": ""
+                "actualDeparture": "10:54 PM",
+                "arrivalTime": "ETA: 12:54 AM",
+                "status": "On Time"
             }
         ]
     },
