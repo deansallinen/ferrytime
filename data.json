@@ -463,7 +463,7 @@
                 "vessel": "Coastal Inspiration",
                 "scheduledDeparture": "8:15 PM",
                 "actualDeparture": "8:17 PM",
-                "arrivalTime": "ETA: 10:17 PM",
+                "arrivalTime": "10:08 PM",
                 "status": "On Time"
             },
             {
@@ -822,7 +822,7 @@
                 "vessel": "Queen of Cowichan",
                 "scheduledDeparture": "9:40 PM",
                 "actualDeparture": "9:38 PM",
-                "arrivalTime": "ETA: 10:20 PM",
+                "arrivalTime": "10:14 PM",
                 "status": "On Time"
             }
         ]
