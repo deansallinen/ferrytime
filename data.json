@@ -1,0 +1,830 @@
+[
+    {
+        "routeName": "Tsawwassen to Swartz Bay",
+        "sailingTime": "1 hour 35 minutes",
+        "schedule": [
+            {
+                "vessel": "Queen of New Westminster",
+                "scheduledDeparture": "6:00 AM",
+                "actualDeparture": "6:01 AM",
+                "arrivalTime": "7:28 AM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Coastal Celebration",
+                "scheduledDeparture": "7:00 AM",
+                "actualDeparture": "7:00 AM",
+                "arrivalTime": "8:32 AM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Coastal Renaissance",
+                "scheduledDeparture": "8:00 AM",
+                "actualDeparture": "8:04 AM",
+                "arrivalTime": "9:30 AM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Spirit of Vancouver Island",
+                "scheduledDeparture": "9:00 AM",
+                "actualDeparture": "9:00 AM",
+                "arrivalTime": "10:32 AM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Queen of New Westminster",
+                "scheduledDeparture": "10:00 AM",
+                "actualDeparture": "10:02 AM",
+                "arrivalTime": "11:27 AM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Coastal Celebration",
+                "scheduledDeparture": "11:00 AM",
+                "actualDeparture": "11:40 AM",
+                "arrivalTime": "...",
+                "status": "Mechanical difficulties with vessel"
+            },
+            {
+                "vessel": "Coastal Renaissance",
+                "scheduledDeparture": "12:00 PM",
+                "actualDeparture": "12:07 PM",
+                "arrivalTime": "...",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Spirit of Vancouver Island",
+                "scheduledDeparture": "1:00 PM",
+                "actualDeparture": "1:00 PM",
+                "arrivalTime": "2:27 PM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Coastal Celebration",
+                "scheduledDeparture": "3:00 PM",
+                "actualDeparture": "3:34 PM",
+                "arrivalTime": "4:54 PM",
+                "status": "Mechanical difficulties with vessel"
+            },
+            {
+                "vessel": "Coastal Renaissance",
+                "scheduledDeparture": "4:00 PM",
+                "actualDeparture": "4:14 PM",
+                "arrivalTime": "5:34 PM",
+                "status": "Ongoing delay due to earlier operational delay"
+            },
+            {
+                "vessel": "Spirit of Vancouver Island",
+                "scheduledDeparture": "5:00 PM",
+                "actualDeparture": "4:59 PM",
+                "arrivalTime": "6:28 PM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Coastal Celebration",
+                "scheduledDeparture": "7:00 PM",
+                "actualDeparture": "7:32 PM",
+                "arrivalTime": "8:56 PM",
+                "status": "Ongoing delays due to earlier mechanical issues"
+            },
+            {
+                "vessel": "Spirit of Vancouver Island",
+                "scheduledDeparture": "9:00 PM",
+                "actualDeparture": "9:04 PM",
+                "arrivalTime": "ETA: 10:39 PM",
+                "status": "On Time"
+            }
+        ]
+    },
+    {
+        "routeName": "Tsawwassen to Southern Gulf Islands",
+        "sailingTime": "Variable",
+        "schedule": [
+            {
+                "vessel": "Salish Raven",
+                "scheduledDeparture": "9:55 AM",
+                "actualDeparture": "10:05 AM",
+                "arrivalTime": "...",
+                "status": "Loading delay"
+            },
+            {
+                "vessel": "Salish Raven",
+                "scheduledDeparture": "7:15 PM",
+                "actualDeparture": "7:35 PM",
+                "arrivalTime": "...",
+                "status": "Operational delay"
+            }
+        ]
+    },
+    {
+        "routeName": "Tsawwassen to Duke Point",
+        "sailingTime": "2 hours",
+        "schedule": [
+            {
+                "vessel": "Queen of Alberni",
+                "scheduledDeparture": "5:15 AM",
+                "actualDeparture": "5:14 AM",
+                "arrivalTime": "7:06 AM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Coastal Inspiration",
+                "scheduledDeparture": "7:45 AM",
+                "actualDeparture": "7:45 AM",
+                "arrivalTime": "9:52 AM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Queen of Alberni",
+                "scheduledDeparture": "10:15 AM",
+                "actualDeparture": "10:14 AM",
+                "arrivalTime": "12:08 PM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Coastal Inspiration",
+                "scheduledDeparture": "12:45 PM",
+                "actualDeparture": "12:53 PM",
+                "arrivalTime": "2:46 PM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Queen of Alberni",
+                "scheduledDeparture": "3:15 PM",
+                "actualDeparture": "3:17 PM",
+                "arrivalTime": "5:12 PM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Coastal Inspiration",
+                "scheduledDeparture": "5:45 PM",
+                "actualDeparture": "5:52 PM",
+                "arrivalTime": "7:39 PM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Queen of Alberni",
+                "scheduledDeparture": "8:15 PM",
+                "actualDeparture": "8:28 PM",
+                "arrivalTime": "ETA: 10:28 PM",
+                "status": "Heavy traffic volume"
+            },
+            {
+                "vessel": "Coastal Inspiration",
+                "scheduledDeparture": "10:45 PM",
+                "actualDeparture": "",
+                "arrivalTime": "",
+                "status": ""
+            }
+        ]
+    },
+    {
+        "routeName": "Swartz Bay to Fulford Harbour (Saltspring Is.)",
+        "sailingTime": "35 minutes",
+        "schedule": [
+            {
+                "vessel": "Skeena Queen",
+                "scheduledDeparture": "7:00 AM",
+                "actualDeparture": "7:06 AM",
+                "arrivalTime": "7:36 AM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Skeena Queen",
+                "scheduledDeparture": "9:00 AM",
+                "actualDeparture": "9:00 AM",
+                "arrivalTime": "9:32 AM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Skeena Queen",
+                "scheduledDeparture": "11:00 AM",
+                "actualDeparture": "10:59 AM",
+                "arrivalTime": "11:32 AM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Skeena Queen",
+                "scheduledDeparture": "1:00 PM",
+                "actualDeparture": "12:57 PM",
+                "arrivalTime": "1:28 PM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Skeena Queen",
+                "scheduledDeparture": "3:00 PM",
+                "actualDeparture": "2:59 PM",
+                "arrivalTime": "3:28 PM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Skeena Queen",
+                "scheduledDeparture": "5:00 PM",
+                "actualDeparture": "5:06 PM",
+                "arrivalTime": "5:36 PM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Skeena Queen",
+                "scheduledDeparture": "7:00 PM",
+                "actualDeparture": "7:00 PM",
+                "arrivalTime": "7:30 PM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Skeena Queen",
+                "scheduledDeparture": "9:00 PM",
+                "actualDeparture": "9:00 PM",
+                "arrivalTime": "9:31 PM",
+                "status": "On Time"
+            }
+        ]
+    },
+    {
+        "routeName": "Swartz Bay to Southern Gulf Islands",
+        "sailingTime": "Variable",
+        "schedule": [
+            {
+                "vessel": "Mayne Queen",
+                "scheduledDeparture": "5:00 AM",
+                "actualDeparture": "4:58 AM",
+                "arrivalTime": "...",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Queen of Cumberland",
+                "scheduledDeparture": "5:05 AM",
+                "actualDeparture": "5:05 AM",
+                "arrivalTime": "...",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Queen of Cumberland",
+                "scheduledDeparture": "8:15 AM",
+                "actualDeparture": "8:28 AM",
+                "arrivalTime": "9:08 AM",
+                "status": "Loading delay"
+            },
+            {
+                "vessel": "Mayne Queen",
+                "scheduledDeparture": "9:10 AM",
+                "actualDeparture": "9:08 AM",
+                "arrivalTime": "...",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Queen of Cumberland",
+                "scheduledDeparture": "10:10 AM",
+                "actualDeparture": "10:22 AM",
+                "arrivalTime": "...",
+                "status": "Ongoing delays due to earlier incident"
+            },
+            {
+                "vessel": "Queen of Cumberland",
+                "scheduledDeparture": "2:20 PM",
+                "actualDeparture": "2:23 PM",
+                "arrivalTime": "3:02 PM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Mayne Queen",
+                "scheduledDeparture": "3:10 PM",
+                "actualDeparture": "3:09 PM",
+                "arrivalTime": "...",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Queen of Cumberland",
+                "scheduledDeparture": "4:20 PM",
+                "actualDeparture": "4:19 PM",
+                "arrivalTime": "...",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Queen of Cumberland",
+                "scheduledDeparture": "6:40 PM",
+                "actualDeparture": "6:55 PM",
+                "arrivalTime": "...",
+                "status": "Ongoing traffic volume delay"
+            },
+            {
+                "vessel": "Mayne Queen",
+                "scheduledDeparture": "7:55 PM",
+                "actualDeparture": "8:08 PM",
+                "arrivalTime": "ETA: 10:08 PM",
+                "status": "Sewage removal delays"
+            }
+        ]
+    },
+    {
+        "routeName": "Swartz Bay to Tsawwassen",
+        "sailingTime": "1 hour 35 minutes",
+        "schedule": [
+            {
+                "vessel": "Coastal Renaissance",
+                "scheduledDeparture": "6:00 AM",
+                "actualDeparture": "6:01 AM",
+                "arrivalTime": "7:30 AM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Spirit of Vancouver Island",
+                "scheduledDeparture": "7:00 AM",
+                "actualDeparture": "7:02 AM",
+                "arrivalTime": "8:26 AM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Queen of New Westminster",
+                "scheduledDeparture": "8:00 AM",
+                "actualDeparture": "8:00 AM",
+                "arrivalTime": "9:26 AM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Coastal Celebration",
+                "scheduledDeparture": "9:00 AM",
+                "actualDeparture": "9:06 AM",
+                "arrivalTime": "10:32 AM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Coastal Renaissance",
+                "scheduledDeparture": "10:00 AM",
+                "actualDeparture": "10:02 AM",
+                "arrivalTime": "11:36 AM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Spirit of Vancouver Island",
+                "scheduledDeparture": "11:00 AM",
+                "actualDeparture": "11:01 AM",
+                "arrivalTime": "12:32 PM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Queen of New Westminster",
+                "scheduledDeparture": "12:00 PM",
+                "actualDeparture": "12:04 PM",
+                "arrivalTime": "1:32 PM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Coastal Celebration",
+                "scheduledDeparture": "1:00 PM",
+                "actualDeparture": "1:35 PM",
+                "arrivalTime": "3:02 PM",
+                "status": "Ongoing delays due to earlier mechanical issues"
+            },
+            {
+                "vessel": "Coastal Renaissance",
+                "scheduledDeparture": "2:00 PM",
+                "actualDeparture": "2:12 PM",
+                "arrivalTime": "3:42 PM",
+                "status": "Vessel congestion at berths"
+            },
+            {
+                "vessel": "Spirit of Vancouver Island",
+                "scheduledDeparture": "3:00 PM",
+                "actualDeparture": "3:00 PM",
+                "arrivalTime": "4:28 PM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Coastal Celebration",
+                "scheduledDeparture": "5:00 PM",
+                "actualDeparture": "5:34 PM",
+                "arrivalTime": "6:58 PM",
+                "status": "Ongoing delays due to earlier mechanical issues"
+            },
+            {
+                "vessel": "Spirit of Vancouver Island",
+                "scheduledDeparture": "7:00 PM",
+                "actualDeparture": "7:09 PM",
+                "arrivalTime": "8:38 PM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Coastal Celebration",
+                "scheduledDeparture": "9:00 PM",
+                "actualDeparture": "9:22 PM",
+                "arrivalTime": "ETA: 10:57 PM",
+                "status": "Ongoing delays due to earlier mechanical issues"
+            }
+        ]
+    },
+    {
+        "routeName": "Duke Point to Tsawwassen",
+        "sailingTime": "2 hours",
+        "schedule": [
+            {
+                "vessel": "Coastal Inspiration",
+                "scheduledDeparture": "5:15 AM",
+                "actualDeparture": "5:14 AM",
+                "arrivalTime": "7:16 AM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Queen of Alberni",
+                "scheduledDeparture": "7:45 AM",
+                "actualDeparture": "7:43 AM",
+                "arrivalTime": "9:36 AM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Coastal Inspiration",
+                "scheduledDeparture": "10:15 AM",
+                "actualDeparture": "10:26 AM",
+                "arrivalTime": "12:18 PM",
+                "status": "Heavy traffic volume"
+            },
+            {
+                "vessel": "Queen of Alberni",
+                "scheduledDeparture": "12:45 PM",
+                "actualDeparture": "12:49 PM",
+                "arrivalTime": "2:36 PM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Coastal Inspiration",
+                "scheduledDeparture": "3:15 PM",
+                "actualDeparture": "3:24 PM",
+                "arrivalTime": "5:16 PM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Queen of Alberni",
+                "scheduledDeparture": "5:45 PM",
+                "actualDeparture": "5:51 PM",
+                "arrivalTime": "7:46 PM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Coastal Inspiration",
+                "scheduledDeparture": "8:15 PM",
+                "actualDeparture": "8:17 PM",
+                "arrivalTime": "ETA: 10:17 PM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Queen of Alberni",
+                "scheduledDeparture": "10:45 PM",
+                "actualDeparture": "",
+                "arrivalTime": "",
+                "status": ""
+            }
+        ]
+    },
+    {
+        "routeName": "Departure Bay to Horseshoe Bay",
+        "sailingTime": "1 hour 40 minutes",
+        "schedule": [
+            {
+                "vessel": "Queen of Cowichan",
+                "scheduledDeparture": "6:30 AM",
+                "actualDeparture": "6:34 AM",
+                "arrivalTime": "8:24 AM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Queen of Oak Bay",
+                "scheduledDeparture": "8:30 AM",
+                "actualDeparture": "8:44 AM",
+                "arrivalTime": "10:24 AM",
+                "status": "Heavy traffic volume"
+            },
+            {
+                "vessel": "Queen of Cowichan",
+                "scheduledDeparture": "10:30 AM",
+                "actualDeparture": "11:03 AM",
+                "arrivalTime": "12:42 PM",
+                "status": "Ongoing delays due to earlier mechanical issues"
+            },
+            {
+                "vessel": "Queen of Oak Bay",
+                "scheduledDeparture": "12:30 PM",
+                "actualDeparture": "1:10 PM",
+                "arrivalTime": "2:50 PM",
+                "status": "Ongoing traffic volume delay"
+            },
+            {
+                "vessel": "Queen of Cowichan",
+                "scheduledDeparture": "3:00 PM",
+                "actualDeparture": "3:38 PM",
+                "arrivalTime": "5:16 PM",
+                "status": "Ongoing traffic volume delay"
+            },
+            {
+                "vessel": "Queen of Oak Bay",
+                "scheduledDeparture": "5:00 PM",
+                "actualDeparture": "5:39 PM",
+                "arrivalTime": "7:20 PM",
+                "status": "Ongoing traffic volume delay"
+            },
+            {
+                "vessel": "Queen of Oak Bay",
+                "scheduledDeparture": "9:00 PM",
+                "actualDeparture": "9:57 PM",
+                "arrivalTime": "ETA: 11:37 PM",
+                "status": "Ongoing traffic volume delay"
+            }
+        ]
+    },
+    {
+        "routeName": "Horseshoe Bay to Snug Cove (Bowen Is.)",
+        "sailingTime": "20 minutes",
+        "schedule": [
+            {
+                "vessel": "Queen of Capilano",
+                "scheduledDeparture": "6:00 AM",
+                "actualDeparture": "5:59 AM",
+                "arrivalTime": "6:16 AM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Queen of Capilano",
+                "scheduledDeparture": "7:00 AM",
+                "actualDeparture": "7:01 AM",
+                "arrivalTime": "7:19 AM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Queen of Capilano",
+                "scheduledDeparture": "8:00 AM",
+                "actualDeparture": "8:04 AM",
+                "arrivalTime": "8:22 AM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Queen of Capilano",
+                "scheduledDeparture": "9:00 AM",
+                "actualDeparture": "9:08 AM",
+                "arrivalTime": "9:26 AM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Queen of Capilano",
+                "scheduledDeparture": "10:00 AM",
+                "actualDeparture": "10:11 AM",
+                "arrivalTime": "10:28 AM",
+                "status": "Ongoing delay due to earlier operational delay"
+            },
+            {
+                "vessel": "Queen of Capilano",
+                "scheduledDeparture": "11:00 AM",
+                "actualDeparture": "11:11 AM",
+                "arrivalTime": "11:28 AM",
+                "status": "Ongoing traffic volume delay"
+            },
+            {
+                "vessel": "Queen of Capilano",
+                "scheduledDeparture": "12:00 PM",
+                "actualDeparture": "12:09 PM",
+                "arrivalTime": "12:26 PM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Queen of Capilano",
+                "scheduledDeparture": "2:25 PM",
+                "actualDeparture": "2:25 PM",
+                "arrivalTime": "2:42 PM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Queen of Capilano",
+                "scheduledDeparture": "3:30 PM",
+                "actualDeparture": "3:30 PM",
+                "arrivalTime": "3:48 PM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Queen of Capilano",
+                "scheduledDeparture": "4:30 PM",
+                "actualDeparture": "4:33 PM",
+                "arrivalTime": "4:53 PM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Queen of Capilano",
+                "scheduledDeparture": "5:30 PM",
+                "actualDeparture": "5:33 PM",
+                "arrivalTime": "5:51 PM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Queen of Capilano",
+                "scheduledDeparture": "6:30 PM",
+                "actualDeparture": "6:30 PM",
+                "arrivalTime": "6:48 PM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Queen of Capilano",
+                "scheduledDeparture": "7:30 PM",
+                "actualDeparture": "7:29 PM",
+                "arrivalTime": "7:46 PM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Queen of Capilano",
+                "scheduledDeparture": "8:30 PM",
+                "actualDeparture": "8:30 PM",
+                "arrivalTime": "8:50 PM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Queen of Capilano",
+                "scheduledDeparture": "9:30 PM",
+                "actualDeparture": "9:29 PM",
+                "arrivalTime": "9:46 PM",
+                "status": "On Time"
+            }
+        ]
+    },
+    {
+        "routeName": "Horseshoe Bay to Departure Bay",
+        "sailingTime": "1 hour 40 minutes",
+        "schedule": [
+            {
+                "vessel": "Queen of Oak Bay",
+                "scheduledDeparture": "6:30 AM",
+                "actualDeparture": "6:30 AM",
+                "arrivalTime": "...",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Queen of Cowichan",
+                "scheduledDeparture": "8:30 AM",
+                "actualDeparture": "8:51 AM",
+                "arrivalTime": "10:30 AM",
+                "status": "Mechanical difficulties with vessel"
+            },
+            {
+                "vessel": "Queen of Oak Bay",
+                "scheduledDeparture": "10:30 AM",
+                "actualDeparture": "10:54 AM",
+                "arrivalTime": "12:36 PM",
+                "status": "Heavy traffic volume"
+            },
+            {
+                "vessel": "Queen of Cowichan",
+                "scheduledDeparture": "12:30 PM",
+                "actualDeparture": "1:15 PM",
+                "arrivalTime": "2:54 PM",
+                "status": "Ongoing delays due to earlier mechanical issues"
+            },
+            {
+                "vessel": "Queen of Oak Bay",
+                "scheduledDeparture": "3:00 PM",
+                "actualDeparture": "3:23 PM",
+                "arrivalTime": "5:02 PM",
+                "status": "Ongoing traffic volume delay"
+            },
+            {
+                "vessel": "Queen of Cowichan",
+                "scheduledDeparture": "5:00 PM",
+                "actualDeparture": "5:49 PM",
+                "arrivalTime": "7:26 PM",
+                "status": "Ongoing delays due to earlier mechanical issues"
+            },
+            {
+                "vessel": "Queen of Oak Bay",
+                "scheduledDeparture": "7:00 PM",
+                "actualDeparture": "7:51 PM",
+                "arrivalTime": "9:31 PM",
+                "status": "Ongoing traffic volume delay"
+            }
+        ]
+    },
+    {
+        "routeName": "Horseshoe Bay to Langdale",
+        "sailingTime": "40 minutes",
+        "schedule": [
+            {
+                "vessel": "Queen of Surrey",
+                "scheduledDeparture": "7:20 AM",
+                "actualDeparture": "7:37 AM",
+                "arrivalTime": "8:16 AM",
+                "status": "Heavy traffic volume"
+            },
+            {
+                "vessel": "Queen of Surrey",
+                "scheduledDeparture": "9:25 AM",
+                "actualDeparture": "9:51 AM",
+                "arrivalTime": "10:30 AM",
+                "status": "Ongoing traffic volume delay"
+            },
+            {
+                "vessel": "Queen of Surrey",
+                "scheduledDeparture": "11:30 AM",
+                "actualDeparture": "12:04 PM",
+                "arrivalTime": "12:42 PM",
+                "status": "Ongoing traffic volume delay"
+            },
+            {
+                "vessel": "Queen of Surrey",
+                "scheduledDeparture": "1:35 PM",
+                "actualDeparture": "2:24 PM",
+                "arrivalTime": "3:02 PM",
+                "status": "Ongoing traffic volume delay"
+            },
+            {
+                "vessel": "Queen of Surrey",
+                "scheduledDeparture": "3:50 PM",
+                "actualDeparture": "4:43 PM",
+                "arrivalTime": "5:29 PM",
+                "status": "Ongoing traffic volume delay"
+            },
+            {
+                "vessel": "Queen of Surrey",
+                "scheduledDeparture": "5:50 PM",
+                "actualDeparture": "7:07 PM",
+                "arrivalTime": "7:54 PM",
+                "status": "Ongoing traffic volume delay"
+            },
+            {
+                "vessel": "Queen of Surrey",
+                "scheduledDeparture": "7:50 PM",
+                "actualDeparture": "",
+                "arrivalTime": "",
+                "status": "Cancelled"
+            },
+            {
+                "vessel": "Queen of Cowichan",
+                "scheduledDeparture": "9:45 PM",
+                "actualDeparture": "",
+                "arrivalTime": "",
+                "status": ""
+            }
+        ]
+    },
+    {
+        "routeName": "Langdale to Horseshoe Bay",
+        "sailingTime": "40 minutes",
+        "schedule": [
+            {
+                "vessel": "Queen of Surrey",
+                "scheduledDeparture": "6:20 AM",
+                "actualDeparture": "6:24 AM",
+                "arrivalTime": "7:02 AM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Queen of Surrey",
+                "scheduledDeparture": "8:25 AM",
+                "actualDeparture": "8:46 AM",
+                "arrivalTime": "9:24 AM",
+                "status": "Heavy traffic volume"
+            },
+            {
+                "vessel": "Queen of Surrey",
+                "scheduledDeparture": "10:25 AM",
+                "actualDeparture": "10:57 AM",
+                "arrivalTime": "11:36 AM",
+                "status": "Heavy traffic volume"
+            },
+            {
+                "vessel": "Queen of Surrey",
+                "scheduledDeparture": "12:35 PM",
+                "actualDeparture": "1:14 PM",
+                "arrivalTime": "1:54 PM",
+                "status": "Ongoing traffic volume delay"
+            },
+            {
+                "vessel": "Queen of Surrey",
+                "scheduledDeparture": "2:45 PM",
+                "actualDeparture": "3:35 PM",
+                "arrivalTime": "4:12 PM",
+                "status": "Ongoing traffic volume delay"
+            },
+            {
+                "vessel": "Queen of Surrey",
+                "scheduledDeparture": "4:50 PM",
+                "actualDeparture": "5:54 PM",
+                "arrivalTime": "6:41 PM",
+                "status": "Ongoing traffic volume delay"
+            },
+            {
+                "vessel": "Queen of Surrey",
+                "scheduledDeparture": "6:50 PM",
+                "actualDeparture": "",
+                "arrivalTime": "",
+                "status": "Cancelled"
+            },
+            {
+                "vessel": "Queen of Surrey",
+                "scheduledDeparture": "8:45 PM",
+                "actualDeparture": "",
+                "arrivalTime": "",
+                "status": "Cancelled"
+            },
+            {
+                "vessel": "Queen of Cowichan",
+                "scheduledDeparture": "9:40 PM",
+                "actualDeparture": "9:38 PM",
+                "arrivalTime": "ETA: 10:20 PM",
+                "status": "On Time"
+            }
+        ]
+    }
+]

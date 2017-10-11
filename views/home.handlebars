@@ -1,0 +1,44 @@
+<header><h1>Ferry Tracker</h1>
+{{!--<h2>headingtwo</h2>--}}
+<p>This is a simple website to show today's sailings on BC Ferries. Designed and 
+built by <a href="https://www.twitter.com/deansallinen">@deansallinen</a> using Node.js</p>
+{{!--<h4>headingfour</h4>--}}
+{{!--<h5>headingfive</h5>--}}
+{{!--<h6>headingsix</h6>--}}
+</header>
+<div class="schedule">
+    <h3>Current Schedule</h3>
+    {{#each routes}}
+    <div class="route" id="{{routeName}}">
+        <div class="accordion">
+            {{!--<a href="#{{routeName}}">--}}
+                <h3 class="routeName">{{routeName}} </h3>
+            {{!--</a>--}}
+        </div>
+        <div class="panel">
+            <h6 class="sailingTime">Sailing Time: {{sailingTime}}</h6>
+            <div class="sailings">
+                <div class="sailing heading">
+                    <h5 class="scheduledDeparture">Departure</h5>
+                    {{!--
+                    <div class="actualDeparture heading">Actual</div>--}}
+                    <h5 class="arrivalTime">Arrival</h5>
+                    {{!--
+                    <div class="status heading">Status</div>--}}
+                </div>
+                {{#each schedule}}
+                <div class="sailing">
+                    <div class="scheduledDeparture">{{scheduledDeparture}}</div>
+                    {{!--
+                    <div class="actualDeparture">{{actualDeparture}}</div>--}}
+                    <div class="arrivalTime">{{arrivalTime}}</div>
+                    {{!--
+                    <div class="status">{{status}}</div>--}} {{!--
+                    <div class="vessel">{{vessel}}</div>--}}
+                </div>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+    {{/each}}
+</div>
