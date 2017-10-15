@@ -27,16 +27,16 @@
             {
                 "vessel": "Spirit of Vancouver Island",
                 "scheduledDeparture": "1:00 PM",
-                "actualDeparture": "",
-                "arrivalTime": "",
-                "status": ""
+                "actualDeparture": "1:05 PM",
+                "arrivalTime": "ETA: 2:40 PM",
+                "status": "On Time"
             },
             {
                 "vessel": "Coastal Renaissance",
                 "scheduledDeparture": "2:00 PM",
-                "actualDeparture": "",
-                "arrivalTime": "",
-                "status": ""
+                "actualDeparture": "1:59 PM",
+                "arrivalTime": "ETA: 3:35 PM",
+                "status": "On Time"
             },
             {
                 "vessel": "Coastal Celebration",
@@ -116,9 +116,9 @@
             {
                 "vessel": "Coastal Inspiration",
                 "scheduledDeparture": "12:45 PM",
-                "actualDeparture": "",
-                "arrivalTime": "",
-                "status": ""
+                "actualDeparture": "12:49 PM",
+                "arrivalTime": "ETA: 2:49 PM",
+                "status": "On Time"
             },
             {
                 "vessel": "Queen of Alberni",
@@ -171,9 +171,9 @@
             {
                 "vessel": "Skeena Queen",
                 "scheduledDeparture": "1:00 PM",
-                "actualDeparture": "",
-                "arrivalTime": "",
-                "status": ""
+                "actualDeparture": "12:58 PM",
+                "arrivalTime": "1:26 PM",
+                "status": "On Time"
             },
             {
                 "vessel": "Skeena Queen",
@@ -296,15 +296,15 @@
                 "vessel": "Coastal Renaissance",
                 "scheduledDeparture": "12:00 PM",
                 "actualDeparture": "12:05 PM",
-                "arrivalTime": "ETA: 1:40 PM",
+                "arrivalTime": "...",
                 "status": "On Time"
             },
             {
                 "vessel": "Coastal Celebration",
                 "scheduledDeparture": "1:00 PM",
-                "actualDeparture": "",
-                "arrivalTime": "",
-                "status": ""
+                "actualDeparture": "1:11 PM",
+                "arrivalTime": "ETA: 2:46 PM",
+                "status": "Loading delay"
             },
             {
                 "vessel": "Spirit of Vancouver Island",
@@ -419,9 +419,9 @@
             {
                 "vessel": "Queen of Oak Bay",
                 "scheduledDeparture": "12:30 PM",
-                "actualDeparture": "",
-                "arrivalTime": "",
-                "status": ""
+                "actualDeparture": "12:55 PM",
+                "arrivalTime": "ETA: 2:35 PM",
+                "status": "Ongoing traffic volume delay"
             },
             {
                 "vessel": "Queen of Cowichan",
@@ -578,9 +578,9 @@
             {
                 "vessel": "Queen of Cowichan",
                 "scheduledDeparture": "12:30 PM",
-                "actualDeparture": "",
-                "arrivalTime": "",
-                "status": ""
+                "actualDeparture": "12:52 PM",
+                "arrivalTime": "ETA: 2:32 PM",
+                "status": "Heavy traffic volume"
             },
             {
                 "vessel": "Queen of Oak Bay",
@@ -640,9 +640,9 @@
             {
                 "vessel": "Queen of Surrey",
                 "scheduledDeparture": "1:35 PM",
-                "actualDeparture": "",
-                "arrivalTime": "",
-                "status": ""
+                "actualDeparture": "1:39 PM",
+                "arrivalTime": "ETA: 2:19 PM",
+                "status": "On Time"
             },
             {
                 "vessel": "Queen of Surrey",
@@ -703,7 +703,7 @@
                 "vessel": "Queen of Surrey",
                 "scheduledDeparture": "12:35 PM",
                 "actualDeparture": "12:35 PM",
-                "arrivalTime": "ETA: 1:15 PM",
+                "arrivalTime": "1:15 PM",
                 "status": "On Time"
             },
             {
