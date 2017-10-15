@@ -19,6 +19,11 @@ header {
     margin-bottom: 1rem;
 }
 
+header h5 {
+    margin-top: 2rem;
+    margin-bottom: .5rem;
+}
+
 .schedule>h3 {
     margin-bottom: .5rem;
 }
@@ -95,8 +100,6 @@ a {
     margin-top: 1em;
 }
 
-.heading {}
-
 .sailing {
     margin-bottom: .5em;
     display: grid;
@@ -104,4 +107,14 @@ a {
     grid-gap: 2em;
     grid-template-columns: 1fr 1fr;
     grid-template-areas: "scheduledDeparture  arrivalTime  ";
+}
+
+footer {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+#twitter {
+    padding-bottom: .12rem;
+    border-bottom: 2px solid #aaa;
 }

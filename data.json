@@ -21,7 +21,7 @@
                 "vessel": "Coastal Celebration",
                 "scheduledDeparture": "11:00 AM",
                 "actualDeparture": "11:00 AM",
-                "arrivalTime": "ETA: 12:35 PM",
+                "arrivalTime": "12:34 PM",
                 "status": "On Time"
             },
             {
@@ -289,7 +289,7 @@
                 "vessel": "Spirit of Vancouver Island",
                 "scheduledDeparture": "11:00 AM",
                 "actualDeparture": "11:07 AM",
-                "arrivalTime": "ETA: 12:42 PM",
+                "arrivalTime": "12:32 PM",
                 "status": "On Time"
             },
             {
@@ -357,9 +357,9 @@
             {
                 "vessel": "Queen of Alberni",
                 "scheduledDeparture": "12:45 PM",
-                "actualDeparture": "",
-                "arrivalTime": "",
-                "status": ""
+                "actualDeparture": "12:44 PM",
+                "arrivalTime": "ETA: 2:45 PM",
+                "status": "On Time"
             },
             {
                 "vessel": "Coastal Inspiration",
@@ -572,7 +572,7 @@
                 "vessel": "Queen of Oak Bay",
                 "scheduledDeparture": "10:30 AM",
                 "actualDeparture": "10:45 AM",
-                "arrivalTime": "ETA: 12:25 PM",
+                "arrivalTime": "12:24 PM",
                 "status": "Heavy traffic volume"
             },
             {
@@ -702,9 +702,9 @@
             {
                 "vessel": "Queen of Surrey",
                 "scheduledDeparture": "12:35 PM",
-                "actualDeparture": "",
-                "arrivalTime": "",
-                "status": ""
+                "actualDeparture": "12:35 PM",
+                "arrivalTime": "ETA: 1:15 PM",
+                "status": "On Time"
             },
             {
                 "vessel": "Queen of Surrey",
