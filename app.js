@@ -32,6 +32,6 @@ app.get('/', function(req, res) {
     res.render('home', data);
 });
 
-app.listen(8080, function() {
+app.listen(process.env.PORT || 8080, function() {
     console.log('example app listening on port 8080!');
 });
