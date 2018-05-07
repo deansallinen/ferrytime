@@ -4,67 +4,74 @@
         "sailingTime": "1 hour 35 minutes",
         "schedule": [
             {
-                "vessel": "Coastal Celebration",
+                "vessel": "Coastal Renaissance",
                 "scheduledDeparture": "7:00 AM",
-                "actualDeparture": "7:00 AM",
-                "arrivalTime": "8:32 AM",
+                "actualDeparture": "7:04 AM",
+                "arrivalTime": "8:28 AM",
                 "status": "On Time"
             },
             {
                 "vessel": "Spirit of Vancouver Island",
                 "scheduledDeparture": "9:00 AM",
-                "actualDeparture": "9:01 AM",
-                "arrivalTime": "10:32 AM",
+                "actualDeparture": "9:03 AM",
+                "arrivalTime": "10:30 AM",
                 "status": "On Time"
             },
             {
-                "vessel": "Coastal Celebration",
+                "vessel": "Coastal Inspiration",
+                "scheduledDeparture": "10:00 AM",
+                "actualDeparture": "10:03 AM",
+                "arrivalTime": "11:28 AM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Coastal Renaissance",
                 "scheduledDeparture": "11:00 AM",
-                "actualDeparture": "11:00 AM",
-                "arrivalTime": "12:34 PM",
+                "actualDeparture": "11:03 AM",
+                "arrivalTime": "12:30 PM",
                 "status": "On Time"
             },
             {
                 "vessel": "Spirit of Vancouver Island",
                 "scheduledDeparture": "1:00 PM",
-                "actualDeparture": "1:05 PM",
-                "arrivalTime": "2:38 PM",
+                "actualDeparture": "1:07 PM",
+                "arrivalTime": "2:32 PM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Coastal Inspiration",
+                "scheduledDeparture": "2:00 PM",
+                "actualDeparture": "2:00 PM",
+                "arrivalTime": "3:26 PM",
                 "status": "On Time"
             },
             {
                 "vessel": "Coastal Renaissance",
-                "scheduledDeparture": "2:00 PM",
-                "actualDeparture": "1:59 PM",
-                "arrivalTime": "3:32 PM",
+                "scheduledDeparture": "3:00 PM",
+                "actualDeparture": "3:01 PM",
+                "arrivalTime": "4:30 PM",
                 "status": "On Time"
             },
             {
-                "vessel": "Coastal Celebration",
-                "scheduledDeparture": "3:00 PM",
-                "actualDeparture": "3:03 PM",
-                "arrivalTime": "4:28 PM",
+                "vessel": "Queen of New Westminster",
+                "scheduledDeparture": "4:00 PM",
+                "actualDeparture": "4:00 PM",
+                "arrivalTime": "5:28 PM",
                 "status": "On Time"
             },
             {
                 "vessel": "Spirit of Vancouver Island",
                 "scheduledDeparture": "5:00 PM",
-                "actualDeparture": "5:12 PM",
-                "arrivalTime": "ETA: 6:47 PM",
-                "status": "Ongoing traffic volume delay"
+                "actualDeparture": "5:01 PM",
+                "arrivalTime": "6:30 PM",
+                "status": "On Time"
             },
             {
                 "vessel": "Coastal Renaissance",
-                "scheduledDeparture": "6:00 PM",
-                "actualDeparture": "",
-                "arrivalTime": "",
-                "status": ""
-            },
-            {
-                "vessel": "Coastal Celebration",
                 "scheduledDeparture": "7:00 PM",
-                "actualDeparture": "",
-                "arrivalTime": "",
-                "status": ""
+                "actualDeparture": "7:01 PM",
+                "arrivalTime": "ETA: 8:36 PM",
+                "status": "On Time"
             },
             {
                 "vessel": "Spirit of Vancouver Island",
@@ -81,24 +88,17 @@
         "schedule": [
             {
                 "vessel": "Salish Raven",
-                "scheduledDeparture": "11:10 AM",
-                "actualDeparture": "11:08 AM",
+                "scheduledDeparture": "9:15 AM",
+                "actualDeparture": "9:25 AM",
+                "arrivalTime": "...",
+                "status": "Mechanical difficulties with terminal equipment"
+            },
+            {
+                "vessel": "Salish Raven",
+                "scheduledDeparture": "12:51 PM",
+                "actualDeparture": "12:52 PM",
                 "arrivalTime": "...",
                 "status": "On Time"
-            },
-            {
-                "vessel": "Salish Raven",
-                "scheduledDeparture": "5:40 PM",
-                "actualDeparture": "",
-                "arrivalTime": "",
-                "status": ""
-            },
-            {
-                "vessel": "Salish Raven",
-                "scheduledDeparture": "9:05 PM",
-                "actualDeparture": "",
-                "arrivalTime": "",
-                "status": ""
             }
         ]
     },
@@ -108,45 +108,45 @@
         "schedule": [
             {
                 "vessel": "Queen of Alberni",
-                "scheduledDeparture": "10:15 AM",
-                "actualDeparture": "10:14 AM",
-                "arrivalTime": "12:12 PM",
+                "scheduledDeparture": "5:15 AM",
+                "actualDeparture": "5:20 AM",
+                "arrivalTime": "7:20 AM",
                 "status": "On Time"
             },
             {
-                "vessel": "Coastal Inspiration",
+                "vessel": "Queen of Coquitlam",
+                "scheduledDeparture": "7:45 AM",
+                "actualDeparture": "7:54 AM",
+                "arrivalTime": "9:44 AM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Queen of Alberni",
+                "scheduledDeparture": "10:15 AM",
+                "actualDeparture": "10:17 AM",
+                "arrivalTime": "12:14 PM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Queen of Coquitlam",
                 "scheduledDeparture": "12:45 PM",
-                "actualDeparture": "12:49 PM",
-                "arrivalTime": "2:39 PM",
+                "actualDeparture": "12:48 PM",
+                "arrivalTime": "2:42 PM",
                 "status": "On Time"
             },
             {
                 "vessel": "Queen of Alberni",
                 "scheduledDeparture": "3:15 PM",
-                "actualDeparture": "3:19 PM",
-                "arrivalTime": "5:16 PM",
+                "actualDeparture": "3:15 PM",
+                "arrivalTime": "...",
                 "status": "On Time"
             },
             {
-                "vessel": "Coastal Inspiration",
+                "vessel": "Queen of Coquitlam",
                 "scheduledDeparture": "5:45 PM",
-                "actualDeparture": "",
-                "arrivalTime": "",
-                "status": ""
-            },
-            {
-                "vessel": "Queen of Alberni",
-                "scheduledDeparture": "8:15 PM",
-                "actualDeparture": "",
-                "arrivalTime": "",
-                "status": ""
-            },
-            {
-                "vessel": "Coastal Inspiration",
-                "scheduledDeparture": "10:45 PM",
-                "actualDeparture": "",
-                "arrivalTime": "",
-                "status": ""
+                "actualDeparture": "5:46 PM",
+                "arrivalTime": "ETA: 7:46 PM",
+                "status": "On Time"
             }
         ]
     },
@@ -156,45 +156,52 @@
         "schedule": [
             {
                 "vessel": "Skeena Queen",
+                "scheduledDeparture": "7:00 AM",
+                "actualDeparture": "7:02 AM",
+                "arrivalTime": "7:36 AM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Skeena Queen",
                 "scheduledDeparture": "9:00 AM",
-                "actualDeparture": "8:59 AM",
-                "arrivalTime": "9:32 AM",
+                "actualDeparture": "9:08 AM",
+                "arrivalTime": "9:40 AM",
                 "status": "On Time"
             },
             {
                 "vessel": "Skeena Queen",
                 "scheduledDeparture": "11:00 AM",
-                "actualDeparture": "10:59 AM",
-                "arrivalTime": "11:30 AM",
+                "actualDeparture": "11:03 AM",
+                "arrivalTime": "11:36 AM",
                 "status": "On Time"
             },
             {
                 "vessel": "Skeena Queen",
                 "scheduledDeparture": "1:00 PM",
-                "actualDeparture": "12:58 PM",
-                "arrivalTime": "1:26 PM",
+                "actualDeparture": "1:02 PM",
+                "arrivalTime": "1:36 PM",
                 "status": "On Time"
             },
             {
                 "vessel": "Skeena Queen",
                 "scheduledDeparture": "3:00 PM",
-                "actualDeparture": "3:00 PM",
-                "arrivalTime": "3:32 PM",
+                "actualDeparture": "2:58 PM",
+                "arrivalTime": "3:28 PM",
                 "status": "On Time"
             },
             {
                 "vessel": "Skeena Queen",
                 "scheduledDeparture": "5:00 PM",
-                "actualDeparture": "5:00 PM",
-                "arrivalTime": "ETA: 5:35 PM",
+                "actualDeparture": "4:59 PM",
+                "arrivalTime": "5:28 PM",
                 "status": "On Time"
             },
             {
                 "vessel": "Skeena Queen",
                 "scheduledDeparture": "7:00 PM",
-                "actualDeparture": "",
-                "arrivalTime": "",
-                "status": ""
+                "actualDeparture": "6:58 PM",
+                "arrivalTime": "ETA: 7:35 PM",
+                "status": "On Time"
             },
             {
                 "vessel": "Skeena Queen",
@@ -211,52 +218,45 @@
         "schedule": [
             {
                 "vessel": "Mayne Queen",
-                "scheduledDeparture": "5:45 AM",
-                "actualDeparture": "5:42 AM",
-                "arrivalTime": "6:56 AM",
-                "status": "On Time"
-            },
-            {
-                "vessel": "Queen of Cumberland",
-                "scheduledDeparture": "6:25 AM",
-                "actualDeparture": "6:25 AM",
+                "scheduledDeparture": "5:40 AM",
+                "actualDeparture": "5:39 AM",
                 "arrivalTime": "...",
                 "status": "On Time"
             },
             {
-                "vessel": "Queen of Cumberland",
+                "vessel": "Mayne Queen",
+                "scheduledDeparture": "8:20 AM",
+                "actualDeparture": "8:20 AM",
+                "arrivalTime": "...",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Salish Eagle",
                 "scheduledDeparture": "9:35 AM",
-                "actualDeparture": "9:38 AM",
+                "actualDeparture": "9:35 AM",
+                "arrivalTime": "...",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Salish Eagle",
+                "scheduledDeparture": "2:30 PM",
+                "actualDeparture": "2:29 PM",
                 "arrivalTime": "...",
                 "status": "On Time"
             },
             {
                 "vessel": "Mayne Queen",
-                "scheduledDeparture": "2:20 PM",
-                "actualDeparture": "2:17 PM",
-                "arrivalTime": "2:58 PM",
-                "status": "On Time"
-            },
-            {
-                "vessel": "Queen of Cumberland",
-                "scheduledDeparture": "2:40 PM",
-                "actualDeparture": "2:38 PM",
+                "scheduledDeparture": "3:40 PM",
+                "actualDeparture": "3:42 PM",
                 "arrivalTime": "...",
                 "status": "On Time"
             },
             {
-                "vessel": "Mayne Queen",
-                "scheduledDeparture": "4:10 PM",
-                "actualDeparture": "4:07 PM",
-                "arrivalTime": "ETA: 6:05 PM",
+                "vessel": "Salish Eagle",
+                "scheduledDeparture": "6:45 PM",
+                "actualDeparture": "6:49 PM",
+                "arrivalTime": "...",
                 "status": "On Time"
-            },
-            {
-                "vessel": "Queen of Cumberland",
-                "scheduledDeparture": "6:35 PM",
-                "actualDeparture": "",
-                "arrivalTime": "",
-                "status": ""
             },
             {
                 "vessel": "Mayne Queen",
@@ -274,68 +274,82 @@
             {
                 "vessel": "Spirit of Vancouver Island",
                 "scheduledDeparture": "7:00 AM",
-                "actualDeparture": "7:03 AM",
-                "arrivalTime": "8:32 AM",
+                "actualDeparture": "7:01 AM",
+                "arrivalTime": "8:30 AM",
                 "status": "On Time"
             },
             {
-                "vessel": "Coastal Celebration",
+                "vessel": "Coastal Inspiration",
+                "scheduledDeparture": "8:00 AM",
+                "actualDeparture": "8:03 AM",
+                "arrivalTime": "9:30 AM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Coastal Renaissance",
                 "scheduledDeparture": "9:00 AM",
-                "actualDeparture": "9:00 AM",
-                "arrivalTime": "10:28 AM",
+                "actualDeparture": "9:04 AM",
+                "arrivalTime": "10:30 AM",
                 "status": "On Time"
             },
             {
                 "vessel": "Spirit of Vancouver Island",
                 "scheduledDeparture": "11:00 AM",
-                "actualDeparture": "11:07 AM",
-                "arrivalTime": "12:32 PM",
+                "actualDeparture": "11:06 AM",
+                "arrivalTime": "12:40 PM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Coastal Inspiration",
+                "scheduledDeparture": "12:00 PM",
+                "actualDeparture": "12:03 PM",
+                "arrivalTime": "1:32 PM",
                 "status": "On Time"
             },
             {
                 "vessel": "Coastal Renaissance",
-                "scheduledDeparture": "12:00 PM",
-                "actualDeparture": "12:05 PM",
-                "arrivalTime": "...",
+                "scheduledDeparture": "1:00 PM",
+                "actualDeparture": "1:03 PM",
+                "arrivalTime": "2:30 PM",
                 "status": "On Time"
             },
             {
-                "vessel": "Coastal Celebration",
-                "scheduledDeparture": "1:00 PM",
-                "actualDeparture": "1:11 PM",
-                "arrivalTime": "2:34 PM",
-                "status": "Loading delay"
+                "vessel": "Queen of New Westminster",
+                "scheduledDeparture": "2:00 PM",
+                "actualDeparture": "2:01 PM",
+                "arrivalTime": "3:28 PM",
+                "status": "On Time"
             },
             {
                 "vessel": "Spirit of Vancouver Island",
                 "scheduledDeparture": "3:00 PM",
-                "actualDeparture": "3:13 PM",
-                "arrivalTime": "4:38 PM",
-                "status": "Heavy traffic volume"
-            },
-            {
-                "vessel": "Coastal Renaissance",
-                "scheduledDeparture": "4:00 PM",
-                "actualDeparture": "4:07 PM",
-                "arrivalTime": "ETA: 5:42 PM",
+                "actualDeparture": "3:01 PM",
+                "arrivalTime": "4:28 PM",
                 "status": "On Time"
             },
             {
-                "vessel": "Coastal Celebration",
+                "vessel": "Coastal Renaissance",
                 "scheduledDeparture": "5:00 PM",
-                "actualDeparture": "5:07 PM",
-                "arrivalTime": "ETA: 6:42 PM",
+                "actualDeparture": "5:04 PM",
+                "arrivalTime": "6:28 PM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Queen of New Westminster",
+                "scheduledDeparture": "6:00 PM",
+                "actualDeparture": "6:00 PM",
+                "arrivalTime": "ETA: 7:35 PM",
                 "status": "On Time"
             },
             {
                 "vessel": "Spirit of Vancouver Island",
                 "scheduledDeparture": "7:00 PM",
-                "actualDeparture": "",
-                "arrivalTime": "",
-                "status": ""
+                "actualDeparture": "7:00 PM",
+                "arrivalTime": "ETA: 8:35 PM",
+                "status": "On Time"
             },
             {
-                "vessel": "Coastal Celebration",
+                "vessel": "Coastal Renaissance",
                 "scheduledDeparture": "9:00 PM",
                 "actualDeparture": "",
                 "arrivalTime": "",
@@ -348,46 +362,46 @@
         "sailingTime": "2 hours",
         "schedule": [
             {
-                "vessel": "Coastal Inspiration",
+                "vessel": "Queen of Coquitlam",
+                "scheduledDeparture": "5:15 AM",
+                "actualDeparture": "5:16 AM",
+                "arrivalTime": "7:24 AM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Queen of Alberni",
+                "scheduledDeparture": "7:45 AM",
+                "actualDeparture": "7:45 AM",
+                "arrivalTime": "9:47 AM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Queen of Coquitlam",
                 "scheduledDeparture": "10:15 AM",
                 "actualDeparture": "10:17 AM",
-                "arrivalTime": "12:16 PM",
+                "arrivalTime": "...",
                 "status": "On Time"
             },
             {
                 "vessel": "Queen of Alberni",
                 "scheduledDeparture": "12:45 PM",
-                "actualDeparture": "12:44 PM",
-                "arrivalTime": "2:44 PM",
+                "actualDeparture": "12:47 PM",
+                "arrivalTime": "2:40 PM",
                 "status": "On Time"
             },
             {
-                "vessel": "Coastal Inspiration",
+                "vessel": "Queen of Coquitlam",
                 "scheduledDeparture": "3:15 PM",
-                "actualDeparture": "3:22 PM",
-                "arrivalTime": "5:14 PM",
+                "actualDeparture": "3:13 PM",
+                "arrivalTime": "5:18 PM",
                 "status": "On Time"
             },
             {
                 "vessel": "Queen of Alberni",
                 "scheduledDeparture": "5:45 PM",
-                "actualDeparture": "",
-                "arrivalTime": "",
-                "status": ""
-            },
-            {
-                "vessel": "Coastal Inspiration",
-                "scheduledDeparture": "8:15 PM",
-                "actualDeparture": "",
-                "arrivalTime": "",
-                "status": ""
-            },
-            {
-                "vessel": "Queen of Alberni",
-                "scheduledDeparture": "10:45 PM",
-                "actualDeparture": "",
-                "arrivalTime": "",
-                "status": ""
+                "actualDeparture": "5:43 PM",
+                "arrivalTime": "ETA: 7:45 PM",
+                "status": "On Time"
             }
         ]
     },
@@ -397,56 +411,56 @@
         "schedule": [
             {
                 "vessel": "Queen of Cowichan",
-                "scheduledDeparture": "6:30 AM",
-                "actualDeparture": "6:30 AM",
-                "arrivalTime": "8:08 AM",
+                "scheduledDeparture": "6:15 AM",
+                "actualDeparture": "6:17 AM",
+                "arrivalTime": "8:00 AM",
                 "status": "On Time"
             },
             {
                 "vessel": "Queen of Oak Bay",
-                "scheduledDeparture": "8:30 AM",
-                "actualDeparture": "8:34 AM",
-                "arrivalTime": "10:16 AM",
+                "scheduledDeparture": "8:25 AM",
+                "actualDeparture": "8:30 AM",
+                "arrivalTime": "10:14 AM",
                 "status": "On Time"
             },
             {
                 "vessel": "Queen of Cowichan",
-                "scheduledDeparture": "10:30 AM",
-                "actualDeparture": "10:37 AM",
-                "arrivalTime": "12:16 PM",
-                "status": "On Time"
-            },
-            {
-                "vessel": "Queen of Oak Bay",
-                "scheduledDeparture": "12:30 PM",
-                "actualDeparture": "12:55 PM",
-                "arrivalTime": "2:36 PM",
-                "status": "Ongoing traffic volume delay"
-            },
-            {
-                "vessel": "Queen of Cowichan",
-                "scheduledDeparture": "3:00 PM",
-                "actualDeparture": "3:09 PM",
-                "arrivalTime": "4:48 PM",
+                "scheduledDeparture": "10:40 AM",
+                "actualDeparture": "10:48 AM",
+                "arrivalTime": "12:28 PM",
                 "status": "On Time"
             },
             {
                 "vessel": "Queen of Oak Bay",
-                "scheduledDeparture": "5:00 PM",
-                "actualDeparture": "5:26 PM",
-                "arrivalTime": "ETA: 7:06 PM",
-                "status": "Ongoing traffic volume delay"
+                "scheduledDeparture": "1:00 PM",
+                "actualDeparture": "1:03 PM",
+                "arrivalTime": "2:48 PM",
+                "status": "On Time"
             },
             {
                 "vessel": "Queen of Cowichan",
-                "scheduledDeparture": "7:00 PM",
+                "scheduledDeparture": "3:20 PM",
+                "actualDeparture": "3:20 PM",
+                "arrivalTime": "5:06 PM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Queen of Oak Bay",
+                "scheduledDeparture": "5:55 PM",
+                "actualDeparture": "5:59 PM",
+                "arrivalTime": "ETA: 7:39 PM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Queen of Surrey",
+                "scheduledDeparture": "8:45 PM",
                 "actualDeparture": "",
                 "arrivalTime": "",
                 "status": ""
             },
             {
                 "vessel": "Queen of Oak Bay",
-                "scheduledDeparture": "9:00 PM",
+                "scheduledDeparture": "10:10 PM",
                 "actualDeparture": "",
                 "arrivalTime": "",
                 "status": ""
@@ -459,91 +473,98 @@
         "schedule": [
             {
                 "vessel": "Queen of Capilano",
-                "scheduledDeparture": "6:00 AM",
-                "actualDeparture": "6:00 AM",
-                "arrivalTime": "6:20 AM",
+                "scheduledDeparture": "5:50 AM",
+                "actualDeparture": "5:49 AM",
+                "arrivalTime": "6:10 AM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Queen of Capilano",
+                "scheduledDeparture": "6:50 AM",
+                "actualDeparture": "6:49 AM",
+                "arrivalTime": "7:10 AM",
                 "status": "On Time"
             },
             {
                 "vessel": "Queen of Capilano",
                 "scheduledDeparture": "8:00 AM",
-                "actualDeparture": "8:07 AM",
-                "arrivalTime": "8:24 AM",
+                "actualDeparture": "8:00 AM",
+                "arrivalTime": "8:20 AM",
                 "status": "On Time"
             },
             {
                 "vessel": "Queen of Capilano",
-                "scheduledDeparture": "9:00 AM",
-                "actualDeparture": "9:03 AM",
-                "arrivalTime": "9:22 AM",
+                "scheduledDeparture": "9:05 AM",
+                "actualDeparture": "9:09 AM",
+                "arrivalTime": "9:26 AM",
                 "status": "On Time"
             },
             {
                 "vessel": "Queen of Capilano",
-                "scheduledDeparture": "10:00 AM",
-                "actualDeparture": "10:00 AM",
-                "arrivalTime": "10:18 AM",
+                "scheduledDeparture": "10:15 AM",
+                "actualDeparture": "10:15 AM",
+                "arrivalTime": "10:32 AM",
                 "status": "On Time"
             },
             {
                 "vessel": "Queen of Capilano",
-                "scheduledDeparture": "11:00 AM",
-                "actualDeparture": "11:04 AM",
-                "arrivalTime": "11:22 AM",
+                "scheduledDeparture": "11:25 AM",
+                "actualDeparture": "11:25 AM",
+                "arrivalTime": "11:44 AM",
                 "status": "On Time"
             },
             {
                 "vessel": "Queen of Capilano",
-                "scheduledDeparture": "12:00 PM",
-                "actualDeparture": "12:04 PM",
-                "arrivalTime": "12:22 PM",
+                "scheduledDeparture": "12:35 PM",
+                "actualDeparture": "12:34 PM",
+                "arrivalTime": "12:50 PM",
                 "status": "On Time"
             },
             {
                 "vessel": "Queen of Capilano",
-                "scheduledDeparture": "2:25 PM",
-                "actualDeparture": "2:25 PM",
-                "arrivalTime": "2:42 PM",
+                "scheduledDeparture": "2:20 PM",
+                "actualDeparture": "2:23 PM",
+                "arrivalTime": "2:40 PM",
                 "status": "On Time"
             },
             {
                 "vessel": "Queen of Capilano",
                 "scheduledDeparture": "3:30 PM",
-                "actualDeparture": "3:31 PM",
-                "arrivalTime": "3:48 PM",
+                "actualDeparture": "3:34 PM",
+                "arrivalTime": "3:52 PM",
                 "status": "On Time"
             },
             {
                 "vessel": "Queen of Capilano",
-                "scheduledDeparture": "4:30 PM",
-                "actualDeparture": "4:29 PM",
-                "arrivalTime": "4:50 PM",
+                "scheduledDeparture": "4:35 PM",
+                "actualDeparture": "4:38 PM",
+                "arrivalTime": "4:56 PM",
                 "status": "On Time"
             },
             {
                 "vessel": "Queen of Capilano",
-                "scheduledDeparture": "5:30 PM",
+                "scheduledDeparture": "5:45 PM",
+                "actualDeparture": "5:44 PM",
+                "arrivalTime": "6:04 PM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Queen of Capilano",
+                "scheduledDeparture": "6:50 PM",
+                "actualDeparture": "6:53 PM",
+                "arrivalTime": "ETA: 7:13 PM",
+                "status": "On Time"
+            },
+            {
+                "vessel": "Queen of Capilano",
+                "scheduledDeparture": "9:00 PM",
                 "actualDeparture": "",
                 "arrivalTime": "",
                 "status": ""
             },
             {
                 "vessel": "Queen of Capilano",
-                "scheduledDeparture": "6:30 PM",
-                "actualDeparture": "",
-                "arrivalTime": "",
-                "status": ""
-            },
-            {
-                "vessel": "Queen of Capilano",
-                "scheduledDeparture": "7:30 PM",
-                "actualDeparture": "",
-                "arrivalTime": "",
-                "status": ""
-            },
-            {
-                "vessel": "Queen of Capilano",
-                "scheduledDeparture": "9:30 PM",
+                "scheduledDeparture": "10:00 PM",
                 "actualDeparture": "",
                 "arrivalTime": "",
                 "status": ""
@@ -556,56 +577,56 @@
         "schedule": [
             {
                 "vessel": "Queen of Oak Bay",
-                "scheduledDeparture": "6:30 AM",
-                "actualDeparture": "6:31 AM",
-                "arrivalTime": "8:10 AM",
+                "scheduledDeparture": "6:15 AM",
+                "actualDeparture": "6:16 AM",
+                "arrivalTime": "8:00 AM",
                 "status": "On Time"
             },
             {
                 "vessel": "Queen of Cowichan",
-                "scheduledDeparture": "8:30 AM",
-                "actualDeparture": "8:33 AM",
-                "arrivalTime": "10:08 AM",
+                "scheduledDeparture": "8:25 AM",
+                "actualDeparture": "8:30 AM",
+                "arrivalTime": "10:12 AM",
                 "status": "On Time"
             },
             {
                 "vessel": "Queen of Oak Bay",
-                "scheduledDeparture": "10:30 AM",
-                "actualDeparture": "10:45 AM",
-                "arrivalTime": "12:24 PM",
-                "status": "Heavy traffic volume"
+                "scheduledDeparture": "10:40 AM",
+                "actualDeparture": "10:46 AM",
+                "arrivalTime": "12:28 PM",
+                "status": "On Time"
             },
             {
                 "vessel": "Queen of Cowichan",
-                "scheduledDeparture": "12:30 PM",
-                "actualDeparture": "12:52 PM",
-                "arrivalTime": "2:32 PM",
-                "status": "Heavy traffic volume"
+                "scheduledDeparture": "1:00 PM",
+                "actualDeparture": "1:01 PM",
+                "arrivalTime": "2:42 PM",
+                "status": "On Time"
             },
             {
                 "vessel": "Queen of Oak Bay",
-                "scheduledDeparture": "3:00 PM",
-                "actualDeparture": "3:14 PM",
-                "arrivalTime": "4:54 PM",
-                "status": "Ongoing traffic volume delay"
+                "scheduledDeparture": "3:45 PM",
+                "actualDeparture": "3:47 PM",
+                "arrivalTime": "5:30 PM",
+                "status": "On Time"
             },
             {
-                "vessel": "Queen of Cowichan",
-                "scheduledDeparture": "5:00 PM",
-                "actualDeparture": "5:19 PM",
-                "arrivalTime": "ETA: 6:59 PM",
-                "status": "Heavy traffic volume"
+                "vessel": "Queen of Surrey",
+                "scheduledDeparture": "6:35 PM",
+                "actualDeparture": "6:39 PM",
+                "arrivalTime": "ETA: 8:24 PM",
+                "status": "On Time"
             },
             {
                 "vessel": "Queen of Oak Bay",
-                "scheduledDeparture": "7:00 PM",
+                "scheduledDeparture": "8:05 PM",
                 "actualDeparture": "",
                 "arrivalTime": "",
                 "status": ""
             },
             {
                 "vessel": "Queen of Cowichan",
-                "scheduledDeparture": "9:00 PM",
+                "scheduledDeparture": "10:10 PM",
                 "actualDeparture": "",
                 "arrivalTime": "",
                 "status": ""
@@ -618,48 +639,48 @@
         "schedule": [
             {
                 "vessel": "Queen of Surrey",
-                "scheduledDeparture": "7:20 AM",
-                "actualDeparture": "7:20 AM",
-                "arrivalTime": "8:00 AM",
+                "scheduledDeparture": "7:30 AM",
+                "actualDeparture": "7:33 AM",
+                "arrivalTime": "8:12 AM",
                 "status": "On Time"
             },
             {
                 "vessel": "Queen of Surrey",
-                "scheduledDeparture": "9:25 AM",
-                "actualDeparture": "9:25 AM",
-                "arrivalTime": "10:04 AM",
+                "scheduledDeparture": "9:45 AM",
+                "actualDeparture": "9:45 AM",
+                "arrivalTime": "10:24 AM",
                 "status": "On Time"
             },
             {
                 "vessel": "Queen of Surrey",
-                "scheduledDeparture": "11:30 AM",
-                "actualDeparture": "11:30 AM",
-                "arrivalTime": "12:08 PM",
+                "scheduledDeparture": "11:55 AM",
+                "actualDeparture": "11:57 AM",
+                "arrivalTime": "12:36 PM",
                 "status": "On Time"
             },
             {
                 "vessel": "Queen of Surrey",
-                "scheduledDeparture": "1:35 PM",
-                "actualDeparture": "1:39 PM",
-                "arrivalTime": "...",
+                "scheduledDeparture": "2:10 PM",
+                "actualDeparture": "2:12 PM",
+                "arrivalTime": "2:49 PM",
                 "status": "On Time"
             },
             {
                 "vessel": "Queen of Surrey",
-                "scheduledDeparture": "3:50 PM",
-                "actualDeparture": "3:57 PM",
-                "arrivalTime": "4:36 PM",
+                "scheduledDeparture": "4:20 PM",
+                "actualDeparture": "4:24 PM",
+                "arrivalTime": "5:01 PM",
                 "status": "On Time"
             },
             {
-                "vessel": "Queen of Surrey",
-                "scheduledDeparture": "5:50 PM",
-                "actualDeparture": "",
-                "arrivalTime": "",
-                "status": ""
+                "vessel": "Queen of Cowichan",
+                "scheduledDeparture": "5:30 PM",
+                "actualDeparture": "5:31 PM",
+                "arrivalTime": "6:14 PM",
+                "status": "On Time"
             },
             {
-                "vessel": "Queen of Surrey",
+                "vessel": "Queen of Cowichan",
                 "scheduledDeparture": "7:50 PM",
                 "actualDeparture": "",
                 "arrivalTime": "",
@@ -667,7 +688,7 @@
             },
             {
                 "vessel": "Queen of Surrey",
-                "scheduledDeparture": "9:45 PM",
+                "scheduledDeparture": "10:55 PM",
                 "actualDeparture": "",
                 "arrivalTime": "",
                 "status": ""
@@ -681,55 +702,55 @@
             {
                 "vessel": "Queen of Surrey",
                 "scheduledDeparture": "6:20 AM",
-                "actualDeparture": "6:20 AM",
-                "arrivalTime": "7:00 AM",
+                "actualDeparture": "6:21 AM",
+                "arrivalTime": "7:02 AM",
                 "status": "On Time"
             },
             {
                 "vessel": "Queen of Surrey",
-                "scheduledDeparture": "8:25 AM",
-                "actualDeparture": "8:25 AM",
-                "arrivalTime": "9:04 AM",
+                "scheduledDeparture": "8:40 AM",
+                "actualDeparture": "8:40 AM",
+                "arrivalTime": "9:18 AM",
                 "status": "On Time"
             },
             {
                 "vessel": "Queen of Surrey",
-                "scheduledDeparture": "10:25 AM",
-                "actualDeparture": "10:28 AM",
-                "arrivalTime": "11:06 AM",
+                "scheduledDeparture": "10:50 AM",
+                "actualDeparture": "10:51 AM",
+                "arrivalTime": "11:28 AM",
                 "status": "On Time"
             },
             {
                 "vessel": "Queen of Surrey",
-                "scheduledDeparture": "12:35 PM",
-                "actualDeparture": "12:35 PM",
-                "arrivalTime": "1:15 PM",
+                "scheduledDeparture": "1:05 PM",
+                "actualDeparture": "1:05 PM",
+                "arrivalTime": "1:42 PM",
                 "status": "On Time"
             },
             {
                 "vessel": "Queen of Surrey",
-                "scheduledDeparture": "2:45 PM",
-                "actualDeparture": "2:51 PM",
-                "arrivalTime": "3:28 PM",
+                "scheduledDeparture": "3:15 PM",
+                "actualDeparture": "3:14 PM",
+                "arrivalTime": "3:56 PM",
                 "status": "On Time"
             },
             {
                 "vessel": "Queen of Surrey",
-                "scheduledDeparture": "4:50 PM",
-                "actualDeparture": "5:03 PM",
-                "arrivalTime": "ETA: 5:43 PM",
-                "status": "Heavy traffic volume"
+                "scheduledDeparture": "5:25 PM",
+                "actualDeparture": "5:29 PM",
+                "arrivalTime": "6:06 PM",
+                "status": "On Time"
             },
             {
-                "vessel": "Queen of Surrey",
-                "scheduledDeparture": "6:50 PM",
-                "actualDeparture": "",
-                "arrivalTime": "",
-                "status": ""
+                "vessel": "Queen of Cowichan",
+                "scheduledDeparture": "6:40 PM",
+                "actualDeparture": "6:39 PM",
+                "arrivalTime": "ETA: 7:20 PM",
+                "status": "On Time"
             },
             {
-                "vessel": "Queen of Surrey",
-                "scheduledDeparture": "8:45 PM",
+                "vessel": "Queen of Cowichan",
+                "scheduledDeparture": "8:55 PM",
                 "actualDeparture": "",
                 "arrivalTime": "",
                 "status": ""
