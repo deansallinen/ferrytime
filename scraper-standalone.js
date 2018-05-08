@@ -1,12 +1,14 @@
 const scraper = require("table-scraper");
-const MongoClient = require('mongodb').MongoClient;
+// const MongoClient = require('mongodb').MongoClient;
 // const fs = require('fs');
 // var util = require("util");
-const assert = require('assert');
+// const assert = require('assert');
 // const monk = require("monk");
-const url = 'mongodb://deza604-ferry-tracker-2-5483816:27017/ferrytracker';
+// const url = 'mongodb://deza604-ferry-tracker-2-5483816:27017/ferrytracker';
 // const db = monk(monkurl);
 // const collection = db.get('ferrytracker');
+const sqlite3 = require('sqlite3').verbose();
+const db = new sqlite3.Database('ferrytracker.db');
 
 
 const getRouteInfo = array => ({
@@ -44,18 +46,28 @@ const createSailing = object => {
 //     return allRoutes;
 // };
 
-const createSchedule = data => {
+function createSchedule(data) {
     let l = data.length;
-    let allRoutes = [];
+    let schedule = [];
     for (var i = 2; i < l; i = i + 2) {
         let info = getRouteInfo(data[i]);
         let sailings = getRouteSailings(data[i + 1]);
         sailings.map(sailing => Object.assign(sailing, info))
-            .map(sailing => allRoutes.push(sailing));
-        // allRoutes.push(sailings);
+            .map(sailing => schedule.push(sailing));
     }
-    return allRoutes;
+    return schedule;
 };
 
+function insertDb(sailing) {
+    const keys = Object.keys(sailing).join(', ');
+    const placeholders = Object.keys(sailing).fill('?').join(', ');
+    // db.serialize(function() {
+    db.run('INSERT INTO sailings (' + keys + ') \
+        VALUES (' + placeholders + ');', Object.values(sailing)), (err) => { throw err };
+    // });
+    // db.close();
+}
+
 scraper.get('http://orca.bcferries.com:8080/cc/marqui/actualDepartures.asp')
-    .then(result => console.log(createSchedule(result)));
+    .then(result => createSchedule(result))
+    .then(schedule => schedule.map(sailing => insertDb(sailing)));
