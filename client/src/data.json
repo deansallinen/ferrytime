@@ -6,10 +6,10 @@
     "actualDeparture": "10:01 AM",
     "eta": "11:26 AM",
     "sailingStatus": "On Time",
-    "vessel": "Queen of New Westminster",
+    "vessel": "Queen of New time",
     "createdAt": "2018-05-14T02:13:09.110Z",
     "updatedAt": "2018-05-14T02:13:09.430Z",
-    "routeId": 5
+    "routeId": 1
   },
   {
     "id": 739,
@@ -21,7 +21,7 @@
     "vessel": "Spirit of Vancouver Island",
     "createdAt": "2018-05-14T02:13:09.277Z",
     "updatedAt": "2018-05-14T02:13:10.087Z",
-    "routeId": 5
+    "routeId": 2
   },
   {
     "id": 656,

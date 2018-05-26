@@ -2,17 +2,16 @@ import React from "react";
 import { render } from "react-dom";
 import Schedule from "./schedule";
 import RouteHeader from "./route-header";
-
-const styles = {
-  fontFamily: "sans-serif",
-  margin: "0"
-  // 'background-color': "#666"
-};
+import "./index.css";
+import AllRoutesMenu from "./allRoutesMenu";
 
 const App = () => (
-  <div style={styles}>
-    <RouteHeader routeName="Test Route" />
-    <Schedule />
+  <div className="app">
+    <AllRoutesMenu className="allRoutesMenu" />
+    <div className="content">
+      <RouteHeader routeName="Test Route" />
+      <Schedule />
+    </div>
   </div>
 );
 
