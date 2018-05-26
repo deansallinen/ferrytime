@@ -8,6 +8,7 @@
   "dependencies": {
     "body-parser": "~1.18.2",
     "cookie-parser": "~1.4.3",
+    "create-react-app": "^1.5.2",
     "cron": "^1.3.0",
     "debug": "~2.6.9",
     "es6-promise": "^4.2.4",
@@ -15,9 +16,14 @@
     "express-handlebars": "^3.0.0",
     "handlebars": "^4.0.11",
     "isomorphic-fetch": "^2.2.1",
-    "monk": "^6.0.5",
+    "monk": "^6.0.6",
     "morgan": "~1.9.0",
+    "npm": "^6.0.1",
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2",
+    "sequelize": "^4.37.7",
     "serve-favicon": "~2.4.5",
+    "sqlite": "^2.9.1",
     "sqlite3": "^4.0.0",
     "table-scraper": "^0.1.0"
   }

@@ -27,6 +27,8 @@ var options = {
 
 app.use(express.static(path.join(__dirname, 'public'), options));
 
+
+require('./server/routes')(app);
 app.get('/', function(req, res) {
     var data = { "routes": require("./data.json") };
     res.render('home', data);
