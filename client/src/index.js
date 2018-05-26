@@ -1,18 +1,22 @@
 import React from "react";
 import { render } from "react-dom";
-import Schedule from "./schedule";
-import RouteHeader from "./route-header";
+import Content from "./content";
 import "./index.css";
-import AllRoutesMenu from "./allRoutesMenu";
+import RoutesMenu from "./routesMenu";
+import styled from "styled-components";
+
+const Wrapper = styled.div`
+  display: grid;
+  grid-template-columns: auto 1fr;
+`;
+
+// const Content = styled(Content)``;
 
 const App = () => (
-  <div className="app">
-    <AllRoutesMenu className="allRoutesMenu" />
-    <div className="content">
-      <RouteHeader routeName="Test Route" />
-      <Schedule />
-    </div>
-  </div>
+  <Wrapper>
+    <RoutesMenu className="routesMenu" />
+    <Content />
+  </Wrapper>
 );
 
 render(<App />, document.getElementById("root"));

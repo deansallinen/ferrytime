@@ -1,18 +1,21 @@
 import React from "react";
 import Clock from "./clock";
+import styled from "styled-components";
 
-const styles = {
-  padding: "0 1rem",
-  display: "flex",
-  "justify-content": "space-between",
-  "align-items": "baseline"
-};
+const Header = styled.header`
+  padding: 0 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+`;
 
-export default props => {
+const RouteHeader = props => {
   return (
-    <div style={styles}>
+    <Header>
       <h2>{props.routeName}</h2>
       <Clock />
-    </div>
+    </Header>
   );
 };
+
+export default RouteHeader;

@@ -1,13 +1,20 @@
 import React from "react";
 import AllRoutesItem from "./allRoutesItem";
+import styled from "styled-components";
 
-class AllRoutesMenu extends React.Component {
+const Menu = styled.ul`
+  list-style-type: none;
+  line-height: 2rem;
+  padding-left: 0;
+`;
+
+class RoutesMenu extends React.Component {
   constructor() {
     super();
     this.state = {
       error: null,
       isLoaded: false,
-      items: []
+      routeNames: []
     };
   }
 
@@ -20,7 +27,7 @@ class AllRoutesMenu extends React.Component {
         data => {
           this.setState({
             isLoaded: true,
-            items: data.map(route => route.routeName)
+            routeNames: data.map(route => route.routeName)
           });
         },
         error => {
@@ -33,9 +40,16 @@ class AllRoutesMenu extends React.Component {
   }
 
   render() {
-    const items = this.state.items;
-    return <ul> {items.map(item => <li key={item}>{item}</li>)} </ul>;
+    const routeNames = this.state.routeNames;
+    return (
+      <Menu>
+        <AllRoutesItem key="All" name="All Routes" />
+        {routeNames.map(routeName => (
+          <AllRoutesItem key={routeName} name={routeName} />
+        ))}
+      </Menu>
+    );
   }
 }
 
-export default AllRoutesMenu;
+export default RoutesMenu;

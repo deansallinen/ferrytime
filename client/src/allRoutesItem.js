@@ -1,5 +1,9 @@
 import React from "react";
 
-export default props => {
-  <h2>{props}</h2>;
-};
+const MenuItem = props => (
+  <li>
+    <a href="#">{props.name} </a>
+  </li>
+);
+
+export default MenuItem;
