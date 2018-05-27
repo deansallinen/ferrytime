@@ -1,13 +1,20 @@
 import React from "react";
 import styled from "styled-components";
 
-const Menu = styled.ul`
-  list-style-type: none;
-  line-height: 2rem;
-  padding-left: 0;
+const Menu = styled.div`
+  grid-area: menu;
+  display: flex;
+  flex-direction: column;
 `;
 
-const MenuItem = styled.li``;
+const MenuItem = styled.a`
+  cursor: pointer;
+  padding: 1.5rem;
+
+  &:hover {
+    background: #eee;
+  }
+`;
 
 class RoutesMenu extends React.Component {
   constructor() {
@@ -15,7 +22,6 @@ class RoutesMenu extends React.Component {
     this.state = {
       error: null,
       isLoaded: false,
-      activeRoute: 1,
       routes: []
     };
     this.changeRoute = this.changeRoute.bind(this);
@@ -54,12 +60,11 @@ class RoutesMenu extends React.Component {
     const routes = this.state.routes;
     return (
       <Menu>
-        <MenuItem id="0">All Routes</MenuItem>
+        {/* <MenuItem id="0">All Routes</MenuItem> */}
         {routes.map(route => (
-          <MenuItem key={route.id}>
-            <a onClick={this.changeRoute} id={route.id}>
-              {route.routeName}
-            </a>
+          <MenuItem onClick={this.changeRoute} id={route.id} key={route.id}>
+            {" "}
+            {route.routeName}
           </MenuItem>
         ))}
       </Menu>

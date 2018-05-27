@@ -1,9 +1,12 @@
 import React from "react";
 import Sailing from "./sailing";
-import RouteHeader from "./route-header";
+import RouteHeader from "./routeHeader";
 import styled from "styled-components";
+import LoadingMessage from "./loadingMessage";
 
-const RouteSchedule = styled.div``;
+const RouteSchedule = styled.div`
+  grid-area: schedule;
+`;
 
 class Schedule extends React.Component {
   constructor(props) {
@@ -57,11 +60,14 @@ class Schedule extends React.Component {
 
   render() {
     if (this.state.currentRoute === null) {
-      return <h1>Loading...</h1>;
+      return <LoadingMessage />;
     } else {
       return (
         <RouteSchedule>
-          <RouteHeader routeName={this.state.currentRoute.routeName} />
+          <RouteHeader
+            routeName={this.state.currentRoute.routeName}
+            averageSailing={this.state.currentRoute.averageSailing}
+          />
           {this.state.currentRoute.sailings.map(sailing => {
             return (
               <Sailing

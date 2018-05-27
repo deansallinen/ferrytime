@@ -9,8 +9,9 @@ module.exports = {
   },
   one(req, res) {
     return Routes.findAll({
+      include: [Sailing],
       where: { id: req.params.id },
-      include: [Sailing]
+      order: [Sailing.scheduledDeparture, "ASC"]
     })
       .then(routes => res.status(200).send(routes))
       .catch(error => res.status(400).send(error));

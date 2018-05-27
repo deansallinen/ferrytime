@@ -1,5 +1,5 @@
 const scraper = require("table-scraper");
-const db = require("./db.js");
+const db = require("./models/index.js");
 
 const makeRouteInfo = array => ({
   routeName: array[0][0].split("Sailing time: ")[0],
@@ -16,8 +16,8 @@ const compileSailings = (rawSchedule, date) => {
 const makeSailing = (object, date) => {
   let sailing = {};
   sailing.vessel = object[0];
-  sailing.scheduledDeparture = object[1];
-  sailing.actualDeparture = object[2];
+  sailing.scheduledDeparture = new Date(date.concat(" ", object[1]));
+  sailing.actualDeparture = new Date(date.concat(" ", object[2]));
   sailing.eta = object[3];
   sailing.sailingStatus = object[4];
   sailing.sailingDate = date;
