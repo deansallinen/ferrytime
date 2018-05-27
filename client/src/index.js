@@ -1,6 +1,5 @@
 import React from "react";
 import { render } from "react-dom";
-import "./index.css";
 import RoutesMenu from "./routesMenu";
 import styled from "styled-components";
 import Schedule from "./schedule";
