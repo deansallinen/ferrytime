@@ -8,26 +8,38 @@ const Menu = styled.ul`
   padding-left: 0;
 `;
 
+const MenuItem = styled.li``;
+
 class RoutesMenu extends React.Component {
   constructor() {
     super();
     this.state = {
       error: null,
       isLoaded: false,
-      routeNames: []
+      activeRoute: 1,
+      routes: []
     };
+    this.changeRoute = this.changeRoute.bind(this);
+  }
+
+  changeRoute(e) {
+    // e.preventDefault();
+    this.props.onRouteChange(e.target.id);
   }
 
   componentDidMount() {
     fetch("/api/routes")
-      .then(results => {
-        return results.json();
+      .then(response => {
+        if (!response.ok) {
+          throw response;
+        }
+        return response.json();
       })
       .then(
         data => {
           this.setState({
             isLoaded: true,
-            routeNames: data.map(route => route.routeName)
+            routes: data
           });
         },
         error => {
@@ -40,12 +52,16 @@ class RoutesMenu extends React.Component {
   }
 
   render() {
-    const routeNames = this.state.routeNames;
+    const routes = this.state.routes;
     return (
       <Menu>
-        <AllRoutesItem key="All" name="All Routes" />
-        {routeNames.map(routeName => (
-          <AllRoutesItem key={routeName} name={routeName} />
+        <MenuItem id="0">All Routes</MenuItem>
+        {routes.map(route => (
+          <MenuItem key={route.id}>
+            <a onClick={this.changeRoute} id={route.id}>
+              {route.routeName}
+            </a>
+          </MenuItem>
         ))}
       </Menu>
     );

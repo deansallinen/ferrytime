@@ -9,6 +9,7 @@ module.exports = app => {
   );
 
   app.get("/api/routes", routesController.list);
+  app.get("/api/route/:id", routesController.one);
   app.post("/api/sailings", sailingsController.create);
   app.get("/api/sailings", sailingsController.list);
 };

@@ -1,34 +1,49 @@
 import React from "react";
 import Sailing from "./sailing";
+import RouteHeader from "./route-header";
+import styled from "styled-components";
+
+const RouteSchedule = styled.div``;
 
 class Schedule extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       error: null,
       isLoaded: false,
-      sailings: []
+      currentRoute: null
     };
+  }
+  static getDerivedStateFromProps(props, state) {
+    if (props.routeId !== state.prevId) {
+      return {
+        currentRoute: null,
+        prevId: props.routeId
+      };
+    }
+    return null;
   }
 
   componentDidMount() {
-    fetch("/api/sailings")
-      .then(results => {
-        return results.json();
+    this.loadScheduleData(this.props.routeId);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.currentRoute === null) {
+      this.loadScheduleData(this.props.routeId);
+    }
+  }
+
+  loadScheduleData(id) {
+    fetch(`/api/route/${id}`)
+      .then(response => {
+        return response.json();
       })
       .then(
         data => {
           this.setState({
             isLoaded: true,
-            sailings: data.map(sailing => (
-              <Sailing
-                vessel={sailing.vessel}
-                sailingDate={sailing.sailingDate}
-                scheduledDeparture={sailing.scheduledDeparture}
-                sailingStatus={sailing.sailingStatus}
-                key={sailing.id}
-              />
-            ))
+            currentRoute: data[0]
           });
         },
         error => {
@@ -41,7 +56,26 @@ class Schedule extends React.Component {
   }
 
   render() {
-    return <div>{this.state.sailings}</div>;
+    if (this.state.currentRoute === null) {
+      return <h1>Loading...</h1>;
+    } else {
+      return (
+        <RouteSchedule>
+          <RouteHeader routeName={this.state.currentRoute.routeName} />
+          {this.state.currentRoute.sailings.map(sailing => {
+            return (
+              <Sailing
+                vessel={sailing.vessel}
+                sailingDate={sailing.sailingDate}
+                scheduledDeparture={sailing.scheduledDeparture}
+                sailingStatus={sailing.sailingStatus}
+                key={sailing.id}
+              />
+            );
+          })}
+        </RouteSchedule>
+      );
+    }
   }
 }
 
