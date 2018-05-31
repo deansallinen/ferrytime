@@ -1,7 +1,7 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
-const Spinner = styled.div`
+const Center = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -31,7 +31,11 @@ class LoadingMessage extends React.Component {
       return null;
     }
 
-    return <Spinner>Loading...</Spinner>;
+    return (
+      <Center>
+        <div>Loading...</div>
+      </Center>
+    );
   }
 }
 

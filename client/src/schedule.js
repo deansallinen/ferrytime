@@ -17,6 +17,7 @@ class Schedule extends React.Component {
       currentRoute: null
     };
   }
+
   static getDerivedStateFromProps(props, state) {
     if (props.routeId !== state.prevId) {
       return {

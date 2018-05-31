@@ -6,11 +6,12 @@ import styled from "styled-components";
 import Schedule from "./schedule";
 
 const Wrapper = styled.div`
+  max-width: 1300px;
   display: grid;
   grid-template-rows: auto 1fr;
   grid-template-columns: auto 1fr;
   grid-template-areas: "header header" "menu schedule";
-  column-gap: 1rem;
+  column-gap: 1.5rem;
 `;
 
 const AppHeader = styled.header`

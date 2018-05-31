@@ -1,6 +1,34 @@
 const scraper = require("table-scraper");
 const db = require("./models/index.js");
 
+module.exports = {
+  scrape: () => {
+    scraper
+      .get("http://orca.bcferries.com:8080/cc/marqui/actualDepartures.asp")
+      .then(result => clean(result))
+      .then(data => {
+        data.map(route => insertRoute(route));
+      });
+  }
+};
+
+function clean(data) {
+  let l = data.length;
+  // let schedule = [];
+  let routes = [];
+  for (var i = 2; i < l; i = i + 2) {
+    let route = makeRouteInfo(data[i]);
+    route.sailings = compileSailings(data[i + 1], route.sailingDate);
+    routes.push(route);
+    // sailings.map(sailing => {
+    //     return schedule.push(
+    //         Object.assign({}, sailing, routeInfo)
+    //     );
+    // }
+  }
+  return routes;
+}
+
 const makeRouteInfo = array => ({
   routeName: array[0][0].split("Sailing time: ")[0],
   averageSailing: array[0][0].split("Sailing time: ")[1],
@@ -24,23 +52,6 @@ const makeSailing = (object, date) => {
   return sailing;
 };
 
-function clean(data) {
-  let l = data.length;
-  // let schedule = [];
-  let routes = [];
-  for (var i = 2; i < l; i = i + 2) {
-    let route = makeRouteInfo(data[i]);
-    route.sailings = compileSailings(data[i + 1], route.sailingDate);
-    routes.push(route);
-    // sailings.map(sailing => {
-    //     return schedule.push(
-    //         Object.assign({}, sailing, routeInfo)
-    //     );
-    // }
-  }
-  return routes;
-}
-
 // Controls
 const insertRoute = function(route) {
   db.route.sync({ force: true }).then(() => {
@@ -57,6 +68,27 @@ const insertRoute = function(route) {
   });
 };
 
+const upsertSailing = function(sailing, routeId) {
+  let condition = {
+    routeId: routeId,
+    sailingDate: sailing.sailingDate,
+    scheduledDeparture: sailing.scheduledDeparture
+  };
+  db.sailing
+    .sync()
+    .then(() => db.sailing.findOne({ where: condition }))
+    .then(obj => {
+      if (obj) {
+        console.log("Sailing exists, update");
+        console.log(obj);
+        return obj.update(sailing);
+      } else {
+        console.log("Need to create Sailing");
+        return insertSailing(sailing, routeId);
+      }
+    });
+};
+
 const insertSailing = function(sailing, routeId) {
   return db.sailing
     .sync()
@@ -67,27 +99,3 @@ const insertSailing = function(sailing, routeId) {
       return sailing.setRoute(routeId);
     });
 };
-
-const upsertSailing = function(sailing, routeId) {
-  let condition = {
-    routeId: routeId,
-    sailingDate: sailing.sailingDate,
-    scheduledDeparture: sailing.scheduledDeparture
-  };
-  db.sailing.findOne({ where: condition }).then(obj => {
-    if (obj) {
-      console.log("true");
-      return obj.update(sailing);
-    } else {
-      console.log("false");
-      return insertSailing(sailing, routeId);
-    }
-  });
-};
-
-scraper
-  .get("http://orca.bcferries.com:8080/cc/marqui/actualDepartures.asp")
-  .then(result => clean(result))
-  .then(data => {
-    data.map(route => insertRoute(route));
-  });
