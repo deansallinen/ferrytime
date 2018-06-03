@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize");
 const sequelize = new Sequelize("null", "null", "null", {
   dialect: "sqlite",
-  storage: "../ferrytracker.db"
+  storage: "./server/ferrytracker.db"
 });
 
 const db = {};

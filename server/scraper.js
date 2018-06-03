@@ -1,16 +1,16 @@
 const scraper = require("table-scraper");
 const db = require("./models/index.js");
 
-module.exports = {
-  scrape: () => {
-    scraper
-      .get("http://orca.bcferries.com:8080/cc/marqui/actualDepartures.asp")
-      .then(result => clean(result))
-      .then(data => {
-        data.map(route => insertRoute(route));
-      });
-  }
-};
+// module.exports = {
+//   scrape: () => {
+scraper
+  .get("http://orca.bcferries.com:8080/cc/marqui/actualDepartures.asp")
+  .then(result => clean(result))
+  .then(data => {
+    data.map(route => insertRoute(route));
+  });
+//   }
+// };
 
 function clean(data) {
   let l = data.length;
@@ -68,25 +68,27 @@ const insertRoute = function(route) {
   });
 };
 
+const upsertSailing2 = (sailing, routeId) => {
+  sailing.routeId = routeId;
+  db.sailing.upsert(sailing).then(res => console.log(res));
+};
+
 const upsertSailing = function(sailing, routeId) {
   let condition = {
     routeId: routeId,
     sailingDate: sailing.sailingDate,
-    scheduledDeparture: sailing.scheduledDeparture
+    scheduledDeparture: sailing.scheduledDeparture.toISOString()
   };
-  db.sailing
-    .sync()
-    .then(() => db.sailing.findOne({ where: condition }))
-    .then(obj => {
-      if (obj) {
-        console.log("Sailing exists, update");
-        console.log(obj);
-        return obj.update(sailing);
-      } else {
-        console.log("Need to create Sailing");
-        return insertSailing(sailing, routeId);
-      }
-    });
+  db.sailing.findAll({ where: condition }).then(obj => {
+    if (obj) {
+      console.log("Sailing exists, update");
+      console.log(obj);
+      return obj.update(sailing);
+    } else {
+      console.log("Need to create Sailing");
+      return insertSailing(sailing, routeId);
+    }
+  });
 };
 
 const insertSailing = function(sailing, routeId) {

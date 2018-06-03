@@ -1,5 +1,5 @@
 const Routes = require("../models").route;
-const Sailings = require("../models").sailing;
+const Sailing = require("../models").sailing;
 
 module.exports = {
   list(req, res) {
@@ -9,9 +9,9 @@ module.exports = {
   },
   one(req, res) {
     return Routes.findAll({
-      include: [Sailings],
+      include: [Sailing],
       where: { id: req.params.id },
-      order: [Sailings.scheduledDeparture, "ASC"]
+      order: [Sailing.scheduledDeparture, "ASC"]
     })
       .then(routes => res.status(200).send(routes))
       .catch(error => res.status(400).send(error));
