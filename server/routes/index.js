@@ -8,8 +8,8 @@ module.exports = app => {
     })
   );
 
-  app.get("/api/routes", routesController.list);
-  app.get("/api/route/:id", routesController.one);
-  app.post("/api/sailings", sailingsController.create);
-  app.get("/api/sailings", sailingsController.list);
+  app.get("/routes", routesController.list);
+  app.get("/routes/:id", routesController.one);
+  // app.post("/routes/:id/sailings", sailingsController.create);
+  app.get("/routes/:id/sailings", sailingsController.list);
 };
