@@ -1,9 +1,9 @@
 const express = require("express");
-const exphbs = require("express-handlebars");
-const logger = require("morgan");
+// const exphbs = require("express-handlebars");
+// const logger = require("morgan");
 const app = express();
-const path = require("path");
-const fs = require("fs");
+// const path = require("path");
+// const fs = require("fs");
 const CronJob = require("cron").CronJob;
 
 // var scraper = require("./server/scraper.js");
@@ -38,6 +38,8 @@ require("./server/routes")(app);
 //   res.render("home", data);
 // });
 
-module.exports = app.listen(process.env.PORT || 8080, function() {
-  console.log("Server started on port 8080!");
+const PORT = process.env.PORT || 8080;
+
+module.exports = app.listen(PORT, () => {
+  console.log(`Server started on port: ${PORT}!`);
 });
