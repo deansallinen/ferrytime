@@ -1,38 +1,46 @@
-const scraper = require("table-scraper");
-const db = require("./models/index.js");
+const scraper = require('table-scraper');
+const db = require('./db/index');
+const isValid = require('date-fns/is_valid');
+
+const baseURL = 'http://localhost:8080';
+
+const putToDB = (baseURL, apiRoute, data) =>
+  fetch(baseURL + apiRoute, {
+    method: 'PUT',
+    body: data
+  })
+    .then(response => response.json())
+    .catch(error => console.error('Error:', error))
+    .then(response => console.log('Success:', response));
 
 // module.exports = {
 //   scrape: () => {
 scraper
-  .get("http://orca.bcferries.com:8080/cc/marqui/actualDepartures.asp")
+  .get('http://orca.bcferries.com:8080/cc/marqui/actualDepartures.asp')
   .then(result => clean(result))
   .then(data => {
-    data.map(route => insertRoute(route));
+    data.map(route => {
+      route;
+    });
   });
 //   }
 // };
 
 function clean(data) {
   let l = data.length;
-  // let schedule = [];
   let routes = [];
   for (var i = 2; i < l; i = i + 2) {
     let route = makeRouteInfo(data[i]);
-    route.sailings = compileSailings(data[i + 1], route.sailingDate);
+    route.sailings = compileSailings(data[i + 1], route.sailing_date);
     routes.push(route);
-    // sailings.map(sailing => {
-    //     return schedule.push(
-    //         Object.assign({}, sailing, routeInfo)
-    //     );
-    // }
   }
   return routes;
 }
 
 const makeRouteInfo = array => ({
-  routeName: array[0][0].split("Sailing time: ")[0],
-  averageSailing: array[0][0].split("Sailing time: ")[1],
-  sailingDate: new Date(array[0][1]).toISOString().substr(0, 10)
+  route_name: array[0][0].split('Sailing time: ')[0],
+  average_sailing: array[0][0].split('Sailing time: ')[1],
+  sailing_date: new Date(array[0][1]).toISOString().substr(0, 10)
 });
 
 const compileSailings = (rawSchedule, date) => {
@@ -41,63 +49,20 @@ const compileSailings = (rawSchedule, date) => {
   return sailings;
 };
 
+const checkValidTime = (date, time) => {
+  const dateTime = new Date(date.concat(' ', time));
+  if (isValid(dateTime)) {
+    return dateTime;
+  }
+  return null;
+};
+
 const makeSailing = (object, date) => {
   let sailing = {};
   sailing.vessel = object[0];
-  sailing.scheduledDeparture = new Date(date.concat(" ", object[1]));
-  sailing.actualDeparture = new Date(date.concat(" ", object[2]));
-  sailing.eta = object[3];
-  sailing.sailingStatus = object[4];
-  sailing.sailingDate = date;
+  sailing.scheduled_departure = checkValidTime(date, object[1]);
+  sailing.actual_departure = checkValidTime(date, object[2]);
+  sailing.eta = checkValidTime(date, object[3]);
+  sailing.sailing_status = object[4];
   return sailing;
-};
-
-// Controls
-const insertRoute = function(route) {
-  db.route.sync({ force: true }).then(() => {
-    return db.route
-      .create({
-        routeName: route.routeName,
-        averageSailing: route.averageSailing
-      })
-      .then(result => {
-        return route.sailings.map(sailing => {
-          upsertSailing(sailing, result.id);
-        });
-      });
-  });
-};
-
-const upsertSailing2 = (sailing, routeId) => {
-  sailing.routeId = routeId;
-  db.sailing.upsert(sailing).then(res => console.log(res));
-};
-
-const upsertSailing = function(sailing, routeId) {
-  let condition = {
-    routeId: routeId,
-    sailingDate: sailing.sailingDate,
-    scheduledDeparture: sailing.scheduledDeparture.toISOString()
-  };
-  db.sailing.findAll({ where: condition }).then(obj => {
-    if (obj) {
-      console.log("Sailing exists, update");
-      console.log(obj);
-      return obj.update(sailing);
-    } else {
-      console.log("Need to create Sailing");
-      return insertSailing(sailing, routeId);
-    }
-  });
-};
-
-const insertSailing = function(sailing, routeId) {
-  return db.sailing
-    .sync()
-    .then(() => {
-      return db.sailing.create(sailing);
-    })
-    .then(sailing => {
-      return sailing.setRoute(routeId);
-    });
 };

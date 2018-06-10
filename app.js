@@ -1,10 +1,14 @@
-const express = require("express");
+const express = require('express');
 // const exphbs = require("express-handlebars");
 // const logger = require("morgan");
 const app = express();
+const bodyParser = require('body-parser');
+
+app.use(bodyParser.json());
+
 // const path = require("path");
 // const fs = require("fs");
-const CronJob = require("cron").CronJob;
+const CronJob = require('cron').CronJob;
 
 // var scraper = require("./server/scraper.js");
 
@@ -31,7 +35,7 @@ const CronJob = require("cron").CronJob;
 
 // app.use(express.static(path.join(__dirname, "public"), options));
 
-require("./server/routes")(app);
+require('./server/routes')(app);
 
 // app.get("/", function(req, res) {
 //   var data = { routes: require("./data.json") };
