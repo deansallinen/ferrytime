@@ -67,9 +67,24 @@ module.exports = {
   getOneSchedule(req, res) {
     const routeId = parseInt(req.params.id);
     db.any(
-      'SELECT * FROM routes JOIN sailings ON routes.id = sailings.route_id WHERE routes.id = $1',
+      `SELECT * FROM routes JOIN sailings ON routes.id = sailings.route_id 
+      WHERE routes.id = $1
+      ORDER BY sailings.scheduled_departure ASC`,
       routeId
     )
+      .then(data => res.status(200).send(data))
+      .catch(error => res.status(400).send(error));
+  },
+
+  getAllSailings(req, res) {
+    db.any(`SELECT * FROM sailings`)
+      .then(data => res.status(200).send(data))
+      .catch(error => res.status(400).send(error));
+  },
+
+  getOneSailing(req, res) {
+    const ID = parseInt(req.params.id);
+    db.any(`SELECT * FROM sailings WHERE id = ${ID}`)
       .then(data => res.status(200).send(data))
       .catch(error => res.status(400).send(error));
   }

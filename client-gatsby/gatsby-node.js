@@ -6,11 +6,25 @@
 
 // You can delete this file if you're not using it
 
-exports.createPages = ({ boundActionCreators, graphql }) => {
-  const { createPage } = boundActionCreators
-
-  return new Promise((resolve, reject) => {
-    //  const scheduleTemplate = path.resolve(``)
-    fetch('/api/')
-  })
+exports.onCreateNode = ({ node }) => {
+  console.log(node.internal.type)
 }
+
+// exports.createPages = ({ boundActionCreators, graphql }) => {
+//   const { createPage } = boundActionCreators
+
+//   return new Promise((resolve, reject) => {
+//     const scheduleTemplate = path.resolve(`src/templates/schedule.js`)
+//     fetch('/api/routes').then(result => {
+//       if (result.errors) {
+//         reject(result.errors)
+//       }
+//       result.forEach(route => {
+//         createPage({
+//           path,
+//           component: scheduleTemplate,
+//         })
+//       })
+//     })
+//   })
+// }

@@ -19,7 +19,7 @@ export default class FullSchedule extends Component {
   }
 
   loadInfo() {
-    fetch(`/api/routes/${this.props.routeID}/schedule`)
+    fetch(`/api/routes/${this.props.routeID}/sailings`)
       .then(res => {
         return res.json()
       })
