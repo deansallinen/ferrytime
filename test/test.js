@@ -70,7 +70,7 @@ describe('API', function() {
   it('should list all sailings on a single route on /routes/<id>/sailings GET', done => {
     chai
       .request(server)
-      .get('/api/routes/1/schedule')
+      .get('/api/routes/1/sailings')
       .end((err, res) => {
         res.should.have.status(200);
         res.should.be.json;
@@ -83,10 +83,10 @@ describe('API', function() {
   );
   // it('should create a single sailing on /routes/<id>/sailings/<date> POST');
 
-  it('should update or create a single sailing on /routes/<id>/schedule PUT', done => {
+  it('should update or create a single sailing on /routes/<id>/sailings PUT', done => {
     chai
       .request(server)
-      .put('/api/routes/1/schedule')
+      .put('/api/routes/1/sailings')
       .send({
         route_id: 1,
         scheduled_departure: '2018-05-31T02:22:00.000Z',

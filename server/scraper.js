@@ -1,17 +1,42 @@
 const scraper = require('table-scraper');
 const db = require('./db/index');
+const fetch = require('node-fetch');
 const isValid = require('date-fns/is_valid');
 
 const baseURL = 'http://localhost:8080';
 
-const putToDB = (baseURL, apiRoute, data) =>
-  fetch(baseURL + apiRoute, {
-    method: 'PUT',
-    body: data
-  })
-    .then(response => response.json())
-    .catch(error => console.error('Error:', error))
-    .then(response => console.log('Success:', response));
+// const getRouteID = async (baseURL, routeName) => {
+//   const URL = baseURL + `/api/routes/name/${routeName}`;
+//   try {
+//     const response = await fetch(URL);
+//     const route = await response.json();
+//     return route.id;
+//   } catch (err) {
+//     console.error(err);
+//   }
+// };
+
+const putToDB = async (baseURL, apiRoute, obj) => {
+  const URL = baseURL + apiRoute;
+  try {
+    const response = await fetch(URL, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: 'PUT',
+      body: JSON.stringify(obj)
+    });
+    const result = await response.json();
+    return result;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+const routeModel = route => ({
+  route_name: route.route_name,
+  average_sailing: route.average_sailing
+});
 
 // module.exports = {
 //   scrape: () => {
@@ -19,22 +44,30 @@ scraper
   .get('http://orca.bcferries.com:8080/cc/marqui/actualDepartures.asp')
   .then(result => clean(result))
   .then(data => {
-    data.map(route => {
-      route;
+    data.map((route, index) => {
+      putToDB(baseURL, '/api/routes', routeModel(route))
+        .then(result => console.log(result))
+        .catch(err => console.log(err.message));
+
+      route.sailings.map(sailing => {
+        putToDB(baseURL, `/api/routes/${index + 1}/sailings`, sailing)
+          .then(result => console.log(result))
+          .catch(err => console.log(err.message));
+      });
     });
   });
 //   }
 // };
 
 function clean(data) {
-  let l = data.length;
-  let routes = [];
+  const l = data.length;
+  const routesArray = [];
   for (var i = 2; i < l; i = i + 2) {
     let route = makeRouteInfo(data[i]);
     route.sailings = compileSailings(data[i + 1], route.sailing_date);
-    routes.push(route);
+    routesArray.push(route);
   }
-  return routes;
+  return routesArray;
 }
 
 const makeRouteInfo = array => ({
@@ -49,10 +82,10 @@ const compileSailings = (rawSchedule, date) => {
   return sailings;
 };
 
-const checkValidTime = (date, time) => {
+const validateTime = (date, time) => {
   const dateTime = new Date(date.concat(' ', time));
   if (isValid(dateTime)) {
-    return dateTime;
+    return dateTime.toISOString();
   }
   return null;
 };
@@ -60,9 +93,9 @@ const checkValidTime = (date, time) => {
 const makeSailing = (object, date) => {
   let sailing = {};
   sailing.vessel = object[0];
-  sailing.scheduled_departure = checkValidTime(date, object[1]);
-  sailing.actual_departure = checkValidTime(date, object[2]);
-  sailing.eta = checkValidTime(date, object[3]);
+  sailing.scheduled_departure = validateTime(date, object[1]);
+  sailing.actual_departure = validateTime(date, object[2]);
+  sailing.eta = validateTime(date, object[3]);
   sailing.sailing_status = object[4];
   return sailing;
 };

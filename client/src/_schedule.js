@@ -1,8 +1,8 @@
-import React from "react";
-import Sailing from "./sailing";
-import RouteHeader from "./routeHeader";
-import styled from "styled-components";
-import LoadingMessage from "./loadingMessage";
+import React from 'react';
+import Sailing from './_sailing';
+import RouteHeader from './routeHeader';
+import styled from 'styled-components';
+import LoadingMessage from './loadingMessage';
 
 const RouteSchedule = styled.div`
   grid-area: schedule;
@@ -29,17 +29,19 @@ class Schedule extends React.Component {
   }
 
   componentDidMount() {
-    this.loadScheduleData(this.props.routeId);
+    this.loadRouteInfo(this.props.routeId);
+    this.loadRouteSchedule(this.props.routeId);
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (this.state.currentRoute === null) {
-      this.loadScheduleData(this.props.routeId);
+      this.loadRouteInfo(this.props.routeId);
+      this.loadRouteSchedule(this.props.routeId);
     }
   }
 
-  loadScheduleData(id) {
-    fetch(`/api/route/${id}`)
+  loadRouteInfo(id) {
+    fetch(`/api/routes/${id}`)
       .then(response => {
         return response.json();
       })
@@ -47,7 +49,7 @@ class Schedule extends React.Component {
         data => {
           this.setState({
             isLoaded: true,
-            currentRoute: data[0]
+            routeInfo: data[0]
           });
         },
         error => {
@@ -59,6 +61,26 @@ class Schedule extends React.Component {
       );
   }
 
+  loadRouteSchedule(id) {
+    fetch(`/api/routes/${id}/schedule`)
+      .then(response => {
+        return response.json();
+      })
+      .then(
+        data => {
+          this.setState({
+            isLoaded: true,
+            routeSchedule: data[0]
+          });
+        },
+        error => {
+          this.setState({
+            isLoaded: true,
+            error
+          });
+        }
+      );
+  }
   render() {
     if (this.state.currentRoute === null) {
       return <LoadingMessage />;

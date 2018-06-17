@@ -6,7 +6,7 @@ const db = require('../db');
 module.exports = {
   getAllRoutes(req, res, next) {
     db.any('SELECT * FROM routes')
-      .then(data => res.status(200).send(data))
+      .then(data => res.status(200).json(data))
       .catch(error => res.status(400).send(error));
   },
 
@@ -40,6 +40,7 @@ module.exports = {
 
   putOneSailing(req, res) {
     const routeId = parseInt(req.params.id);
+    console.log(req.body.scheduled_departure);
     db.one(
       `INSERT INTO sailings
       (route_id, scheduled_departure, actual_departure, eta, sailing_status, vessel)

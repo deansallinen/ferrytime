@@ -1,16 +1,16 @@
-import React from "react";
-import { render } from "react-dom";
-import RoutesMenu from "./routesMenu";
-import Clock from "./clock";
-import styled from "styled-components";
-import Schedule from "./schedule";
+import React from 'react';
+import { render } from 'react-dom';
+import RoutesMenu from './_routesMenu';
+import Clock from './_clock';
+import styled from 'styled-components';
+import Schedule from './schedule';
 
 const Wrapper = styled.div`
   max-width: 1300px;
   display: grid;
   grid-template-rows: auto 1fr;
   grid-template-columns: auto 1fr;
-  grid-template-areas: "header header" "menu schedule";
+  grid-template-areas: 'header header' 'menu schedule';
   column-gap: 1.5rem;
 `;
 
@@ -55,4 +55,4 @@ class App extends React.Component {
   }
 }
 
-render(<App />, document.getElementById("root"));
+render(<App />, document.getElementById('root'));

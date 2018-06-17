@@ -7,6 +7,6 @@ module.exports = app => {
   app.get('/api/routes/name/:route_name', controller.getRouteByName);
   app.get('/api/routes/:id', controller.getOneRoute);
 
-  app.put('/api/routes/:id/schedule', controller.putOneSailing);
-  app.get('/api/routes/:id/schedule', controller.getOneSchedule);
+  app.put('/api/routes/:id/sailings', controller.putOneSailing);
+  app.get('/api/routes/:id/sailings', controller.getOneSchedule);
 };
