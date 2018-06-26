@@ -68,7 +68,8 @@ module.exports = {
     db.any(
       `SELECT * FROM routes JOIN sailings ON routes.id = sailings.route_id 
       WHERE routes.id = $1
-      ORDER BY sailings.scheduled_departure ASC`,
+      AND sailings.scheduled_departure::date = current_date
+      ORDER BY sailings.scheduled_departure DESC`,
       routeId
     )
       .then(data => res.status(200).send(data))

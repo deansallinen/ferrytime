@@ -2,10 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 
 const Header = styled.header`
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  padding: 0 1.5rem 0 0;
+  display: grid;
+  margin: 1rem;
 `
 
 const RouteHeader = props => {

@@ -4,13 +4,16 @@ import { format } from 'date-fns'
 
 const SailingContainer = styled.div`
   display: grid;
-  grid-template-areas: 'time vessel status';
-  grid-template-columns: auto 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr auto;
   align-items: baseline;
-  margin-right: 1.5rem;
+  margin: 1rem;
 `
 
-const SailingTime = styled.h2``
+const SailingTime = styled.h2`
+  font-family: monospace;
+`
+
+const SailingStatusContainer = styled.div``
 
 const SailingStatus = styled.div`
   background: ${props =>
@@ -18,31 +21,35 @@ const SailingStatus = styled.div`
   color: ${props => (props.status === 'On Time' ? 'green' : 'white')};
   border: ${props =>
     props.status === 'On Time' ? '2px solid green' : '2px solid palevioletred'};
-  padding: 1rem;
+  padding: 0.5rem;
   border-radius: 3px;
-  text-align: right;
+  font-family: sans-serif;
 `
 
 const timeOf = date => {
   if (date) {
-    return format(new Date(date).toLocaleString(), 'HH:mm')
+    return format(new Date(date).getTime(), 'HH:mm')
   }
 }
 
-const SailingVessel = styled.p``
+const SailingVessel = styled.h6``
 
 const Sailing = props => {
   return (
     <SailingContainer>
-      <SailingTime>{timeOf(props.scheduledDeparture)}</SailingTime>
-      <div>{timeOf(props.actualDeparture)}</div>
-      <SailingVessel>{props.vessel}</SailingVessel>
-      <div>{timeOf(props.eta)}</div>
+      <SailingTime>
+        {timeOf(props.scheduledDeparture)} ==> {timeOf(props.eta)}
+      </SailingTime>
+      {/* <SailingTime>{timeOf(props.actualDeparture)}</SailingTime> */}
+      {/* <SailingVessel>{props.vessel}</SailingVessel> */}
+      {/* <SailingTime>{timeOf(props.eta)}</SailingTime> */}
 
       {props.sailingStatus && (
-        <SailingStatus status={props.sailingStatus}>
-          {props.sailingStatus}
-        </SailingStatus>
+        <SailingStatusContainer>
+          <SailingStatus status={props.sailingStatus}>
+            {props.sailingStatus}
+          </SailingStatus>
+        </SailingStatusContainer>
       )}
     </SailingContainer>
   )

@@ -10,8 +10,8 @@ const Wrapper = styled.div`
   max-width: 1500px;
   display: grid;
   grid-template-rows: auto 1fr;
-  grid-template-columns: auto 1fr;
-  grid-template-areas: 'header header' 'menu schedule';
+  grid-template-columns: 1fr;
+  grid-template-areas: 'header' 'schedule' 'menu';
   column-gap: 1.5rem;
 `
 

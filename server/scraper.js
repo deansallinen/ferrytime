@@ -45,7 +45,7 @@ module.exports = {
         'http://orca.bcferries.com:8080/cc/marqui/actualDepartures.asp'
       );
       const data = await clean(result);
-      console.log(new Date());
+      console.log('Scraped! ', new Date());
       data.map(async route => {
         const result = await putToDB(baseURL, '/api/routes', routeModel(route));
         route.sailings.map(async sailing => {
