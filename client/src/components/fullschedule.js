@@ -36,7 +36,7 @@ export default class FullSchedule extends Component {
 
   render() {
     if (this.state.loaded === false) {
-      return <div />
+      return <div>Loading...</div>
     } else if (this.state.data.length === 0) {
       return <NoSailings />
     } else {
@@ -50,7 +50,8 @@ export default class FullSchedule extends Component {
             return (
               <Sailing
                 vessel={sailing.vessel}
-                scheduledDeparture={sailing.scheduled_departure}
+                scheduledDeparture={
+                  sailing.scheduled_departure}
                 actualDeparture={sailing.actual_departure}
                 eta={sailing.eta}
                 sailingStatus={sailing.sailing_status}

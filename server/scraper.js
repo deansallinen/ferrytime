@@ -38,26 +38,25 @@ const routeModel = route => ({
   average_sailing: route.average_sailing
 });
 
-// module.exports = {
-//   scrape: () => {
-scraper
-  .get('http://orca.bcferries.com:8080/cc/marqui/actualDepartures.asp')
-  .then(result => clean(result))
-  .then(data => {
-    data.map((route, index) => {
-      putToDB(baseURL, '/api/routes', routeModel(route))
-        .then(result => console.log(result))
-        .catch(err => console.log(err.message));
-
-      route.sailings.map(sailing => {
-        putToDB(baseURL, `/api/routes/${index + 1}/sailings`, sailing)
-          .then(result => console.log(result))
-          .catch(err => console.log(err.message));
+module.exports = {
+  scrape: async () => {
+    try {
+      const result = await scraper.get(
+        'http://orca.bcferries.com:8080/cc/marqui/actualDepartures.asp'
+      );
+      const data = await clean(result);
+      console.log(new Date());
+      data.map(async route => {
+        const result = await putToDB(baseURL, '/api/routes', routeModel(route));
+        route.sailings.map(async sailing => {
+          await putToDB(baseURL, `/api/routes/${result.id}/sailings`, sailing);
+        });
       });
-    });
-  });
-//   }
-// };
+    } catch (err) {
+      console.log(err.message);
+    }
+  }
+};
 
 function clean(data) {
   const l = data.length;
@@ -84,8 +83,8 @@ const compileSailings = (rawSchedule, date) => {
 
 const validateTime = (date, time) => {
   const dateTime = new Date(date.concat(' ', time));
-  if (isValid(dateTime)) {
-    return dateTime.toISOString();
+  if (time && isValid(dateTime)) {
+    return dateTime;
   }
   return null;
 };

@@ -5,7 +5,7 @@ import { format } from 'date-fns'
 const SailingContainer = styled.div`
   display: grid;
   grid-template-areas: 'time vessel status';
-  grid-template-columns: 6rem 1fr auto;
+  grid-template-columns: auto 1fr 1fr 1fr 1fr;
   align-items: baseline;
   margin-right: 1.5rem;
 `
@@ -23,22 +23,27 @@ const SailingStatus = styled.div`
   text-align: right;
 `
 
+const timeOf = date => {
+  if (date) {
+    return format(new Date(date).toLocaleString(), 'HH:mm')
+  }
+}
+
 const SailingVessel = styled.p``
 
 const Sailing = props => {
   return (
     <SailingContainer>
-      <SailingTime>{format(props.scheduledDeparture, 'HH:mm')} </SailingTime>
-
+      <SailingTime>{timeOf(props.scheduledDeparture)}</SailingTime>
+      <div>{timeOf(props.actualDeparture)}</div>
       <SailingVessel>{props.vessel}</SailingVessel>
+      <div>{timeOf(props.eta)}</div>
 
       {props.sailingStatus && (
         <SailingStatus status={props.sailingStatus}>
           {props.sailingStatus}
         </SailingStatus>
       )}
-      <div>ETA: {format(props.eta, 'HH:mm')}</div>
-      <div>Actual Departure: {format(props.actualDeparture, 'HH:mm')}</div>
     </SailingContainer>
   )
 }

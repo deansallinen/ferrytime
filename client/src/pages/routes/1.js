@@ -1,7 +1,7 @@
 import React from 'react'
 import Link from 'gatsby-link'
-import FullSchedule from '../components/fullschedule'
-import AppMenu from '../components/menu'
+import FullSchedule from '../../components/fullschedule'
+import AppMenu from '../../components/menu'
 
 const IndexPage = () => (
   <div>

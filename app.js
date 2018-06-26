@@ -88,28 +88,15 @@ app.listen({ port: 4000 }, () =>
 );
 
 app.use(bodyParser.json());
-// app.use('/graphql', bodyParser.json(), graphqlExpress({ schema: typeDefs }));
-// app.get('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }));
 
 require('./server/routes')(app);
-// const logger = require("morgan");
 
 // const path = require("path");
 // const fs = require("fs");
 // const CronJob = require('cron').CronJob;
 
-// var scraper = require("./server/scraper.js");
-
-// new CronJob(
-//   "1 * * * * *",
-//   function() {
-//     // scraper.scrape();
-//     console.log("Message every minute");
-//   },
-//   null,
-//   true,
-//   "America/Vancouver"
-// );
+const scraper = require('./server/scraper');
+setInterval(scraper.scrape, 60000);
 
 const PORT = process.env.PORT || 8080;
 

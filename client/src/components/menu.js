@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import Link from 'gatsby-link'
+import slugify from 'slugify'
 
 const Menu = styled.div`
   grid-area: menu;
@@ -45,8 +46,13 @@ export default class AppMenu extends Component {
       <Menu>
         {this.state.data.map(each => {
           return (
-            <Link to="/page-2">
-              <MenuItem>{each.route_name}</MenuItem>
+            <Link
+              key={each.id}
+              to={slugify(each.route_name, {
+                remove: /[$*_+~.()'"!\-:@]/g,
+              })}
+            >
+              <MenuItem key={each.id}>{each.route_name}</MenuItem>
             </Link>
           )
         })}
