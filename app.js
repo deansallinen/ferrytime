@@ -96,7 +96,7 @@ require('./server/routes')(app);
 // const CronJob = require('cron').CronJob;
 
 const scraper = require('./server/scraper');
-setInterval(scraper.scrape, 60000);
+setInterval(scraper.scrape, 600000);
 
 const PORT = process.env.PORT || 8080;
 
