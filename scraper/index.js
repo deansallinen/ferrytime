@@ -12,22 +12,20 @@ mongoose.connect(
   { useNewUrlParser: true }
 );
 
-const sailingSchema = {
+const Sailing = mongoose.model('Sailing', {
   routeId: String,
   scheduledDeparture: Date,
   actualDeparture: Date,
   eta: Date,
   sailingStatus: String,
-  vessel: String
-};
-
-const Sailing = mongoose.model('Sailing', sailingSchema);
+  vessel: String,
+  lastUpdated: Date
+});
 
 const Route = mongoose.model('Route', {
   routeName: String,
   averageSailing: String,
-  sailingDate: Date,
-  sailings: [sailingSchema]
+  sailingDate: Date
 });
 
 // const test = new Sailing({ name: 'Test Sailing' });
@@ -41,22 +39,46 @@ const scrape = async () => {
     );
     const data = await clean(result);
     console.log('Scraped! ', new Date());
-    data.map(async route => {
-      const newRoute = new Route(route);
-      newRoute
-        .save()
-        .then(() => console.log(`Route ${newRoute.routeName} saved!`));
-      // const result = await putToDB(baseURL, '/api/routes', routeModel(route));
-      // route.sailings.map(async sailing => {
-      // await putToDB(baseURL, `/api/routes/${result.id}/sailings`, sailing);
-      // });
+    data.map(route => {
+      let conditions = { routeName: route.routeName };
+      let options = {
+        upsert: true,
+        new: true
+      };
+      Route.findOneAndUpdate(conditions, route, options).then(newRoute => {
+        console.log(`Route ${newRoute.routeName} updated!`);
+        addSailings(route.sailings, newRoute.id);
+      });
     });
   } catch (err) {
     console.log(err.message);
   }
 };
 
+const addSailings = (sailings, routeId) => {
+  sailings.map(sailing => {
+    let conditions = {
+      routeId,
+      scheduledDeparture: sailing.scheduledDeparture
+    };
+    let update = {
+      ...sailing,
+      routeId: routeId,
+      lastUpdated: new Date()
+    };
+    let options = { upsert: true, new: true };
+    try {
+      Sailing.findOneAndUpdate(conditions, update, options);
+    } catch (err) {
+      throw err;
+    }
+  });
+};
+
 scrape();
+Sailing.findOne({ _id: '5b95b2a5ade6732dc89ca4d5' }).then((err, sailing) =>
+  console.log(sailing)
+);
 
 function clean(data) {
   const l = data.length;

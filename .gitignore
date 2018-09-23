@@ -43,5 +43,5 @@ Thumbs.db
 mongod
 test-*.js
 /data
-*/node_modules
+node_modules
 secrets.js

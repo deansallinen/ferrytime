@@ -1,15 +1,9 @@
-const controller = require('../controllers');
+// routes index
 
-module.exports = app => {
-  app.get('/api/routes', controller.getAllRoutes);
-  app.get('/api/routes/:id', controller.getOneRoute);
-  app.put('/api/routes', controller.putOneRoute);
+const Router = require('koa-router');
+const router = new Router();
+const Ctrl = require('../controllers/sailing');
 
-  app.get('/api/sailings', controller.getAllSailings);
-  app.get('/api/sailings/:id', controller.getOneSailing);
+router.get('/', Ctrl.findAll);
 
-  app.get('/api/routes/name/:route_name', controller.getRouteByName);
-
-  app.put('/api/routes/:id/sailings', controller.putOneSailing);
-  app.get('/api/routes/:id/sailings', controller.getOneSchedule);
-};
+module.exports = router;
