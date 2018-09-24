@@ -11,15 +11,16 @@ const scrape = async () => {
     );
     const data = await clean(result);
     data.map(route => {
-      const routeVariables = {
-        routeName: route.routeName,
-        averageSailing: route.averageSailing,
-        sailingDate: route.sailingDate
-      };
-      // console.log(route);
+      // const routeVariables = {
+      //   routeName: route.routeName,
+      //   averageSailing: route.averageSailing,
+      //   sailingDate: route.sailingDate
+      // };
+      const { sailings, ...routeVariables } = route;
       request(endpoint, upsertRoute, routeVariables).then(result => {
         const routeId = result.updateRoute.id;
-        route.sailings.map(sailing => {
+        // route.sailings.map(sailing => {
+        sailings.map(sailing => {
           request(endpoint, upsertSailing, {
             ...sailing,
             routeId,
