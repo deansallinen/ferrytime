@@ -10,23 +10,17 @@ const scrape = async () => {
       'http://orca.bcferries.com:8080/cc/marqui/actualDepartures.asp'
     );
     const data = await clean(result);
-    data.map(route => {
-      // const routeVariables = {
-      //   routeName: route.routeName,
-      //   averageSailing: route.averageSailing,
-      //   sailingDate: route.sailingDate
-      // };
+    data.map(async route => {
       const { sailings, ...routeVariables } = route;
-      request(endpoint, upsertRoute, routeVariables).then(result => {
-        const routeId = result.updateRoute.id;
-        // route.sailings.map(sailing => {
-        sailings.map(sailing => {
-          request(endpoint, upsertSailing, {
-            ...sailing,
-            routeId,
-            lastUpdated: now
-          }).then(sailingResult => console.log(sailingResult));
+      const result = await request(endpoint, upsertRoute, routeVariables);
+      const routeId = result.updateRoute.id;
+      sailings.map(async sailing => {
+        const sailingResult = await request(endpoint, upsertSailing, {
+          ...sailing,
+          routeId,
+          lastUpdated: now
         });
+        // console.log(sailingResult);
       });
     });
   } catch (err) {
@@ -122,3 +116,7 @@ mutation sailingUpdate(
   }
 }
 `;
+
+module.exports = {
+  scrape
+};
