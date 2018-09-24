@@ -16,7 +16,7 @@ mongoose.connect(
 // Schema
 const typeDefs = gql`
   type Query {
-    route(id: ID): Route
+    route(routeName: String): Route
     allRoutes: [Route]
     allSailings: [Sailing]
   }
@@ -32,12 +32,14 @@ const typeDefs = gql`
     id: ID
     routeName: String
     averageSailing: String
+    sailingDate: String
     sailings: [Sailing]
   }
 
   input RouteInput {
     routeName: String
     averageSailing: String
+    sailingDate: String
   }
 
   type Sailing {
@@ -49,6 +51,7 @@ const typeDefs = gql`
     eta: String
     sailingStatus: String
     vessel: String
+    lastUpdated: String
   }
 
   input SailingInput {
@@ -58,6 +61,7 @@ const typeDefs = gql`
     eta: String
     sailingStatus: String
     vessel: String
+    lastUpdated: String
   }
 `;
 
@@ -65,7 +69,7 @@ const typeDefs = gql`
 const resolvers = {
   Query: {
     route: (parent, args, context) => {
-      return Route.findOne({ _id: args.id });
+      return Route.findOne({ ...args });
     },
     allRoutes: (parent, args, context) => {
       return Route.find({});

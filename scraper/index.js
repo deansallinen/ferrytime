@@ -1,36 +1,8 @@
+// scraper
+
 const scraper = require('table-scraper');
-// const db = require('./db/index');
-const fetch = require('node-fetch');
+const { request } = require('graphql-request');
 const isValid = require('date-fns/is_valid');
-const { USER, PASS } = require('./secrets');
-const mongoose = require('mongoose');
-
-const URI = `mongodb://${USER}:${PASS}@ds064198.mlab.com:64198/ferrytracker`;
-
-mongoose.connect(
-  URI,
-  { useNewUrlParser: true }
-);
-
-const Sailing = mongoose.model('Sailing', {
-  routeId: String,
-  scheduledDeparture: Date,
-  actualDeparture: Date,
-  eta: Date,
-  sailingStatus: String,
-  vessel: String,
-  lastUpdated: Date
-});
-
-const Route = mongoose.model('Route', {
-  routeName: String,
-  averageSailing: String,
-  sailingDate: Date
-});
-
-// const test = new Sailing({ name: 'Test Sailing' });
-
-// test.save().then(() => console.log('saved'));
 
 const scrape = async () => {
   try {
@@ -38,16 +10,22 @@ const scrape = async () => {
       'http://orca.bcferries.com:8080/cc/marqui/actualDepartures.asp'
     );
     const data = await clean(result);
-    console.log('Scraped! ', new Date());
     data.map(route => {
-      let conditions = { routeName: route.routeName };
-      let options = {
-        upsert: true,
-        new: true
+      const routeVariables = {
+        routeName: route.routeName,
+        averageSailing: route.averageSailing,
+        sailingDate: route.sailingDate
       };
-      Route.findOneAndUpdate(conditions, route, options).then(newRoute => {
-        console.log(`Route ${newRoute.routeName} updated!`);
-        addSailings(route.sailings, newRoute.id);
+      // console.log(route);
+      request(endpoint, upsertRoute, routeVariables).then(result => {
+        const routeId = result.updateRoute.id;
+        route.sailings.map(sailing => {
+          request(endpoint, upsertSailing, {
+            ...sailing,
+            routeId,
+            lastUpdated: now
+          }).then(sailingResult => console.log(sailingResult));
+        });
       });
     });
   } catch (err) {
@@ -55,30 +33,7 @@ const scrape = async () => {
   }
 };
 
-const addSailings = (sailings, routeId) => {
-  sailings.map(sailing => {
-    let conditions = {
-      routeId,
-      scheduledDeparture: sailing.scheduledDeparture
-    };
-    let update = {
-      ...sailing,
-      routeId: routeId,
-      lastUpdated: new Date()
-    };
-    let options = { upsert: true, new: true };
-    try {
-      Sailing.findOneAndUpdate(conditions, update, options);
-    } catch (err) {
-      throw err;
-    }
-  });
-};
-
 scrape();
-Sailing.findOne({ _id: '5b95b2a5ade6732dc89ca4d5' }).then((err, sailing) =>
-  console.log(sailing)
-);
 
 function clean(data) {
   const l = data.length;
@@ -121,35 +76,48 @@ const makeSailing = (object, date) => {
   return sailing;
 };
 
-// const getRouteID = async (baseURL, routeName) => {
-//   const URL = baseURL + `/api/routes/name/${routeName}`;
-//   try {
-//     const response = await fetch(URL);
-//     const route = await response.json();
-//     return route.id;
-//   } catch (err) {
-//     console.error(err);
-//   }
-// };
-
-// const putToDB = async (baseURL, apiRoute, obj) => {
-//   const URL = baseURL + apiRoute;
-//   try {
-//     const response = await fetch(URL, {
-//       headers: {
-//         'Content-Type': 'application/json'
-//       },
-//       method: 'PUT',
-//       body: JSON.stringify(obj)
-//     });
-//     const result = await response.json();
-//     return result;
-//   } catch (err) {
-//     console.error(err);
-//   }
-// };
-
-// const routeModel = route => ({
-//   route_name: route.route_name,
-//   average_sailing: route.average_sailing
-// });
+const now = new Date();
+const endpoint = 'http://localhost:4000/graphql';
+const upsertRoute = `
+mutation updateRoute(
+  $routeName: String
+  $averageSailing: String
+  $sailingDate: String
+) {
+  updateRoute(
+    input: {
+      routeName: $routeName
+      averageSailing: $averageSailing
+      sailingDate: $sailingDate
+    }
+  ) {
+    id
+    routeName
+    averageSailing
+  }
+}`;
+const upsertSailing = `
+mutation sailingUpdate(
+  $routeId: String
+  $scheduledDeparture: String
+  $actualDeparture: String
+  $eta: String
+  $sailingStatus: String
+  $vessel: String
+  $lastUpdated: String
+) {
+  updateSailing(
+    input: {
+      routeId: $routeId
+      scheduledDeparture: $scheduledDeparture
+      actualDeparture: $actualDeparture
+      eta: $eta
+      vessel: $vessel
+      sailingStatus: $sailingStatus
+      lastUpdated: $lastUpdated
+    }
+  ) {
+    routeId
+  }
+}
+`;
