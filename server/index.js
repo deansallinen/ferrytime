@@ -16,13 +16,16 @@ mongoose.connect(
 // Schema
 const typeDefs = gql`
   type Query {
-    routes(id: ID): [Route]
-    sailings(id: ID): [Sailing]
+    route(id: ID): Route
+    allRoutes: [Route]
+    allSailings: [Sailing]
   }
 
   type Mutation {
     createSailing(input: SailingInput): Sailing
     createRoute(input: RouteInput): Route
+    updateRoute(input: RouteInput): Route
+    updateSailing(input: SailingInput): Sailing
   }
 
   type Route {
@@ -39,7 +42,8 @@ const typeDefs = gql`
 
   type Sailing {
     id: ID
-    routeId: Int
+    route: Route
+    routeId: String
     scheduledDeparture: String
     actualDeparture: String
     eta: String
@@ -48,7 +52,7 @@ const typeDefs = gql`
   }
 
   input SailingInput {
-    routeId: Int
+    routeId: String
     scheduledDeparture: String
     actualDeparture: String
     eta: String
@@ -60,23 +64,51 @@ const typeDefs = gql`
 // Resolver functions
 const resolvers = {
   Query: {
-    routes: (parent, args, context) => {
-      return Route.find({ _id: args.id });
+    route: (parent, args, context) => {
+      return Route.findOne({ _id: args.id });
     },
-    sailings: (parent, args, context) => {
-      return Sailing.find({ _id: args.id });
+    allRoutes: (parent, args, context) => {
+      return Route.find({});
+    },
+    allSailings: (parent, args, context) => {
+      return Sailing.find({});
     }
   },
   Mutation: {
     createRoute: (parent, args, context) => {
-      const route = new Route({
-        routeName: args.input.routeName,
-        averageSailing: args.input.averageSailing
-      });
+      const route = new Route({ ...args.input });
       return route.save();
     },
+    updateRoute: (parent, args, context) => {
+      return Route.findOneAndUpdate(
+        { routeName: args.input.routeName }, // condition
+        { ...args.input }, // payload
+        { upsert: true } // options
+      );
+    },
     createSailing: (parent, args, context) => {
-      return Sailing.save();
+      const sailing = new Sailing({ ...args.input });
+      return sailing.save();
+    },
+    updateSailing: (parent, args, context) => {
+      return Sailing.findOneAndUpdate(
+        {
+          routeId: args.input.routeId,
+          scheduledDeparture: args.input.scheduledDeparture
+        }, // condition
+        { ...args.input }, // payload
+        { upsert: true } // options
+      );
+    }
+  },
+  Route: {
+    sailings: (parent, args, context) => {
+      return Sailing.find({ routeId: parent.id });
+    }
+  },
+  Sailing: {
+    route: (parent, args, context) => {
+      return Route.findOne({ _id: parent.routeId });
     }
   }
 };
