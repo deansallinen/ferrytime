@@ -4,7 +4,7 @@ const scraper = require('table-scraper');
 const { request } = require('graphql-request');
 const isValid = require('date-fns/is_valid');
 
-const endpoint = 'https://localhost:4000/graphql';
+const endpoint = 'http://localhost:4000/graphql';
 const upsertRoute = `
 mutation updateRoute(
   $routeName: String
@@ -64,14 +64,13 @@ const validateTime = (date, time) => {
 };
 
 const makeSailing = (object, date) => {
-  console.log(object);
   const [
     vessel,
     scheduledDeparture,
     actualDeparture,
     eta,
     sailingStatus
-  ] = object;
+  ] = Object.values(object);
   return {
     vessel,
     sailingStatus,
@@ -124,7 +123,7 @@ const scrapeSailings = async () => {
   }
 };
 
-const scrape = () => setInterval(scrapeSailings, 20000);
+const scrape = interval => setInterval(scrapeSailings, interval);
 
 module.exports = {
   scrape,

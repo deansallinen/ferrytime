@@ -126,7 +126,7 @@ app.use(Helmet());
 app.use(cors());
 server.applyMiddleware({ app });
 
-scraper.scrape();
+scraper.scrape(60000);
 
 app.listen({ port: 4000 }, () =>
   console.log(`🚀  Server ready at http://localhost:4000${server.graphqlPath}`)
