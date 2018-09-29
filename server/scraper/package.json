@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "start": "node index.js"
+    "dev": "node index.js",
+    "start": "micro"
   },
   "author": "",
   "license": "ISC",
@@ -14,6 +15,7 @@
     "date-fns": "^1.29.0",
     "eslint-plugin-jest": "^21.22.1",
     "graphql-request": "^1.8.2",
+    "micro": "^9.3.3",
     "mongoose": "^5.2.13",
     "node-fetch": "^2.2.0",
     "table-scraper": "^0.1.0"
