@@ -123,10 +123,12 @@ const scrapeSailings = async () => {
   }
 };
 
-const scrape = () => setInterval(scrapeSailings, 2000);
+// const scrape = () => setInterval(scrapeSailings, 2000);
 
-module.exports = {
-  scrape,
-  makeSailing,
-  validateTime
-};
+// module.exports = {
+//   scrape,
+//   makeSailing,
+//   validateTime
+// };
+
+module.exports = () => setInterval(scrapeSailings, 20000);
