@@ -4,74 +4,6 @@ const scraper = require('table-scraper');
 const { request } = require('graphql-request');
 const isValid = require('date-fns/is_valid');
 
-const scrape = async () => {
-  try {
-    const result = await scraper.get(
-      'http://orca.bcferries.com:8080/cc/marqui/actualDepartures.asp'
-    );
-    const data = await clean(result);
-    data.map(async route => {
-      const { sailings, ...routeVariables } = route;
-      const result = await request(endpoint, upsertRoute, routeVariables);
-      const routeId = result.updateRoute.id;
-      sailings.map(async sailing => {
-        const sailingResult = await request(endpoint, upsertSailing, {
-          ...sailing,
-          routeId,
-          lastUpdated: now
-        });
-        // console.log(sailingResult);
-      });
-    });
-  } catch (err) {
-    console.log(err.message);
-  }
-};
-
-scrape();
-
-function clean(data) {
-  const l = data.length;
-  const routesArray = [];
-  for (var i = 2; i < l; i = i + 2) {
-    let route = makeRouteInfo(data[i]);
-    route.sailings = compileSailings(data[i + 1], route.sailingDate);
-    routesArray.push(route);
-  }
-  return routesArray;
-}
-
-const makeRouteInfo = array => ({
-  routeName: array[0][0].split('Sailing time: ')[0],
-  averageSailing: array[0][0].split('Sailing time: ')[1],
-  sailingDate: new Date(array[0][1]).toISOString().substr(0, 10)
-});
-
-const compileSailings = (rawSchedule, date) => {
-  let sailings = rawSchedule.map(x => makeSailing(x, date));
-  sailings.shift();
-  return sailings;
-};
-
-const validateTime = (date, time) => {
-  const dateTime = new Date(date.concat(' ', time));
-  if (time && isValid(dateTime)) {
-    return dateTime;
-  }
-  return null;
-};
-
-const makeSailing = (object, date) => {
-  let sailing = {};
-  sailing.vessel = object[0];
-  sailing.scheduledDeparture = validateTime(date, object[1]);
-  sailing.actualDeparture = validateTime(date, object[2]);
-  sailing.eta = validateTime(date, object[3]);
-  sailing.sailingStatus = object[4];
-  return sailing;
-};
-
-const now = new Date();
 const endpoint = 'http://localhost:4000/graphql';
 const upsertRoute = `
 mutation updateRoute(
@@ -117,6 +49,84 @@ mutation sailingUpdate(
 }
 `;
 
+const makeRouteInfo = array => ({
+  routeName: array[0][0].split('Sailing time: ')[0],
+  averageSailing: array[0][0].split('Sailing time: ')[1],
+  sailingDate: new Date(array[0][1]).toISOString().substr(0, 10)
+});
+
+const validateTime = (date, time) => {
+  const dateTime = new Date(date.concat(' ', time));
+  if (time && isValid(dateTime)) {
+    return dateTime;
+  }
+  return null;
+};
+
+const makeSailing = (object, date) => {
+  const [
+    vessel,
+    scheduledDeparture,
+    actualDeparture,
+    eta,
+    sailingStatus
+  ] = object;
+  return {
+    vessel,
+    sailingStatus,
+    scheduledDeparture: validateTime(date, scheduledDeparture),
+    actualDeparture: validateTime(date, actualDeparture),
+    eta: validateTime(date, eta)
+  };
+};
+
+const compileSailings = (rawSchedule, date) => {
+  const sailings = rawSchedule.map(x => makeSailing(x, date));
+  sailings.shift();
+  return sailings;
+};
+
+function clean(data) {
+  const l = data.length;
+  const routesArray = [];
+  for (let i = 2; i < l; i += 2) {
+    const route = makeRouteInfo(data[i]);
+    route.sailings = compileSailings(data[i + 1], route.sailingDate);
+    routesArray.push(route);
+  }
+  return routesArray;
+}
+
+const scrapeSailings = async () => {
+  try {
+    const rawSchedule = await scraper.get(
+      'http://orca.bcferries.com:8080/cc/marqui/actualDepartures.asp'
+    );
+    const data = await clean(rawSchedule);
+    data.map(async route => {
+      const { sailings, ...routeVariables } = route;
+      const result = await request(endpoint, upsertRoute, routeVariables);
+      const routeId = result.updateRoute.id;
+      sailings.map(async sailing => {
+        const sailingResult = await request(endpoint, upsertSailing, {
+          ...sailing,
+          routeId,
+          lastUpdated: new Date()
+        });
+        // console.log(sailingResult);
+      });
+    });
+  } catch (err) {
+    throw err;
+  } finally {
+    console.log(`Scraped at ${new Date()}`);
+  }
+};
+
+const scrape = () => setInterval(scrapeSailings, 2000);
+
 module.exports = {
-  scrape
+  scrape,
+  makeSailing,
+  validateTime
 };
