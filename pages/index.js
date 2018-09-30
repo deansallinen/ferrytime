@@ -12,7 +12,7 @@ const Index = props => (
       {props.allRoutes.map(route => (
         <li key={route.id}>
           <Link
-            as={`/r/${route.routeName}`}
+            // as={`/r/${route.routeName}`}
             href={`/post?id=${route.routeName}`}
           >
             <a>{route.routeName}</a>

@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "next",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "next build && next export",
+    "build": "next build",
+    "export": "npm run build && next export",
     "start": "next start"
   },
   "keywords": [],

@@ -13,7 +13,6 @@ const Post = props => (
     <h1>{props.route.routeName}</h1>
     <ul>
       {props.route.sailings.map(sailing => {
-        console.log(sailing);
         return (
           <li key={sailing.id}>
             {sailing.vessel} -{' '}
