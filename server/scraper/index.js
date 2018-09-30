@@ -3,6 +3,7 @@
 const scraper = require('table-scraper');
 const { request } = require('graphql-request');
 const isValid = require('date-fns/is_valid');
+const moment = require('moment-timezone');
 
 const endpoint = 'http://localhost:4000/graphql';
 const upsertRoute = `
@@ -56,9 +57,14 @@ const makeRouteInfo = array => ({
 });
 
 const validateTime = (date, time) => {
-  const dateTime = new Date(date.concat(' ', time));
-  if (time && isValid(dateTime)) {
-    return dateTime;
+  const dateTime = moment.tz(
+    date.concat(' ', time),
+    'YYYY-MM-DD hh:mm a',
+    'America/Vancouver'
+  );
+  // console.log(dateTime);
+  if (time && dateTime.isValid()) {
+    return dateTime.utc().format();
   }
   return null;
 };
@@ -81,9 +87,8 @@ const makeSailing = (object, date) => {
 };
 
 const compileSailings = (rawSchedule, date) => {
-  const sailings = rawSchedule.map(x => makeSailing(x, date));
-  sailings.shift();
-  return sailings;
+  rawSchedule.shift();
+  return rawSchedule.map(x => makeSailing(x, date));
 };
 
 function clean(data) {
@@ -108,6 +113,12 @@ const scrapeSailings = async () => {
       const result = await request(endpoint, upsertRoute, routeVariables);
       const routeId = result.updateRoute.id;
       sailings.map(async sailing => {
+        if (
+          sailing.sailingStatus ===
+          'Ongoing delay due to earlier operational delay'
+        ) {
+          console.log('Before sending request: ', sailing.scheduledDeparture);
+        }
         const sailingResult = await request(endpoint, upsertSailing, {
           ...sailing,
           routeId,

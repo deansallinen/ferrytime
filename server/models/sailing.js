@@ -2,12 +2,12 @@ const mongoose = require('mongoose');
 
 const Sailing = mongoose.model('Sailing', {
   routeId: String,
-  scheduledDeparture: Date,
-  actualDeparture: Date,
-  eta: Date,
+  scheduledDeparture: String,
+  actualDeparture: String,
+  eta: String,
   sailingStatus: String,
   vessel: String,
-  lastUpdated: Date
+  lastUpdated: String
 });
 
 module.exports = Sailing;

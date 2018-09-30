@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 const { Route, Sailing } = require('./models');
 const { USER, PASS } = require('./secrets');
 const scraper = require('./scraper');
+// const { GraphQLDateTime } = require('graphql-iso-date');
 
 const URI = `mongodb://${USER}:${PASS}@ds064198.mlab.com:64198/ferrytracker`;
 
@@ -90,18 +91,32 @@ const resolvers = {
       const sailing = new Sailing({ ...args.input });
       return sailing.save();
     },
-    updateSailing: (parent, args, context) =>
-      Sailing.findOneAndUpdate(
+    updateSailing: async (parent, args, context) => {
+      if (
+        args.input.sailingStatus ===
+        'Ongoing delay due to earlier operational delay'
+      ) {
+        console.log('Before updating db: ', args.input.scheduledDeparture);
+      }
+      const res = await Sailing.findOneAndUpdate(
         {
           routeId: args.input.routeId,
           scheduledDeparture: args.input.scheduledDeparture
         }, // condition
-        { ...args.input }, // payload
+        args.input, // payload
         { upsert: true } // options
-      )
+      );
+      if (
+        args.input.sailingStatus ===
+        'Ongoing delay due to earlier operational delay'
+      ) {
+        console.log('After updating db: ', res.scheduledDeparture);
+      }
+    }
   },
   Route: {
-    sailings: (parent, args, context) => Sailing.find({ routeId: parent.id })
+    sailings: (parent, args, context) =>
+      Sailing.find({ routeId: parent.id }).sort({ scheduledDeparture: 1 })
   },
   Sailing: {
     route: (parent, args, context) => Route.findOne({ _id: parent.routeId })
