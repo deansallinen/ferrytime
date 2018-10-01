@@ -12,7 +12,4 @@ What began as a re-styled HTML table ended up becoming a pet project learning en
 - Moved to Postgres for Database
 - Tried using Knex as ORM
 - Fell back to using pg-promise and writing SQL for simplicity
-
-## TODO
-
-See project page in Github.
+- Rewrote entire backend for Mongodb (mLab) and Graphql
