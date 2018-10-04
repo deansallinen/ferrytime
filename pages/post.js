@@ -1,6 +1,10 @@
 import Link from 'next/link';
+import { withRouter } from 'next/router';
 import { request } from 'graphql-request';
 import { format, parse } from 'date-fns';
+import React from 'react';
+import Sailing from '../components/sailing';
+import Route from '../layouts/route';
 
 const URL = 'https://server-sphnxiurqx.now.sh/graphql';
 // const URL = 'http://localhost:4000/graphql';
@@ -8,22 +12,20 @@ const URL = 'https://server-sphnxiurqx.now.sh/graphql';
 const formatSailingTime = time =>
   time ? format(new Date(time).getTime(), 'HH:mm') : time;
 
-const Post = props => (
-  <div>
+const Post = withRouter(props => (
+  <Route>
     <h1>{props.route.routeName}</h1>
     <ul>
       {props.route.sailings.map(sailing => {
         return (
           <li key={sailing.id}>
-            {sailing.vessel} -{' '}
-            <h1>{formatSailingTime(sailing.scheduledDeparture)}</h1>
-            {sailing.sailingStatus} -{sailing.lastUpdated}
+            <Sailing {...sailing} />
           </li>
         );
       })}
     </ul>
-  </div>
-);
+  </Route>
+));
 
 Post.getInitialProps = async function(context) {
   const routeName = context.query.id;
@@ -34,6 +36,8 @@ Post.getInitialProps = async function(context) {
               id
               vessel
               scheduledDeparture
+              actualDeparture
+              eta
               sailingStatus
               lastUpdated
           }

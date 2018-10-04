@@ -1,1 +1,1 @@
-{"/index":"bundles/pages/index.js","/post":"bundles/pages/post.js","/_app":"bundles/pages/_app.js","/_error":"bundles/pages/_error.js","/_document":"bundles/pages/_document.js","/":"bundles/pages/index.js"}
+{"/_app":"static/development/pages/_app.js","/_error":"static/development/pages/_error.js","/_document":"static/development/pages/_document.js","/post":"static/development/pages/post.js","/index":"static/development/pages/index.js","/":"static/development/pages/index.js"}
