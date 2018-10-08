@@ -1,1 +1,0 @@
-{"version":3,"file":"4.d273a4d58f785e65dc0d.hot-update.js","sources":["webpack:///pages/index.js"],"sourcesContent":["import fetch from 'isomorphic-unfetch';\n\nconst Index = (props) => (\n  <div>\n    \n  </div>\n)\n\n\n// WEBPACK FOOTER //\n// pages/index.js"],"mappings":";;;;;;;;;;;;;AAAA;AACA;AACA;AAAA;AACA;AAAA;AAAA;AAAA;AAAA;AADA;;;;;;;;;;;;;;;;;;;;;;;A","sourceRoot":""}
