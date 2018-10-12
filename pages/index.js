@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { request } from 'graphql-request';
 import Header from '../components/header';
 
-const URL = 'https://server-sphnxiurqx.now.sh/graphql';
+const URL = 'https://ferrytrackerserver.now.sh/graphql';
 // const URL = 'http://localhost:4000/graphql';
 
 const Index = props => (
