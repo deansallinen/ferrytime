@@ -6,7 +6,7 @@ import React from 'react';
 import Sailing from '../components/sailing';
 import Route from '../layouts/route';
 
-const URL = 'https://ferrytracker.now.sh/graphql';
+const URL = 'https://ferrytrackerserver.now.sh/graphql';
 // const URL = 'http://localhost:4000/graphql';
 
 const formatSailingTime = time =>

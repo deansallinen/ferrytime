@@ -1,7 +1,7 @@
 const { request } = require('graphql-request');
 module.exports = {
   async exportPathMap() {
-    const URL = 'https://server-sphnxiurqx.now.sh/graphql';
+    const URL = 'https://ferrytrackerserver.now.sh/graphql';
     const query = `{
             allRoutes {
               routeName
