@@ -4,7 +4,7 @@ import { request } from 'graphql-request';
 import { format, parse } from 'date-fns';
 import React from 'react';
 import Sailing from '../components/sailing';
-import Route from '../layouts/route';
+import Page from '../layouts/main';
 
 const URL = 'https://ferrytrackerserver.now.sh/graphql';
 // const URL = 'http://localhost:4000/graphql';
@@ -13,7 +13,7 @@ const formatSailingTime = time =>
   time ? format(new Date(time).getTime(), 'HH:mm') : time;
 
 const Post = withRouter(props => (
-  <Route>
+  <Page>
     <h1>{props.route.routeName}</h1>
     <ul>
       {props.route.sailings.map(sailing => {
@@ -24,7 +24,7 @@ const Post = withRouter(props => (
         );
       })}
     </ul>
-  </Route>
+  </Page>
 ));
 
 Post.getInitialProps = async function(context) {

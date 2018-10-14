@@ -9,6 +9,10 @@ export default props => (
     <p>{props.vessel}</p>
     <p>Actual Departure: {formatSailingTime(props.actualDeparture)}</p>
     <p>ETA: {formatSailingTime(props.eta)}</p>
-    <h3 />
+    <style jsx>{`
+      div {
+        // display: flex;
+      }
+    `}</style>
   </div>
 );

@@ -1,28 +1,31 @@
 import Link from 'next/link';
 
 export default () => (
-  <header>
+  <footer>
 
-  <h1>
+  <h3>
     <Link prefetch href="/">
     <a>
     Ferrytracker
     </a>
     </Link>
-  </h1>
+  </h3>
+  <p>Written by Dean Sallinen</p>
+  <p>Node | Graphql | React | Next</p>
   <style jsx>{`
     h1 {
       font-family: sans-serif;
     }
     a {
       text-decoration: none;
-      color: black;
+      color: #fefefe;
     }
-    header {
-      // background-color: #aaa;
+    footer {
+      background-color: #222;
       padding: .5rem;
+      color: #aaa;
     }
   `}</style>
-  </header>
+  </footer>
 
 );

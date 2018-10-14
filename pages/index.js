@@ -2,13 +2,13 @@ import fetch from 'isomorphic-unfetch';
 import Link from 'next/link';
 import { request } from 'graphql-request';
 import Header from '../components/header';
+import Page from '../layouts/main';
 
 const URL = 'https://ferrytrackerserver.now.sh/graphql';
 // const URL = 'http://localhost:4000/graphql';
 
 const Index = props => (
-  <div>
-    <Header />
+  <Page>
     <ul>
       {props.allRoutes.map(route => (
         <li key={route.id}>
@@ -24,7 +24,12 @@ const Index = props => (
         </li>
       ))}
     </ul>
-  </div>
+    <style jsx>{`
+      ul {
+        list-style: none;
+      }
+    `}</style>
+  </Page>
 );
 
 Index.getInitialProps = async function() {
