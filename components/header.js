@@ -1,28 +1,29 @@
-import Link from 'next/link';
+import React from 'react';
+import AppBar from './appBar'
+import { request } from 'graphql-request';
 
-export default () => (
-  <header>
+export default class Header extends React.Component {
+    state = {
+        data: {}
+    };
 
-  <h1>
-    <Link prefetch href="/">
-    <a>
-    Ferrytracker
-    </a>
-    </Link>
-  </h1>
-  <style jsx>{`
-    h1 {
-      font-family: sans-serif;
+    async componentDidMount() {
+        const query = `{
+          allRoutes {
+            id
+            routeName
+          }
+        }`;
+        const URL = 'https://ferrytrackerserver.now.sh/graphql';
+        request(URL, query).then(data => {
+            this.setState({data})
+            // console.log(this.state.data)
+        });
+      };
+  
+    render() {
+        return (
+            <AppBar {...this.state.data}></AppBar>
+        )
     }
-    a {
-      text-decoration: none;
-      color: black;
-    }
-    header {
-      // background-color: #aaa;
-      padding: .5rem;
-    }
-  `}</style>
-  </header>
-
-);
+}
