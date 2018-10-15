@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --watch",
     "start": "node index.js",
     "dev": "nodemon"
   },
@@ -13,6 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "@koa/cors": "^2.2.2",
+    "@types/es6-promise": "^3.3.0",
     "apollo-server-koa": "^2.0.0-rc.12",
     "axios": "^0.18.0",
     "date-fns": "^1.29.0",
@@ -22,6 +23,7 @@
     "koa": "^2.5.3",
     "koa-helmet": "^4.0.0",
     "koa-router": "^7.4.0",
+    "lodash": "^4.17.11",
     "micro": "latest",
     "moment": "^2.22.2",
     "moment-timezone": "^0.5.21",

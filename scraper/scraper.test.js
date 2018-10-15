@@ -1,6 +1,7 @@
 const scraper = require('./index');
 const { isEqual } = require('date-fns');
 const moment = require('moment-timezone');
+
 test('should return properly formatted sailing', () => {
   const date = '2010-12-13';
   const example = ['boat', '12:00', '12:01', '12:45', 'On Time'];
