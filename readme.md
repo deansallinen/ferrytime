@@ -14,3 +14,9 @@ What began as a re-styled HTML table ended up becoming a continuously changing l
 - Tried using Knex as ORM
 - Fell back to using pg-promise and writing SQL for simplicity
 - Rewrote entire backend for hosted Mongodb (mLab) and Graphql
+
+
+## TODO
+- Not all sailings show
+- Merge results of second scraper
+- Fix frontend styling
