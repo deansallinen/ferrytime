@@ -1,4 +1,4 @@
-# Ferry Tracker
+# Ferrytime
 
 A simple ~~website~~ webapp to track the schedule of the BC Ferries.
 
