@@ -5,7 +5,7 @@ import Layout from '../components/layout'
 
 const FerryRoute = props => (
   <Layout>
-    {console.log(props.data)}
+    {console.log(props)}
     <h1>{props.data.ftapi.route.routeName}</h1>
     <p>{props.data.ftapi.route.averageSailing}</p>
     <ul>
@@ -18,9 +18,9 @@ const FerryRoute = props => (
 )
 
 export const query = graphql`
-  query PageQuery {
+  query PageQuery($routeName: String) {
     ftapi {
-      route {
+      route(routeName: $routeName) {
         id
         routeName
         averageSailing
