@@ -14,7 +14,10 @@ const Index = props => (
         <li key={route.id}>
           <Link
             prefetch
-            as={`post?id=${route.routeName}`}
+            as={route.routeName
+              .toLowerCase()
+              .replace(/[^a-zA-Z0-9 -]/g, '')
+              .replace(/ /g, '_')}
             href={{ pathname: '/post', query: { id: route.routeName } }}
           >
             <a>

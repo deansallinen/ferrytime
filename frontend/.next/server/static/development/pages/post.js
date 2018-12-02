@@ -819,7 +819,7 @@ var FerryMenu = function FerryMenu(_ref) {
   }, console.log(data), data.map(function (route) {
     return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(next_link__WEBPACK_IMPORTED_MODULE_0___default.a, {
       prefetch: true,
-      as: "post?id=".concat(route.routeName),
+      as: route.routeName.toLowerCase().replace(/[^a-zA-Z0-9 -]/g, '').replace(/ /g, '_'),
       href: {
         pathname: '/post',
         query: {
@@ -836,14 +836,14 @@ var FerryMenu = function FerryMenu(_ref) {
       key: route.id,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 17
+        lineNumber: 20
       },
       __self: this
     }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_4___default.a, {
       primary: route.routeName,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 18
+        lineNumber: 21
       },
       __self: this
     })));

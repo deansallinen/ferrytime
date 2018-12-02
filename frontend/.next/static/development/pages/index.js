@@ -609,7 +609,7 @@ var FerryMenu = function FerryMenu(_ref) {
   }, console.log(data), data.map(function (route) {
     return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(next_link__WEBPACK_IMPORTED_MODULE_0___default.a, {
       prefetch: true,
-      as: "post?id=".concat(route.routeName),
+      as: route.routeName.toLowerCase().replace(/[^a-zA-Z0-9 -]/g, '').replace(/ /g, '_'),
       href: {
         pathname: '/post',
         query: {
@@ -626,14 +626,14 @@ var FerryMenu = function FerryMenu(_ref) {
       key: route.id,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 17
+        lineNumber: 20
       },
       __self: this
     }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_4___default.a, {
       primary: route.routeName,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 18
+        lineNumber: 21
       },
       __self: this
     })));
@@ -29882,7 +29882,7 @@ var Index = function Index(props) {
       __self: this
     }, react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(next_link__WEBPACK_IMPORTED_MODULE_4___default.a, {
       prefetch: true,
-      as: "post?id=".concat(route.routeName),
+      as: route.routeName.toLowerCase().replace(/[^a-zA-Z0-9 -]/g, '').replace(/ /g, '_'),
       href: {
         pathname: '/post',
         query: {
@@ -29898,20 +29898,20 @@ var Index = function Index(props) {
       className: "jsx-1704715776",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 20
+        lineNumber: 23
       },
       __self: this
     }, react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("h2", {
       className: "jsx-1704715776",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 21
+        lineNumber: 24
       },
       __self: this
     }, route.routeName))));
   })), react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(styled_jsx_style__WEBPACK_IMPORTED_MODULE_1___default.a, {
     styleId: "1704715776",
-    css: "ul.jsx-1704715776{list-style:none;}\n/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9kZWFuL0RvY3VtZW50cy9wcm9qZWN0cy9mZXJyeS10cmFja2VyMi9mcm9udGVuZC9wYWdlcy9pbmRleC5qcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUEwQmdCLEFBR3lCLGdCQUNsQiIsImZpbGUiOiIvVXNlcnMvZGVhbi9Eb2N1bWVudHMvcHJvamVjdHMvZmVycnktdHJhY2tlcjIvZnJvbnRlbmQvcGFnZXMvaW5kZXguanMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgZmV0Y2ggZnJvbSAnaXNvbW9ycGhpYy11bmZldGNoJztcbmltcG9ydCBMaW5rIGZyb20gJ25leHQvbGluayc7XG5pbXBvcnQgeyByZXF1ZXN0IH0gZnJvbSAnZ3JhcGhxbC1yZXF1ZXN0JztcbmltcG9ydCBIZWFkZXIgZnJvbSAnLi4vY29tcG9uZW50cy9oZWFkZXInO1xuaW1wb3J0IFBhZ2UgZnJvbSAnLi4vbGF5b3V0cy9tYWluJztcblxuY29uc3QgVVJMID0gJ2h0dHBzOi8vZmVycnl0cmFja2Vyc2VydmVyLm5vdy5zaC9ncmFwaHFsJztcbi8vIGNvbnN0IFVSTCA9ICdodHRwOi8vbG9jYWxob3N0OjQwMDAvZ3JhcGhxbCc7XG5cbmNvbnN0IEluZGV4ID0gcHJvcHMgPT4gKFxuICA8UGFnZT5cbiAgICA8dWw+XG4gICAgICB7cHJvcHMuYWxsUm91dGVzLm1hcChyb3V0ZSA9PiAoXG4gICAgICAgIDxsaSBrZXk9e3JvdXRlLmlkfT5cbiAgICAgICAgICA8TGlua1xuICAgICAgICAgICAgcHJlZmV0Y2hcbiAgICAgICAgICAgIGFzPXtgcG9zdD9pZD0ke3JvdXRlLnJvdXRlTmFtZX1gfVxuICAgICAgICAgICAgaHJlZj17eyBwYXRobmFtZTogJy9wb3N0JywgcXVlcnk6IHsgaWQ6IHJvdXRlLnJvdXRlTmFtZSB9IH19XG4gICAgICAgICAgPlxuICAgICAgICAgICAgPGE+XG4gICAgICAgICAgICAgIDxoMj57cm91dGUucm91dGVOYW1lfTwvaDI+XG4gICAgICAgICAgICA8L2E+XG4gICAgICAgICAgPC9MaW5rPlxuICAgICAgICA8L2xpPlxuICAgICAgKSl9XG4gICAgPC91bD5cbiAgICA8c3R5bGUganN4PntgXG4gICAgICB1bCB7XG4gICAgICAgIGxpc3Qtc3R5bGU6IG5vbmU7XG4gICAgICB9XG4gICAgYH08L3N0eWxlPlxuICA8L1BhZ2U+XG4pO1xuXG5JbmRleC5nZXRJbml0aWFsUHJvcHMgPSBhc3luYyBmdW5jdGlvbigpIHtcbiAgY29uc3QgcXVlcnkgPSBge1xuICAgIGFsbFJvdXRlcyB7XG4gICAgICBpZFxuICAgICAgcm91dGVOYW1lXG4gICAgfVxuICB9YDtcbiAgY29uc3QgcmVzID0gYXdhaXQgcmVxdWVzdChVUkwsIHF1ZXJ5KTtcbiAgY29uc29sZS5sb2coYEFsbCByb3V0ZXMgZmV0Y2hlZC4gQ291bnQ6ICR7cmVzLmFsbFJvdXRlcy5sZW5ndGh9YCk7XG4gIHJldHVybiByZXM7XG59O1xuXG5leHBvcnQgZGVmYXVsdCBJbmRleDtcbiJdfQ== */\n/*@ sourceURL=/Users/dean/Documents/projects/ferry-tracker2/frontend/pages/index.js */",
+    css: "ul.jsx-1704715776{list-style:none;}\n/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9kZWFuL0RvY3VtZW50cy9wcm9qZWN0cy9mZXJyeS10cmFja2VyMi9mcm9udGVuZC9wYWdlcy9pbmRleC5qcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUE2QmdCLEFBR3lCLGdCQUNsQiIsImZpbGUiOiIvVXNlcnMvZGVhbi9Eb2N1bWVudHMvcHJvamVjdHMvZmVycnktdHJhY2tlcjIvZnJvbnRlbmQvcGFnZXMvaW5kZXguanMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgZmV0Y2ggZnJvbSAnaXNvbW9ycGhpYy11bmZldGNoJztcbmltcG9ydCBMaW5rIGZyb20gJ25leHQvbGluayc7XG5pbXBvcnQgeyByZXF1ZXN0IH0gZnJvbSAnZ3JhcGhxbC1yZXF1ZXN0JztcbmltcG9ydCBIZWFkZXIgZnJvbSAnLi4vY29tcG9uZW50cy9oZWFkZXInO1xuaW1wb3J0IFBhZ2UgZnJvbSAnLi4vbGF5b3V0cy9tYWluJztcblxuY29uc3QgVVJMID0gJ2h0dHBzOi8vZmVycnl0cmFja2Vyc2VydmVyLm5vdy5zaC9ncmFwaHFsJztcbi8vIGNvbnN0IFVSTCA9ICdodHRwOi8vbG9jYWxob3N0OjQwMDAvZ3JhcGhxbCc7XG5cbmNvbnN0IEluZGV4ID0gcHJvcHMgPT4gKFxuICA8UGFnZT5cbiAgICA8dWw+XG4gICAgICB7cHJvcHMuYWxsUm91dGVzLm1hcChyb3V0ZSA9PiAoXG4gICAgICAgIDxsaSBrZXk9e3JvdXRlLmlkfT5cbiAgICAgICAgICA8TGlua1xuICAgICAgICAgICAgcHJlZmV0Y2hcbiAgICAgICAgICAgIGFzPXtyb3V0ZS5yb3V0ZU5hbWVcbiAgICAgICAgICAgICAgLnRvTG93ZXJDYXNlKClcbiAgICAgICAgICAgICAgLnJlcGxhY2UoL1teYS16QS1aMC05IC1dL2csICcnKVxuICAgICAgICAgICAgICAucmVwbGFjZSgvIC9nLCAnXycpfVxuICAgICAgICAgICAgaHJlZj17eyBwYXRobmFtZTogJy9wb3N0JywgcXVlcnk6IHsgaWQ6IHJvdXRlLnJvdXRlTmFtZSB9IH19XG4gICAgICAgICAgPlxuICAgICAgICAgICAgPGE+XG4gICAgICAgICAgICAgIDxoMj57cm91dGUucm91dGVOYW1lfTwvaDI+XG4gICAgICAgICAgICA8L2E+XG4gICAgICAgICAgPC9MaW5rPlxuICAgICAgICA8L2xpPlxuICAgICAgKSl9XG4gICAgPC91bD5cbiAgICA8c3R5bGUganN4PntgXG4gICAgICB1bCB7XG4gICAgICAgIGxpc3Qtc3R5bGU6IG5vbmU7XG4gICAgICB9XG4gICAgYH08L3N0eWxlPlxuICA8L1BhZ2U+XG4pO1xuXG5JbmRleC5nZXRJbml0aWFsUHJvcHMgPSBhc3luYyBmdW5jdGlvbigpIHtcbiAgY29uc3QgcXVlcnkgPSBge1xuICAgIGFsbFJvdXRlcyB7XG4gICAgICBpZFxuICAgICAgcm91dGVOYW1lXG4gICAgfVxuICB9YDtcbiAgY29uc3QgcmVzID0gYXdhaXQgcmVxdWVzdChVUkwsIHF1ZXJ5KTtcbiAgY29uc29sZS5sb2coYEFsbCByb3V0ZXMgZmV0Y2hlZC4gQ291bnQ6ICR7cmVzLmFsbFJvdXRlcy5sZW5ndGh9YCk7XG4gIHJldHVybiByZXM7XG59O1xuXG5leHBvcnQgZGVmYXVsdCBJbmRleDtcbiJdfQ== */\n/*@ sourceURL=/Users/dean/Documents/projects/ferry-tracker2/frontend/pages/index.js */",
     __self: this
   }));
 };
