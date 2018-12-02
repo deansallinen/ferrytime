@@ -7,21 +7,29 @@ const cors = require('@koa/cors');
 const mongoose = require('mongoose');
 const { Route, Sailing } = require('./models');
 const scraper = require('./scraper');
-const moment = require('moment-timezone')
-require('dotenv').config()
+const moment = require('moment-timezone');
+require('dotenv').config();
 
-const URI = `mongodb://${process.env.DB_USER}:${process.env.DB_PASS}@ds064198.mlab.com:64198/ferrytracker`;
+const URI = `mongodb://${process.env.DB_USER}:${
+  process.env.DB_PASS
+}@ds064198.mlab.com:64198/ferrytracker`;
 
 mongoose.connect(
   URI,
   { useNewUrlParser: true }
 );
 
-const today = moment.tz('America/Vancouver').startOf('day').toISOString()
-const tomorrow = moment.tz(today).endOf('day').toISOString()
+const today = moment
+  .tz('America/Vancouver')
+  .startOf('day')
+  .toISOString();
+const tomorrow = moment
+  .tz(today)
+  .endOf('day')
+  .toISOString();
 
-console.log(today)
-console.log(tomorrow)
+console.log(today);
+console.log(tomorrow);
 
 // Schema
 const typeDefs = gql`
@@ -122,10 +130,13 @@ const resolvers = {
   },
   Route: {
     sailings: (parent, args, context) =>
-      Sailing.find({ routeId: parent.id, scheduledDeparture: {
-        $gte: today,
-        $lt: tomorrow
-      } }).sort({ scheduledDeparture: 1 })
+      Sailing.find({
+        routeId: parent.id,
+        scheduledDeparture: {
+          $gte: today,
+          $lt: tomorrow
+        }
+      }).sort({ scheduledDeparture: 1 })
   },
   Sailing: {
     route: (parent, args, context) => Route.findOne({ _id: parent.routeId })
@@ -149,6 +160,10 @@ const app = new Koa();
 app.use(Helmet());
 app.use(cors());
 server.applyMiddleware({ app });
+
+// Keepalive
+const keepalive = () => axios.get('https://ferrytrackerserver.now.sh/');
+setInterval(keepalive, 5 * 60 * 1000);
 
 scraper.scrape(60000);
 
