@@ -21,7 +21,7 @@ export default () => (
     render={data => (
       <ul>
         {data.allSitePage.edges
-          .filter(each => each.node.context.routeName)
+          .filter(each => /^\/route/.test(each.node.path))
           .map(each => (
             <Link to={each.node.path} key={each.node.context.routeId}>
               <li>{each.node.context.routeName}</li>

@@ -24,7 +24,7 @@ exports.createPages = async ({ actions, graphql }) => {
       .replace(/ /g, '_')
 
     actions.createPage({
-      path: linkPath,
+      path: `route/${linkPath}`,
       component: path.resolve(`./src/components/ferryRoute.js`),
       context: {
         routeId: id,
