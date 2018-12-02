@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 const { Route, Sailing } = require('./models');
 const scraper = require('./scraper');
 const moment = require('moment-timezone');
+const axios = require('axios');
 require('dotenv').config();
 
 const URI = `mongodb://${process.env.DB_USER}:${
