@@ -1,0 +1,67 @@
+{
+<<<<<<< HEAD
+  "name": "server",
+=======
+  "name": "client-next",
+>>>>>>> client
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+<<<<<<< HEAD
+    "test": "jest --watch",
+    "start": "node index.js",
+    "dev": "nodemon"
+=======
+    "dev": "next",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "next build",
+    "export": "npm run build && next export",
+    "start": "next start"
+>>>>>>> client
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+<<<<<<< HEAD
+    "@koa/cors": "^2.2.2",
+    "@types/es6-promise": "^3.3.0",
+    "apollo-server-koa": "^2.0.0-rc.12",
+    "axios": "^0.18.0",
+    "date-fns": "^1.29.0",
+    "dotenv": "^6.0.0",
+    "graphql": "^14.0.2",
+    "graphql-request": "^1.8.2",
+    "koa": "^2.5.3",
+    "koa-helmet": "^4.0.0",
+    "koa-router": "^7.4.0",
+    "lodash": "^4.17.11",
+    "micro": "latest",
+    "moment": "^2.22.2",
+    "moment-timezone": "^0.5.21",
+    "mongoose": "^5.2.17",
+    "node-fetch": "^2.2.0",
+    "npm": "^6.4.1",
+    "table-scraper": "^0.1.0"
+  },
+  "devDependencies": {
+    "eslint-plugin-jest": "^21.22.1",
+    "jest": "^23.6.0"
+  },
+  "now": {
+    "env": {
+      "TZ": "America/Vancouver"
+    }
+=======
+    "@material-ui/core": "^3.2.2",
+    "@material-ui/icons": "^3.0.1",
+    "date-fns": "^1.29.0",
+    "graphql-request": "^1.8.2",
+    "isomorphic-unfetch": "^3.0.0",
+    "next": "latest",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1"
+>>>>>>> client
+  }
+}
