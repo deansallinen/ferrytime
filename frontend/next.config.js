@@ -13,7 +13,10 @@ module.exports = {
       //   console.log('pre ', pages);
       return {
         ...pages,
-        [`/post?id=${post.routeName}`]: {
+        [`/${post.routeName
+          .toLowerCase()
+          .replace(/[^a-zA-Z0-9 -]/g, '')
+          .replace(/ /g, '_')}`]: {
           page: '/post',
           query: { id: post.routeName }
         }
