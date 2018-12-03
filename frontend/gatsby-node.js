@@ -3,7 +3,7 @@
  *
  * See: https://www.gatsbyjs.org/docs/node-apis/
  */
-const path = require(`path`)
+const path = require('path');
 
 exports.createPages = async ({ actions, graphql }) => {
   const { data } = await graphql(`
@@ -15,21 +15,21 @@ exports.createPages = async ({ actions, graphql }) => {
         }
       }
     }
-  `)
+  `);
 
   data.ftapi.allRoutes.forEach(({ id, routeName }) => {
     const linkPath = routeName
       .toLowerCase()
       .replace(/[^a-zA-Z0-9 -]/g, '')
-      .replace(/ /g, '_')
+      .replace(/ /g, '_');
 
     actions.createPage({
       path: `route/${linkPath}`,
-      component: path.resolve(`./src/components/ferryRoute.js`),
+      component: path.resolve('./src/components/ferryRoute.jsx'),
       context: {
         routeId: id,
         routeName,
       },
-    })
-  })
-}
+    });
+  });
+};

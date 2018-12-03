@@ -25,7 +25,7 @@ const today = moment
   .startOf('day')
   .toISOString();
 const tomorrow = moment
-  .tz(today)
+  .tz('America/Vancouver')
   .endOf('day')
   .toISOString();
 

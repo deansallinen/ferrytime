@@ -5,23 +5,23 @@ module.exports = {
   plugins: [
     'gatsby-plugin-react-helmet',
     {
-      resolve: `gatsby-source-filesystem`,
+      resolve: 'gatsby-source-filesystem',
       options: {
-        name: `images`,
+        name: 'images',
         path: `${__dirname}/src/images`,
       },
     },
     'gatsby-transformer-sharp',
     'gatsby-plugin-sharp',
     {
-      resolve: `gatsby-plugin-manifest`,
+      resolve: 'gatsby-plugin-manifest',
       options: {
-        name: 'gatsby-starter-default',
-        short_name: 'starter',
+        name: 'Ferryti.me',
+        short_name: 'Ferrytime',
         start_url: '/',
-        background_color: '#4fc3f7',
-        theme_color: '#0093c4',
-        display: 'minimal-ui',
+        background_color: '#55abee',
+        theme_color: '#007cbb',
+        display: 'standalone',
         icon: 'src/images/favicon.png', // This path is relative to the root of the site.
       },
     },
@@ -38,4 +38,4 @@ module.exports = {
     },
     'gatsby-plugin-offline',
   ],
-}
+};
