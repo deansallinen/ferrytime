@@ -31,11 +31,11 @@ function Sailing(props) {
         <p className="card-header-title">
           {format(scheduledDeparture, 'HH:mm')}
         </p>
-        <button className="card-header-icon" aria-label="more options">
+        <div className="card-header-icon" aria-label="more options">
           <span className="icon">
             {open ? <FontAwesomeIcon icon="angle-down" /> : <FontAwesomeIcon icon="angle-right" />}
           </span>
-        </button>
+        </div>
       </div>
       {open
         ? (
