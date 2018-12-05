@@ -1,5 +1,7 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { Link, graphql } from 'gatsby';
+import { request } from 'graphql-request';
+
 import Layout from './layout';
 import Sailing from './sailing';
 import {
@@ -12,16 +14,47 @@ import {
 
 } from './helpers';
 
+const URL = 'https://ferrytrackerserver.now.sh/graphql';
+
+
 const FerryRoute = (props) => {
   const { route } = props.data.ftapi;
-
+  const {routeName, averageSailing} = route
+  const [sailings, setSailings] = useState(route.sailings)
+  
+  useEffect(() => {
+    // console.log(`testing: ${routeName}`)
+  const query = `{
+      route(routeName: "${routeName}"){
+          routeName
+          sailings {
+              id
+              vessel
+              scheduledDeparture
+              actualDeparture
+              eta
+              sailingStatus
+              lastUpdated
+          }
+      }
+  }`;
+  request(URL, query).then(
+    res => {
+    // console.log(`Route info fetched.  ${Object.keys(res.route.sailings)}`)
+    console.log(res.route.sailings)
+    setSailings(res.route.sailings)
+    }
+    )
+  // return res;
+  }, [])
+  
   return (
     <Layout>
       <section className="hero">
         <div className="hero-body">
           <Container>
-            <H1>{route.routeName}</H1>
-            <H2>{route.averageSailing}</H2>
+            <H1>{routeName}</H1>
+            <H2>{averageSailing}</H2>
           </Container>
         </div>
       </section>
@@ -30,7 +63,7 @@ const FerryRoute = (props) => {
 
           <h3 className="title is-3">Sailings</h3>
           <Ancestor className="is-vertical">
-            {route.sailings.map(sailing => (
+            {sailings.map(sailing => (
               <Parent key={sailing.id}>
                 <Child>
                   <Sailing {...sailing} />

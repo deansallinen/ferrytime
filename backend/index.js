@@ -134,8 +134,14 @@ const resolvers = {
       Sailing.find({
         routeId: parent.id,
         scheduledDeparture: {
-          $gte: today,
-          $lt: tomorrow
+          $gte: moment
+  .tz('America/Vancouver')
+  .startOf('day')
+  .toISOString(),
+          $lt: moment
+  .tz('America/Vancouver')
+  .endOf('day')
+  .toISOString()
         }
       }).sort({ scheduledDeparture: 1 })
   },
