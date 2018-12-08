@@ -5,7 +5,6 @@ import {
 } from './helpers';
 
 export default () => {
-  const favourites = (typeof localStorage !== 'undefined') ? JSON.parse(localStorage.getItem('favourites')) || [] : [];
 
   return (<StaticQuery
     query={graphql`

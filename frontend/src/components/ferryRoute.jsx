@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, graphql } from 'gatsby';
 import { request } from 'graphql-request';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import FavouriteStar from './favouriteStar';
 
 
@@ -43,7 +42,7 @@ const FerryRoute = (props) => {
     request(URL, query).then(
       (res) => {
         // console.log(`Route info fetched.  ${Object.keys(res.route.sailings)}`)
-        console.log(res.route.sailings);
+        // console.log(res.route.sailings);
         setSailings(res.route.sailings);
       },
     );
