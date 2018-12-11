@@ -23,6 +23,7 @@ module.exports = {
         theme_color: '#007cbb',
         display: 'standalone',
         icon: 'src/images/favicon.png', // This path is relative to the root of the site.
+        legacy: true,
       },
     },
     {
