@@ -1,6 +1,8 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, graphql } from 'gatsby';
 import { request } from 'graphql-request';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 
 import Layout from './layout';
 import Sailing from './sailing';
@@ -19,12 +21,11 @@ const URL = 'https://ferrytrackerserver.now.sh/graphql';
 
 const FerryRoute = (props) => {
   const { route } = props.data.ftapi;
-  const {routeName, averageSailing} = route
-  const [sailings, setSailings] = useState(route.sailings)
-  
+  const { routeName, averageSailing } = route;
+  const [sailings, setSailings] = useState(route.sailings);
   useEffect(() => {
     // console.log(`testing: ${routeName}`)
-  const query = `{
+    const query = `{
       route(routeName: "${routeName}"){
           routeName
           sailings {
@@ -38,16 +39,27 @@ const FerryRoute = (props) => {
           }
       }
   }`;
-  request(URL, query).then(
-    res => {
-    // console.log(`Route info fetched.  ${Object.keys(res.route.sailings)}`)
-    console.log(res.route.sailings)
-    setSailings(res.route.sailings)
-    }
-    )
+    request(URL, query).then(
+      (res) => {
+        // console.log(`Route info fetched.  ${Object.keys(res.route.sailings)}`)
+        console.log(res.route.sailings);
+        setSailings(res.route.sailings);
+      },
+    );
   // return res;
-  }, [])
-  
+  }, []);
+
+  const [isFavourite, setFavourite] = useState(false);
+  useEffect(() => {
+    const favourites = JSON.parse(localStorage.getItem('favourites'));
+    if (!favourites) {
+      localStorage.setItem('favourites', JSON.stringify([]));
+    }
+    const newFavourites = isFavourite ? [routeName, ...favourites] : favourites.filter(favourite => favourite !== routeName);
+    localStorage.setItem('favourites', JSON.stringify(newFavourites));
+  });
+
+
   return (
     <Layout>
       <section className="hero">
@@ -55,6 +67,9 @@ const FerryRoute = (props) => {
           <Container>
             <H1>{routeName}</H1>
             <H2>{averageSailing}</H2>
+            <div className="icon" onClick={() => setFavourite(!isFavourite)}>
+              { isFavourite ? <FontAwesomeIcon icon={['fas', 'star']} /> : <FontAwesomeIcon icon={['far', 'star']} />}
+            </div>
           </Container>
         </div>
       </section>

@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { StaticQuery, graphql } from 'gatsby';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faAngleDown, faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import { faAngleDown, faAngleRight, faStar as faStarSolid } from '@fortawesome/free-solid-svg-icons';
+import { faStar } from '@fortawesome/free-regular-svg-icons';
 
 import { setConfig } from 'react-hot-loader';
 import 'bulma/css/bulma.min.css';
@@ -12,7 +13,7 @@ import Header from './header';
 
 setConfig({ pureSFC: true });
 
-library.add(faAngleDown, faAngleRight);
+library.add(faAngleDown, faAngleRight, faStar, faStarSolid);
 // import './layout.css'
 
 const Layout = ({ children }) => (
