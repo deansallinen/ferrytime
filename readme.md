@@ -17,7 +17,5 @@ What began as a re-styled HTML table ended up becoming a continuously changing l
 
 
 ## TODO
-- Not all sailings show
 - Merge results of second scraper
-- Fix frontend styling
-- Consider migrating frontend to Gatsby for easy static hosting on Netlify
+
