@@ -4,15 +4,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export default (props) => {
   const { routeName } = props;
-  const favourites = JSON.parse(localStorage.getItem('favourites')) || [];
+  const favourites = (typeof localStorage !== 'undefined') ? JSON.parse(localStorage.getItem('favourites')) || [] : [];
   const [isFavourite, toggleFavourite] = useState(favourites && favourites.includes(routeName));
   useEffect(() => {
-    if (favourites.includes(routeName) && !isFavourite) {
-      const newFavourites = favourites.filter(favourite => favourite !== routeName);
-      localStorage.setItem('favourites', JSON.stringify(newFavourites));
-    }
-    if (!favourites.includes(routeName) && isFavourite) {
-      const newFavourites = [routeName, ...favourites];
+    const newFavourites = (favourites.includes(routeName) && !isFavourite)
+      ? favourites.filter(favourite => favourite !== routeName)
+    // if (!favourites.includes(routeName) && isFavourite) {
+      : [routeName, ...favourites];
+
+    if (typeof localStorage !== 'undefined') {
       localStorage.setItem('favourites', JSON.stringify(newFavourites));
     }
   }, [isFavourite]);
