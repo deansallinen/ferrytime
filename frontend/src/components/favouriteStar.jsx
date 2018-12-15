@@ -7,11 +7,13 @@ export default (props) => {
   const favourites = (typeof localStorage !== 'undefined') ? JSON.parse(localStorage.getItem('favourites')) || [] : [];
   const [isFavourite, toggleFavourite] = useState(favourites && favourites.includes(routeName));
   useEffect(() => {
-    const newFavourites = (favourites.includes(routeName) && !isFavourite)
-      ? favourites.filter(favourite => favourite !== routeName)
-    // if (!favourites.includes(routeName) && isFavourite) {
-      : [routeName, ...favourites];
-
+    let newFavourites = [];
+    if (favourites.includes(routeName) && !isFavourite) {
+      newFavourites = favourites.filter(favourite => favourite !== routeName);
+    }
+    if (!favourites.includes(routeName) && isFavourite) {
+      newFavourites = [routeName, ...favourites];
+    }
     if (typeof localStorage !== 'undefined') {
       localStorage.setItem('favourites', JSON.stringify(newFavourites));
     }
