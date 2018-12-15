@@ -13,7 +13,6 @@
   "license": "ISC",
   "dependencies": {
     "@koa/cors": "^2.2.2",
-    "@types/es6-promise": "^3.3.0",
     "apollo-server-koa": "^2.0.0-rc.12",
     "axios": "^0.18.0",
     "date-fns": "^1.29.0",

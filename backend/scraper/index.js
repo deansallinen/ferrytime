@@ -112,12 +112,6 @@ const scrapeSailings = async () => {
       const result = await request(endpoint, upsertRoute, routeVariables);
       const routeId = result.updateRoute.id;
       sailings.map(async sailing => {
-        if (
-          sailing.sailingStatus ===
-          'Ongoing delay due to earlier operational delay'
-        ) {
-          console.log('Before sending request: ', sailing.scheduledDeparture);
-        }
         const sailingResult = await request(endpoint, upsertSailing, {
           ...sailing,
           routeId,
@@ -129,7 +123,7 @@ const scrapeSailings = async () => {
   } catch (err) {
     throw err;
   } finally {
-    console.log(`Scraped at ${new Date()}`);
+    console.log(`Scraped ${sailings.length} sailings at ${new Date()}`);
   }
 };
 

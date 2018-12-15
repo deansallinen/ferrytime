@@ -11,26 +11,9 @@ const moment = require('moment-timezone');
 const axios = require('axios');
 require('dotenv').config();
 
-const URI = `mongodb://${process.env.DB_USER}:${
-  process.env.DB_PASS
-}@ds064198.mlab.com:64198/ferrytracker`;
+const URI = `mongodb://${process.env.DB_USER}:${process.env.DB_PASS}@ds064198.mlab.com:64198/ferrytracker`;
 
-mongoose.connect(
-  URI,
-  { useNewUrlParser: true }
-);
-
-const today = moment
-  .tz('America/Vancouver')
-  .startOf('day')
-  .toISOString();
-const tomorrow = moment
-  .tz('America/Vancouver')
-  .endOf('day')
-  .toISOString();
-
-console.log(today);
-console.log(tomorrow);
+mongoose.connect(URI, { useNewUrlParser: true });
 
 // Schema
 const typeDefs = gql`
@@ -71,6 +54,7 @@ const typeDefs = gql`
     sailingStatus: String
     vessel: String
     lastUpdated: String
+    percentFull: Int
   }
 
   input SailingInput {
@@ -81,6 +65,7 @@ const typeDefs = gql`
     sailingStatus: String
     vessel: String
     lastUpdated: String
+    percentFull: Int
   }
 `;
 
@@ -107,12 +92,6 @@ const resolvers = {
       return sailing.save();
     },
     updateSailing: async (parent, args, context) => {
-      if (
-        args.input.sailingStatus ===
-        'Ongoing delay due to earlier operational delay'
-      ) {
-        console.log('Before updating db: ', args.input.scheduledDeparture);
-      }
       const res = await Sailing.findOneAndUpdate(
         {
           routeId: args.input.routeId,
@@ -121,12 +100,6 @@ const resolvers = {
         args.input, // payload
         { upsert: true } // options
       );
-      if (
-        args.input.sailingStatus ===
-        'Ongoing delay due to earlier operational delay'
-      ) {
-        console.log('After updating db: ', res.scheduledDeparture);
-      }
     }
   },
   Route: {
@@ -135,13 +108,13 @@ const resolvers = {
         routeId: parent.id,
         scheduledDeparture: {
           $gte: moment
-  .tz('America/Vancouver')
-  .startOf('day')
-  .toISOString(),
+            .tz('America/Vancouver')
+            .startOf('day')
+            .toISOString(),
           $lt: moment
-  .tz('America/Vancouver')
-  .endOf('day')
-  .toISOString()
+            .tz('America/Vancouver')
+            .endOf('day')
+            .toISOString()
         }
       }).sort({ scheduledDeparture: 1 })
   },
