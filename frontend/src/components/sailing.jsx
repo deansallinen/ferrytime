@@ -19,6 +19,12 @@ const SailingItem = (props) => {
   );
 };
 
+const Cancelled = () => (
+  <div className="tag is-danger">
+  Cancelled
+  </div>
+);
+
 function Sailing(props) {
   const [open, toggleOpen] = useState(false);
   const {
@@ -26,11 +32,12 @@ function Sailing(props) {
   } = props;
   const headerClasses = classNames({
     'card-header': true,
-    'has-text-danger': sailingStatus === 'Cancelled',
+    level: true,
+    // 'has-text-danger': sailingStatus === 'Cancelled',
   });
   const headerTitleClasses = classNames({
     'card-header-title': true,
-    'has-text-danger': sailingStatus === 'Cancelled',
+    // 'has-text-danger': sailingStatus === 'Cancelled',
   });
   return (
     <div className="card">
@@ -38,12 +45,11 @@ function Sailing(props) {
         <p className={headerTitleClasses}>
           {format(scheduledDeparture, 'HH:mm')}
         </p>
+        {sailingStatus === 'Cancelled' && <Cancelled />}
         <div className="card-header-icon" aria-label="more options">
-          {sailingStatus === 'Cancelled' ? sailingStatus : (
-            <span className="icon">
-              {open ? <FontAwesomeIcon icon="angle-down" /> : <FontAwesomeIcon icon="angle-right" />}
-            </span>
-          )}
+          <span className="icon">
+            {open ? <FontAwesomeIcon icon="angle-down" /> : <FontAwesomeIcon icon="angle-right" />}
+          </span>
         </div>
       </div>
       {open
