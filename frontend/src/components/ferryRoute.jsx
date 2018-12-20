@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, graphql } from 'gatsby';
 import { request } from 'graphql-request';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import FavouriteStar from './favouriteStar';
-
 
 import Layout from './layout';
 import Sailing from './sailing';
@@ -18,6 +18,12 @@ import {
 
 const URL = 'https://ferrytrackerserver.now.sh/graphql';
 
+const SailingWait = props => (
+  <div>
+    <FontAwesomeIcon icon={props.icon} />
+    {props.value}
+  </div>
+);
 
 const FerryRoute = (props) => {
   const { route } = props.data.ftapi;
@@ -58,6 +64,9 @@ const FerryRoute = (props) => {
             <H1>{routeName}</H1>
             <H2>{averageSailing}</H2>
             <FavouriteStar routeName={routeName} />
+            <H2>Sailing Waits</H2>
+            <SailingWait value="0" icon="car-side" />
+            <SailingWait value="0" icon="truck" />
           </Container>
         </div>
       </section>
