@@ -19,9 +19,15 @@ import {
 const URL = 'https://ferrytrackerserver.now.sh/graphql';
 
 const SailingWait = props => (
-  <div>
-    <FontAwesomeIcon icon={props.icon} />
-    {props.value}
+  <div className="control">
+    <div className="tags has-addons">
+      <div className="tag is-light is-medium">
+        <FontAwesomeIcon icon={props.icon} />
+      </div>
+      <div className="tag is-light is-medium">
+        {props.value}
+      </div>
+    </div>
   </div>
 );
 
@@ -65,8 +71,10 @@ const FerryRoute = (props) => {
             <H2>{averageSailing}</H2>
             <FavouriteStar routeName={routeName} />
             <H2>Sailing Waits</H2>
-            <SailingWait value="0" icon="car-side" />
-            <SailingWait value="0" icon="truck" />
+            <div className="field is-grouped is-grouped-multiline">
+              <SailingWait value="0" icon="car-side" />
+              <SailingWait value="0" icon="truck" />
+            </div>
           </Container>
         </div>
       </section>
