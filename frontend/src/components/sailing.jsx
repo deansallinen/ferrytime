@@ -2,10 +2,8 @@ import React, { useState } from 'react';
 import { format } from 'date-fns';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-
   Parent,
   Child,
-
   Ancestor,
   Tile,
 } from './helpers';
@@ -27,16 +25,26 @@ function Sailing(props) {
   } = props;
   return (
     <div className="card">
-      <div className="card-header" onClick={() => toggleOpen(!open)}>
-        <p className="card-header-title">
-          {format(scheduledDeparture, 'HH:mm')}
-        </p>
-        <div className="card-header-icon" aria-label="more options">
-          <span className="icon">
-            {open ? <FontAwesomeIcon icon="angle-down" /> : <FontAwesomeIcon icon="angle-right" />}
-          </span>
-        </div>
-      </div>
+      {sailingStatus === 'Cancelled' ? (
+        <div className="card-header has-text-danger" onClick={() => toggleOpen(!open)}>
+          <p className="card-header-title has-text-danger">
+            {format(scheduledDeparture, 'HH:mm')}
+          </p>
+          <div className="card-header-icon" aria-label="more options">
+            {sailingStatus}
+          </div>
+        </div>) : (
+          <div className="card-header" onClick={() => toggleOpen(!open)}>
+            <p className="card-header-title">
+              {format(scheduledDeparture, 'HH:mm')}
+            </p>
+            <div className="card-header-icon" aria-label="more options">
+              <span className="icon">
+                {open ? <FontAwesomeIcon icon="angle-down" /> : <FontAwesomeIcon icon="angle-right" />}
+              </span>
+            </div>
+          </div>
+      )}
       {open
         ? (
           <div className="card-content">
