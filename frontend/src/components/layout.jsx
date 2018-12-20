@@ -4,7 +4,7 @@ import Helmet from 'react-helmet';
 import { StaticQuery, graphql } from 'gatsby';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
- faAngleDown, faAngleRight, faStar as faStarSolid, faCarSide, faTruck, faCar 
+  faAngleDown, faAngleRight, faStar as faStarSolid, faCarSide, faTruck, faExclamationTriangle,
 } from '@fortawesome/free-solid-svg-icons';
 import { faStar } from '@fortawesome/free-regular-svg-icons';
 
@@ -15,7 +15,7 @@ import Header from './header';
 
 setConfig({ pureSFC: true });
 
-library.add(faAngleDown, faAngleRight, faStar, faStarSolid, faCarSide, faTruck);
+library.add(faAngleDown, faAngleRight, faStar, faStarSolid, faCarSide, faTruck, faExclamationTriangle);
 // import './layout.css'
 
 const Layout = ({ children }) => (

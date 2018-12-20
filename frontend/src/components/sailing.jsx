@@ -19,11 +19,8 @@ const SailingItem = (props) => {
   );
 };
 
-const Cancelled = () => (
-  <div className="tag is-danger">
-  Cancelled
-  </div>
-);
+const Cancelled = () => <div className="tag is-danger">Cancelled</div>;
+const Delayed = () => <FontAwesomeIcon icon="exclamation-triangle" className="has-text-warning" />;
 
 function Sailing(props) {
   const [open, toggleOpen] = useState(false);
@@ -46,6 +43,7 @@ function Sailing(props) {
           {format(scheduledDeparture, 'HH:mm')}
         </p>
         {sailingStatus === 'Cancelled' && <Cancelled />}
+        {!['On Time', 'Cancelled', '', null, undefined].includes(sailingStatus) && <Delayed />}
         <div className="card-header-icon" aria-label="more options">
           <span className="icon">
             {open ? <FontAwesomeIcon icon="angle-down" /> : <FontAwesomeIcon icon="angle-right" />}
