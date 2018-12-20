@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { format } from 'date-fns';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import classNames from 'classnames';
 import {
   Parent,
   Child,
@@ -23,28 +24,28 @@ function Sailing(props) {
   const {
     scheduledDeparture, actualDeparture, eta, sailingStatus,
   } = props;
+  const headerClasses = classNames({
+    'card-header': true,
+    'has-text-danger': sailingStatus === 'Cancelled',
+  });
+  const headerTitleClasses = classNames({
+    'card-header-title': true,
+    'has-text-danger': sailingStatus === 'Cancelled',
+  });
   return (
     <div className="card">
-      {sailingStatus === 'Cancelled' ? (
-        <div className="card-header has-text-danger" onClick={() => toggleOpen(!open)}>
-          <p className="card-header-title has-text-danger">
-            {format(scheduledDeparture, 'HH:mm')}
-          </p>
-          <div className="card-header-icon" aria-label="more options">
-            {sailingStatus}
-          </div>
-        </div>) : (
-          <div className="card-header" onClick={() => toggleOpen(!open)}>
-            <p className="card-header-title">
-              {format(scheduledDeparture, 'HH:mm')}
-            </p>
-            <div className="card-header-icon" aria-label="more options">
-              <span className="icon">
-                {open ? <FontAwesomeIcon icon="angle-down" /> : <FontAwesomeIcon icon="angle-right" />}
-              </span>
-            </div>
-          </div>
-      )}
+      <div className={headerClasses} onClick={() => toggleOpen(!open)}>
+        <p className={headerTitleClasses}>
+          {format(scheduledDeparture, 'HH:mm')}
+        </p>
+        <div className="card-header-icon" aria-label="more options">
+          {sailingStatus === 'Cancelled' ? sailingStatus : (
+            <span className="icon">
+              {open ? <FontAwesomeIcon icon="angle-down" /> : <FontAwesomeIcon icon="angle-right" />}
+            </span>
+          )}
+        </div>
+      </div>
       {open
         ? (
           <div className="card-content">
