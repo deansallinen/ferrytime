@@ -2,8 +2,9 @@ import React from 'react';
 import { Link } from 'gatsby';
 
 // Typography
-export const H1 = ({ children }) => <h1 className="title">{children}</h1>;
-export const H2 = ({ children }) => <h2 className="subtitle">{children}</h2>;
+export const H1 = ({ children, className }) => <h1 className={`title ${className}`}>{children}</h1>;
+export const H2 = ({ children, className }) => <h2 className={`subtitle ${className}`}>{children}</h2>;
+export const Content = ({ children, className }) => <div className={`content ${className}`}>{children}</div>;
 
 // Layout
 export const Container = ({ children, className }) => (
@@ -11,6 +12,18 @@ export const Container = ({ children, className }) => (
 );
 export const Section = ({ children, className }) => (
   <div className={`section ${className}`}>{children}</div>
+);
+export const Level = ({ children, className }) => (
+  <div className={`level ${className}`}>{children}</div>
+);
+export const LevelLeft = ({ children, className }) => (
+  <div className={`level-left ${className}`}>{children}</div>
+);
+export const LevelRight = ({ children, className }) => (
+  <div className={`level-right ${className}`}>{children}</div>
+);
+export const LevelItem = ({ children, className }) => (
+  <div className={`level-item ${className}`}>{children}</div>
 );
 
 // Tiles
@@ -40,4 +53,9 @@ export const Button = ({ children, className, to }) => (
   <Link to={to}>
     <button className={`button is-large ${className}`}>{children}</button>
   </Link>
+);
+
+
+export const Box = ({ children, className }) => (
+  <div className={`box ${className}`}>{children}</div>
 );
