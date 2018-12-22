@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { format, isBefore, isAfter, isValid } from 'date-fns';
+import {
+  format, isBefore, isAfter, isValid,
+} from 'date-fns';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import {
@@ -17,12 +19,14 @@ const SailingItem = (props) => {
       <p className="">{format(value, 'HH:mm')}</p>
     </div>
   );
-});
+};
 
 const PercentageIndicator = (props) => {
-  const { scheduledDeparture, actualDeparture, eta, completed, setCompleted, time, loading } = props;
+  const {
+    scheduledDeparture, actualDeparture, eta, completed, setCompleted, time, loading,
+  } = props;
 
-  const [percentage, setPercentage] = useState(0)
+  const [percentage, setPercentage] = useState(0);
   useEffect(() => {
     if (!completed) {
       if (isBefore(time, new Date(scheduledDeparture))) return;
@@ -30,24 +34,25 @@ const PercentageIndicator = (props) => {
       if (eta && isAfter(time, new Date(eta))) { setCompleted(true); }
 
       if (eta && actualDeparture) {
-        const timeElapsed = time - new Date(actualDeparture)
-        const totalTime = new Date(eta) - new Date(actualDeparture)
-        const p = timeElapsed / totalTime
+        const timeElapsed = time - new Date(actualDeparture);
+        const totalTime = new Date(eta) - new Date(actualDeparture);
+        const p = timeElapsed / totalTime;
 
         // console.log(timeElapsed, totalTime, p)
 
-        p > 1 ? setPercentage(1) : setPercentage(p.toFixed(2))
+        p > 1 ? setPercentage(1) : setPercentage(p.toFixed(2));
       }
     }
-  }, [time])
+  }, [time]);
 
-  return <div>{percentage}</div>
-
-}
+  return <div>{percentage}</div>;
+};
 
 
 const Sailing = React.memo((props) => {
-  const { scheduledDeparture = null, actualDeparture = null, eta = null, sailingStatus, time, loading } = props;
+  const {
+    scheduledDeparture = null, actualDeparture = null, eta = null, sailingStatus, time, loading,
+  } = props;
 
   const [open, toggleOpen] = useState(false);
   const [completed, setCompleted] = useState(false);
@@ -55,20 +60,20 @@ const Sailing = React.memo((props) => {
     if (!completed && eta && isAfter(time, new Date(eta))) {
       setCompleted(true);
     }
-  }, [time])
+  }, [time]);
 
   const Cancelled = () => <div className="tag is-danger">Cancelled</div>;
   const Delayed = () => <FontAwesomeIcon icon="exclamation-triangle" className="has-text-warning" />;
 
   const headerClasses = classNames({
     'card-header': true,
-    "has-text-grey-lighter": completed,
+    'has-text-grey-lighter': completed,
     level: true,
     // 'has-text-danger': sailingStatus === 'Cancelled',
   });
   const headerTitleClasses = classNames({
     'card-header-title': true,
-    "has-text-grey-lighter": completed,
+    'has-text-grey-lighter': completed,
     // 'has-text-danger': sailingStatus === 'Cancelled',
   });
   // <PercentageIndicator {...props} completed={completed} setCompleted={setCompleted} loading={loading}/>
@@ -87,33 +92,37 @@ const Sailing = React.memo((props) => {
           </span>
         </div>
       </div>
-      {open &&
-        (<div className="card-content" style={props}>
-          <Ancestor>
-            <Tile className="is-vertical">
-              <Parent>
-                <Child className="level is-mobile">
-                  {actualDeparture && <SailingItem title="Departure" value={actualDeparture} />}
-                  {eta && <SailingItem title="Arrival" value={eta} />}
-                </Child>
-              </Parent>
+      {open
+        && (
+          <div className="card-content" style={props}>
+            <Ancestor>
+              <Tile className="is-vertical">
+                <Parent>
+                  <Child className="level is-mobile">
+                    {actualDeparture && <SailingItem title="Departure" value={actualDeparture} />}
+                    {eta && <SailingItem title="Arrival" value={eta} />}
+                  </Child>
+                </Parent>
 
-              <Parent>
-                <Child>
-                  {sailingStatus &&
-                    <div>
-                      <div className="heading">Status</div>
-                      <p>{sailingStatus}</p>
-                    </div>
-                  }
-                </Child>
-              </Parent>
-            </Tile>
-          </Ancestor>
-        </div>)
+                <Parent>
+                  <Child>
+                    {sailingStatus
+                      && (
+                        <div>
+                          <div className="heading">Status</div>
+                          <p>{sailingStatus}</p>
+                        </div>
+                      )
+                    }
+                  </Child>
+                </Parent>
+              </Tile>
+            </Ancestor>
+          </div>
+        )
       }
     </div>
   );
-})
+});
 
 export default Sailing;

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Link, graphql } from 'gatsby';
 import { request } from 'graphql-request';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Spring, config } from 'react-spring'
+import { Spring, config } from 'react-spring';
 import FavouriteStar from './favouriteStar';
 import Layout from './layout';
 import Sailing from './sailing';
@@ -91,10 +91,10 @@ const FerryRoute = (props) => {
             <H1>{routeName}</H1>
             <H2>{averageSailing}</H2>
             <H2>
-Status:
-{' '}
-{currentStatus}
-</H2>
+              Status:
+              {' '}
+              {currentStatus}
+            </H2>
             <FavouriteStar routeName={routeName} />
             <H2>Sailing Waits</H2>
             <div className="field is-grouped is-grouped-multiline">
