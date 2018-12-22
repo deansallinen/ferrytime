@@ -27,7 +27,7 @@ export default (props) => {
 
   return (
       <div className="icon" onClick={() => toggleFavourite(!isFavourite)}>
-          {isFavourite ? <FontAwesomeIcon icon={['fas', 'star']} /> : <FontAwesomeIcon icon={['far', 'star']} />}
+          {isFavourite ? <FontAwesomeIcon icon={['fas', 'star']} size="lg" /> : <FontAwesomeIcon icon={['far', 'star']} size="lg" />}
         </div>
   );
 };
