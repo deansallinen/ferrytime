@@ -19,3 +19,6 @@ What began as a re-styled HTML table ended up becoming a continuously changing l
 ## TODO
 - Merge results of second scraper
 - Handle results in scraper when no date
+- In Progress tag isBetween()
+- Sailing Waits live data
+- Transition for CSS class on Completed Sailings
