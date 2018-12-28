@@ -48,7 +48,7 @@ const getConditionsPromise = () =>
                                         .split(' full')
                                         .filter(Boolean)
                                         .map((x) => {
-                                            // console.log(x)
+                                            console.log(x)
                                             const regex = /(\d{1,2}:\d\d[ap]m)(\d+)%/g
                                             const [_, time, percentage] = regex.exec(x)
                                             const timestamp = new moment(

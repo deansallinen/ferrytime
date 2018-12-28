@@ -3,6 +3,7 @@ import { Link, graphql } from 'gatsby';
 import { request } from 'graphql-request';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Spring, config } from 'react-spring';
+import localforage from 'localforage';
 import FavouriteStar from './favouriteStar';
 import Layout from './layout';
 import Sailing from './sailing';
@@ -39,8 +40,16 @@ const FerryRoute = (props) => {
 
   const [loading, setLoading] = useState(true);
 
-  const [sailings, setSailings] = useState(route.sailings);
+  const [sailings, setSailings] = useState([]);
+  // const [sailings, setSailings] = useState( || route.sailings);
   useEffect(() => {
+    setLoading(true);
+    localforage.getItem(routeName).then((existingSailings) => {
+      if (existingSailings) {
+        console.log('existing', existingSailings);
+        setSailings(existingSailings);
+      }
+    });
     const query = `{
       route(routeName: "${routeName}"){
           routeName
@@ -55,11 +64,10 @@ const FerryRoute = (props) => {
           }
       }
   }`;
-
-    setLoading(true);
     request(URL, query).then(
       (res) => {
         console.log(res.route.sailings);
+        localforage.setItem(routeName, res.route.sailings);
         setSailings(res.route.sailings);
         setLoading(false);
       },
