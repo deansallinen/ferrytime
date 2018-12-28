@@ -2,11 +2,9 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Link, graphql } from 'gatsby';
 import { request } from 'graphql-request';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Spring, config } from 'react-spring';
 import FavouriteStar from './favouriteStar';
 import Layout from './layout';
 import Sailing from './sailing';
-import { useTime, TimeContext } from './time-context';
 import {
   H1,
   H2,

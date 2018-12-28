@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import {
-  format, isBefore, isAfter, isValid,
+  format, isBefore, isAfter, isValid, isWithinRange,
 } from 'date-fns';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
@@ -59,11 +59,17 @@ const Sailing = React.memo((props) => {
   useEffect(() => {
     if (!completed && eta && isAfter(time, new Date(eta))) {
       setCompleted(true);
+      console.log(eta);
     }
   }, [time]);
 
   const Cancelled = () => <div className="tag is-danger">Cancelled</div>;
   const Delayed = () => <FontAwesomeIcon icon="exclamation-triangle" className="has-text-warning" />;
+  const isDelayed = !['On Time', 'Cancelled', '', null, undefined].includes(sailingStatus);
+  const Current = () => <div className="tag is-primary">In Progress</div>;
+
+  // TODO: Waiting on deploy of fix in backend
+  // const isCurrent = !['Cancelled', '', null, undefined].includes(sailingStatus) && isWithinRange(new Date(), new Date(actualDeparture), new Date(eta));
 
   const headerClasses = classNames({
     'card-header': true,
@@ -83,9 +89,12 @@ const Sailing = React.memo((props) => {
       <div className={headerClasses} onClick={() => toggleOpen(!open)}>
         <p className={headerTitleClasses}>
           {format(scheduledDeparture, 'HH:mm')}
+          &nbsp;
+          {/* TODO: Waiting on deploy of fix in backend */}
+          {/* {isCurrent && <Current />} */}
         </p>
         {sailingStatus === 'Cancelled' && <Cancelled />}
-        {!['On Time', 'Cancelled', '', null, undefined].includes(sailingStatus) && <Delayed />}
+        {isDelayed && <Delayed />}
         <div className="card-header-icon" aria-label="more options">
           <span className="icon">
             {open ? <FontAwesomeIcon icon="angle-down" /> : <FontAwesomeIcon icon="angle-right" />}
