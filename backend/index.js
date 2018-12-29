@@ -7,6 +7,7 @@ const cors = require('@koa/cors');
 const mongoose = require('mongoose');
 const { Route, Sailing } = require('./models');
 const scraper = require('./scraper');
+const secondScraper = require('./second-scraper/second-scraper');
 const moment = require('moment-timezone');
 const axios = require('axios');
 require('dotenv').config();
@@ -159,6 +160,7 @@ const keepalive = () => axios.get('https://ferrytrackerserver.now.sh/');
 setInterval(keepalive, 5 * 60 * 1000);
 
 scraper.scrape(60000);
+secondScraper.scrape(60000);
 
 app.listen({ port: 4000 }, () =>
   console.log(`🚀  Server ready at http://localhost:4000${server.graphqlPath}`)

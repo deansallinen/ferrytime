@@ -70,7 +70,7 @@ const getRouteId = async (routeName) => {
     return id
 }
 
-getConditionsPromise()
+const getConditions = getConditionsPromise()
     .then(res => res.forEach(async route => {
         // console.log(route)
         try {
@@ -90,4 +90,6 @@ getConditionsPromise()
     }
     ))
 
-module.exports = { getConditionsPromise, getRouteId };
+const scrape = interval => setInterval(getConditions, interval)
+
+module.exports = { getConditionsPromise, getRouteId, scrape };
