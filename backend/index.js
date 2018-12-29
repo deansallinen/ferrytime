@@ -19,6 +19,7 @@ mongoose.connect(URI, { useNewUrlParser: true });
 const typeDefs = gql`
   type Query {
     route(routeName: String): Route
+    sailing(routeId: String, scheduledDeparture: String): Sailing
     allRoutes: [Route]
     allSailings: [Sailing]
   }
@@ -85,7 +86,8 @@ const resolvers = {
   Query: {
     route: (parent, args, context) => Route.findOne({ ...args }),
     allRoutes: (parent, args, context) => Route.find({}),
-    allSailings: (parent, args, context) => Sailing.find({})
+    allSailings: (parent, args, context) => Sailing.find({}),
+    sailing: (parent, args, context) => Sailing.findOne({...args})
   },
   Mutation: {
     createRoute: (parent, args, context) => {

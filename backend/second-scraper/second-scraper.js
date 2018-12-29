@@ -4,6 +4,7 @@ const { fromPairs, flatten } = require('lodash');
 const moment = require('moment-timezone');
 const { request } = require('graphql-request');
 const { addWaits } = require('../queries/upsertRoute')
+const { getSailing, addPercentage } = require('../queries/upsertSailing')
 const endpoint = process.env.ENDPOINT
 
 
@@ -35,14 +36,17 @@ const getConditionsPromise = () =>
                                     .filter(Boolean)
                                     .map((x) => {
                                         const regex = /(\d{1,2}:\d\d[ap]m)(\d+)%/g
-                                        const [_, time, percentage] = regex.exec(x)
+                                        const res = regex.exec(x)
+                                        // console.log(res)
+                                        if (!res) return null
+                                        const [_, time, percentage] = res
                                         const timestamp = new moment(
                                             time,
                                             'hh:mmaa',
                                             'America/Vancouver'
                                         );
                                         // console.log(time, timestamp)
-                                        return [timestamp, percentage];
+                                        return [timestamp.utc().format(), parseInt(percentage)];
                                     }),
                             carWaits: parseInt(route[route.length-3]),
                             oversizeWaits: parseInt(route[route.length-2]),
@@ -68,10 +72,18 @@ const getRouteId = async (routeName) => {
 
 getConditionsPromise()
     .then(res => res.forEach(async route => {
-        console.log(route)
+        // console.log(route)
         try {
+            const routeId = await getRouteId(route.routeName)
             const res = await request(endpoint, addWaits, route);
-            console.log(res)
+            route.percentFull.forEach(async sailing => {
+                if (sailing) {
+                    const [scheduledDeparture, percentFull] = sailing
+                    const result = await request(endpoint, addPercentage, {scheduledDeparture, percentFull, routeId})
+                    console.log(sailing, routeId, result)
+                }
+            })
+            // console.log(res)
         } catch (err) {
             throw err
         }
