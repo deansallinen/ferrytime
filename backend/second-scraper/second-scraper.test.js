@@ -6,14 +6,19 @@ beforeEach(() => {
   return process.env = {...process.env, ENDPOINT: `http://localhost:4000/graphql` }
 })
 
-test('should return properly formatted sailing', async () => {
-  const date = '2010-12-13';
-  const example = ['boat', '12:00 AM', '12:01 AM', '12:45 AM', 'On Time'];
-  const res = await getConditionsPromise();
-  expect(res).toBeInstanceOf(Array);
-
-  //   console.log(res);
-});
+describe('result', async () => {
+  test('should be an array', async () => {
+    const res = await getConditionsPromise();
+    expect(res).toBeInstanceOf(Array);
+    expect(res[0]).toBeInstanceOf(Object);
+    expect(res[0]).toHaveProperty("routeName");
+    expect(res[0]).toHaveProperty("percentFull");
+    expect(res[0].percentFull).toBeInstanceOf(Array);
+    expect(res[0].percentFull[0]).toHaveLength(2);
+    expect(res[0]).toHaveProperty("carWaits");
+    expect(res[0]).toHaveProperty("oversizeWaits");
+  });
+})
 
 test('should return route ID for given routeName', async () => {
   const routeName = "Tsawwassen to Swartz Bay"
