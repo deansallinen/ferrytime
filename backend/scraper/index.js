@@ -56,16 +56,15 @@ const makeRouteInfo = array => ({
 });
 
 const validateTime = (date, time) => {
+  const isTime = /\d+:\d\d [AP]M/.test(time)
+  // console.log(time, isTime)
+  if (!isTime) return null;
   const dateTime = moment.tz(
     date.concat(' ', time),
     'YYYY-MM-DD hh:mm a',
     'America/Vancouver'
   );
-  // console.log(dateTime);
-  if (time && dateTime.isValid()) {
-    return dateTime.utc().format();
-  }
-  return null;
+  return dateTime.utc().format();
 };
 
 const makeSailing = (object, date) => {
@@ -112,12 +111,6 @@ const scrapeSailings = async () => {
       const result = await request(endpoint, upsertRoute, routeVariables);
       const routeId = result.updateRoute.id;
       sailings.map(async sailing => {
-        if (
-          sailing.sailingStatus ===
-          'Ongoing delay due to earlier operational delay'
-        ) {
-          console.log('Before sending request: ', sailing.scheduledDeparture);
-        }
         const sailingResult = await request(endpoint, upsertSailing, {
           ...sailing,
           routeId,
@@ -129,7 +122,7 @@ const scrapeSailings = async () => {
   } catch (err) {
     throw err;
   } finally {
-    console.log(`Scraped at ${new Date()}`);
+    console.log(`Scraped ${sailings.length} sailings at ${new Date()}`);
   }
 };
 

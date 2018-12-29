@@ -7,21 +7,13 @@ const cors = require('@koa/cors');
 const mongoose = require('mongoose');
 const { Route, Sailing } = require('./models');
 const scraper = require('./scraper');
-const moment = require('moment-timezone')
-require('dotenv').config()
+const moment = require('moment-timezone');
+const axios = require('axios');
+require('dotenv').config();
 
 const URI = `mongodb://${process.env.DB_USER}:${process.env.DB_PASS}@ds064198.mlab.com:64198/ferrytracker`;
 
-mongoose.connect(
-  URI,
-  { useNewUrlParser: true }
-);
-
-const today = moment.tz('America/Vancouver').startOf('day').toISOString()
-const tomorrow = moment.tz(today).endOf('day').toISOString()
-
-console.log(today)
-console.log(tomorrow)
+mongoose.connect(URI, { useNewUrlParser: true });
 
 // Schema
 const typeDefs = gql`
@@ -36,20 +28,31 @@ const typeDefs = gql`
     createRoute(input: RouteInput): Route
     updateRoute(input: RouteInput): Route
     updateSailing(input: SailingInput): Sailing
+    addWaits(input:WaitsInput): Route
   }
 
   type Route {
     id: ID
     routeName: String
     averageSailing: String
+    carWaits: Int
+    oversizeWaits: Int
     sailingDate: String
     sailings: [Sailing]
   }
 
   input RouteInput {
-    routeName: String
+    routeName: String!
     averageSailing: String
     sailingDate: String
+    carWaits: Int
+    oversizeWaits: Int
+  }
+
+  input WaitsInput {
+    routeName: String
+    carWaits: Int
+    oversizeWaits: Int
   }
 
   type Sailing {
@@ -62,6 +65,7 @@ const typeDefs = gql`
     sailingStatus: String
     vessel: String
     lastUpdated: String
+    percentFull: Int
   }
 
   input SailingInput {
@@ -72,6 +76,7 @@ const typeDefs = gql`
     sailingStatus: String
     vessel: String
     lastUpdated: String
+    percentFull: Int
   }
 `;
 
@@ -98,12 +103,6 @@ const resolvers = {
       return sailing.save();
     },
     updateSailing: async (parent, args, context) => {
-      if (
-        args.input.sailingStatus ===
-        'Ongoing delay due to earlier operational delay'
-      ) {
-        console.log('Before updating db: ', args.input.scheduledDeparture);
-      }
       const res = await Sailing.findOneAndUpdate(
         {
           routeId: args.input.routeId,
@@ -112,20 +111,23 @@ const resolvers = {
         args.input, // payload
         { upsert: true } // options
       );
-      if (
-        args.input.sailingStatus ===
-        'Ongoing delay due to earlier operational delay'
-      ) {
-        console.log('After updating db: ', res.scheduledDeparture);
-      }
     }
   },
   Route: {
     sailings: (parent, args, context) =>
-      Sailing.find({ routeId: parent.id, scheduledDeparture: {
-        $gte: today,
-        $lt: tomorrow
-      } }).sort({ scheduledDeparture: 1 })
+      Sailing.find({
+        routeId: parent.id,
+        scheduledDeparture: {
+          $gte: moment
+            .tz('America/Vancouver')
+            .startOf('day')
+            .toISOString(),
+          $lt: moment
+            .tz('America/Vancouver')
+            .endOf('day')
+            .toISOString()
+        }
+      }).sort({ scheduledDeparture: 1 })
   },
   Sailing: {
     route: (parent, args, context) => Route.findOne({ _id: parent.routeId })
@@ -149,6 +151,10 @@ const app = new Koa();
 app.use(Helmet());
 app.use(cors());
 server.applyMiddleware({ app });
+
+// Keepalive
+const keepalive = () => axios.get('https://ferrytrackerserver.now.sh/');
+setInterval(keepalive, 5 * 60 * 1000);
 
 scraper.scrape(60000);
 

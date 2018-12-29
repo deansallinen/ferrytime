@@ -7,7 +7,8 @@ const Sailing = mongoose.model('Sailing', {
   eta: String,
   sailingStatus: String,
   vessel: String,
-  lastUpdated: String
+  lastUpdated: String,
+  percentFull: Number,
 });
 
 module.exports = Sailing;
