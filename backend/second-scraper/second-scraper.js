@@ -3,7 +3,7 @@ const { fromPairs, flatten } = require('lodash');
 const moment = require('moment-timezone');
 const { request } = require('graphql-request');
 const { upsertSailing } = require('../queries/upsertSailing')
-const endpoint = process.env.ENDPOINT
+// const endpoint = process.env.ENDPOINT
 
 const scrapeConditions = async () => {
     try {
@@ -80,30 +80,31 @@ const getRouteId = async (routeName) => {
         }
       }
     `
-    const routeId = await request(endpoint, query, { routeName });
-    return routeId
+    const {route: {id}} = await request(process.env.ENDPOINT, query, { routeName });
+    return id
+    // return process.env.ENDPOINT
 }
 
-getConditionsPromise()
-    .then(res => res.forEach(route => {
-        // console.log(route)
-        const [routeName] = Object.keys(route)
-        console.log(routeName)
-        const routeId = getRouteId(routeName)
-        console.log(routeId)
-        // TODO: Get Route ID working,
-        // Also, there's an error with the regex apparently
-        route[routeName].forEach(async sailing => {
-            const [time, percentage] = sailing;
-            console.log(time.format(), percentage)
-            const sailingResult = await request(endpoint, upsertSailing, {
-                ...sailing,
-                routeId,
-                lastUpdated: new Date()
-            });
-            console.log(sailingResult);
-        })
-    }
-    ))
+// getConditionsPromise()
+//     .then(res => res.forEach(route => {
+//         // console.log(route)
+//         const [routeName] = Object.keys(route)
+//         // console.log(routeName)
+//         const routeId = getRouteId(routeName)
+//         // console.log(routeId)
+//         // TODO: Get Route ID working,
+//         // Also, there's an error with the regex apparently
+//         route[routeName].forEach(async sailing => {
+//             const [time, percentage] = sailing;
+//             // console.log(time.format(), percentage)
+//             const sailingResult = await request(endpoint, upsertSailing, {
+//                 ...sailing,
+//                 routeId,
+//                 lastUpdated: new Date()
+//             });
+//             // console.log(sailingResult);
+//         })
+//     }
+//     ))
 
-module.exports = { getConditionsPromise };
+module.exports = { getConditionsPromise, getRouteId };

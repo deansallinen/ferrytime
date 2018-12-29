@@ -2,6 +2,10 @@ const scraper = require('./index');
 const { isEqual } = require('date-fns');
 const moment = require('moment-timezone');
 
+beforeEach(() => {
+  return process.env = {...process.env, ENDPOINT: `http://localhost:4000/graphql` }
+})
+
 test('should return properly formatted sailing', () => {
   const date = '2010-12-13';
   const example = ['boat', '12:00 AM', '12:01 AM', '12:45 AM', 'On Time'];
