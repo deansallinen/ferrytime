@@ -56,16 +56,15 @@ const makeRouteInfo = array => ({
 });
 
 const validateTime = (date, time) => {
+  const isTime = /\d+:\d\d [AP]M/.test(time)
+  // console.log(time, isTime)
+  if (!isTime) return null;
   const dateTime = moment.tz(
     date.concat(' ', time),
     'YYYY-MM-DD hh:mm a',
     'America/Vancouver'
   );
-  // console.log(dateTime);
-  if (time && dateTime.isValid()) {
-    return dateTime.utc().format();
-  }
-  return null;
+  return dateTime.utc().format();
 };
 
 const makeSailing = (object, date) => {

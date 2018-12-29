@@ -2,9 +2,12 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Link, graphql } from 'gatsby';
 import { request } from 'graphql-request';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+<<<<<<< HEAD
 import localforage from 'localforage';
 import posed, { PoseGroup } from 'react-pose';
 
+=======
+>>>>>>> 1d5026a947adb5c8f26f876eeb79c6749dfa66aa
 import FavouriteStar from './favouriteStar';
 import Layout from './layout';
 import Sailing from './sailing';

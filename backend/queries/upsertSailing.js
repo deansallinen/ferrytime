@@ -1,3 +1,13 @@
+const getSailing = `
+query oneSailing($routeId: String, $scheduledDeparture: String){
+    sailing(routeId: $routeId, scheduledDeparture: $scheduledDeparture){
+      id
+      scheduledDeparture
+      sailingStatus
+      vessel
+    }
+  }
+`;
 
 const upsertSailing = `
 mutation sailingUpdate(
@@ -25,4 +35,24 @@ mutation sailingUpdate(
 }
 `;
 
-module.exports = { upsertSailing }
+const addPercentage = `
+mutation addPercentage(
+  $routeId: String
+  $scheduledDeparture: String
+  $percentFull: Int
+) {
+  updateSailing(
+    input: {
+      routeId: $routeId
+      scheduledDeparture: $scheduledDeparture
+      percentFull: $percentFull
+    }
+  ) {
+    routeId
+    scheduledDeparture
+    vessel
+  }
+}
+`;
+
+module.exports = { upsertSailing, getSailing, addPercentage }
