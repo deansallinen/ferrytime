@@ -40,12 +40,13 @@ const getConditionsPromise = () =>
                                     // console.log(res)
                                     if (!res) return null
                                     const [_, time, percentage] = res
-                                    const timestamp = new moment(
+                                    // const baseDate = new moment.tz("America/Vancouver")
+                                    const timestamp = moment.tz(
                                         time,
                                         'hh:mmaa',
                                         'America/Vancouver'
                                     );
-                                    // console.log(time, timestamp)
+                                    console.log(time, timestamp, timestamp.utc().format())
                                     return [timestamp.utc().format(), parseInt(percentage)];
                                 }),
                             carWaits: parseInt(route[route.length - 3]),

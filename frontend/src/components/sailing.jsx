@@ -11,50 +11,80 @@ import {
   Tile,
 } from './helpers';
 
-const SailingItem = (props) => {
+const SailingItem = React.memo((props) => {
   const { title, value } = props;
   return (
     <div className="">
       <p className="heading">{title}</p>
-      <p className="">{format(value, 'HH:mm')}</p>
+      <p className="">{value}</p>
     </div>
   );
-};
+});
 
-const PercentageIndicator = (props) => {
+
+const CardContent = React.memo((props) => {
   const {
-    scheduledDeparture, actualDeparture, eta, completed, setCompleted, time, loading,
+    percentFull, actualDeparture, eta, sailingStatus
   } = props;
+  return (
+    <div className="card-content">
+      <Ancestor>
+        <Tile className="is-vertical">
+          <Parent>
+            <Child className="level is-mobile">
+              {percentFull && <SailingItem title="Full" value={`${percentFull}%`} />}
+              {actualDeparture && <SailingItem title="Departure" value={format(actualDeparture, 'HH:mm')} />}
+              {eta && <SailingItem title="Arrival" value={format(eta, 'HH:mm')} />}
+            </Child>
+          </Parent>
 
-  const [percentage, setPercentage] = useState(0);
-  useEffect(() => {
-    if (!completed) {
-      if (isBefore(time, new Date(scheduledDeparture))) return;
+          <Parent>
+            <Child>
+              {sailingStatus && <SailingItem title="Status" value={sailingStatus} />}
+            </Child>
+          </Parent>
+        </Tile>
+      </Ancestor>
+    </div>);
+});
+// const PercentageIndicator = (props) => {
+//   const {
+//     scheduledDeparture, actualDeparture, eta, completed, setCompleted, time, loading,
+//   } = props;
 
-      if (eta && isAfter(time, new Date(eta))) { setCompleted(true); }
+//   const [percentage, setPercentage] = useState(0);
+//   useEffect(() => {
+//     if (!completed) {
+//       if (isBefore(time, new Date(scheduledDeparture))) return;
 
-      if (eta && actualDeparture) {
-        const timeElapsed = time - new Date(actualDeparture);
-        const totalTime = new Date(eta) - new Date(actualDeparture);
-        const p = timeElapsed / totalTime;
+//       if (eta && isAfter(time, new Date(eta))) { setCompleted(true); }
 
-        // console.log(timeElapsed, totalTime, p)
+//       if (eta && actualDeparture) {
+//         const timeElapsed = time - new Date(actualDeparture);
+//         const totalTime = new Date(eta) - new Date(actualDeparture);
+//         const p = timeElapsed / totalTime;
 
-        p > 1 ? setPercentage(1) : setPercentage(p.toFixed(2));
-      }
-    }
-  }, [time]);
+//         // console.log(timeElapsed, totalTime, p)
 
-  return <div>{percentage}</div>;
-};
+//         p > 1 ? setPercentage(1) : setPercentage(p.toFixed(2));
+//       }
+//     }
+//   }, [time]);
 
+//   return <div>{percentage}</div>;
+// };
+
+const Cancelled = () => <div className="tag is-danger">Cancelled</div>;
+const Delayed = () => <FontAwesomeIcon icon="exclamation-triangle" className="has-text-warning" />;
+const Current = () => <div className="tag is-primary">In Progress</div>;
 
 const Sailing = React.memo((props) => {
   const {
-    scheduledDeparture = null, actualDeparture = null, eta = null, sailingStatus, time, loading, percentFull,
+    scheduledDeparture = null, actualDeparture = null, eta = null, sailingStatus, time, percentFull,
   } = props;
+  console.log('sailing', props);
 
-  const [open, toggleOpen] = useState(false);
+  const [open, toggleOpen] = useState(true);
   const [completed, setCompleted] = useState(false);
   useEffect(() => {
     if (!completed && eta && isAfter(time, new Date(eta))) {
@@ -63,10 +93,7 @@ const Sailing = React.memo((props) => {
     }
   }, [time]);
 
-  const Cancelled = () => <div className="tag is-danger">Cancelled</div>;
-  const Delayed = () => <FontAwesomeIcon icon="exclamation-triangle" className="has-text-warning" />;
   const isDelayed = !['On Time', 'Cancelled', '', null, undefined].includes(sailingStatus);
-  const Current = () => <div className="tag is-primary">In Progress</div>;
 
   // TODO: Waiting on deploy of fix in backend
   // const isCurrent = !['Cancelled', '', null, undefined].includes(sailingStatus) && isWithinRange(new Date(), new Date(actualDeparture), new Date(eta));
@@ -102,45 +129,7 @@ const Sailing = React.memo((props) => {
         </div>
       </div>
       {open
-        && (
-          <div className="card-content" style={props}>
-            <Ancestor>
-              <Tile className="is-vertical">
-                <Parent>
-                  <Child className="level is-mobile">
-                    {percentFull
-                      && (
-                        <div>
-                          <div className="heading">Full</div>
-                          <p>
-                            {percentFull}
-                            %
-</p>
-                        </div>
-                      )
-                    }
-                    {actualDeparture && <SailingItem title="Departure" value={actualDeparture} />}
-                    {eta && <SailingItem title="Arrival" value={eta} />}
-                  </Child>
-                </Parent>
-
-                <Parent>
-                  <Child>
-                    {sailingStatus
-                      && (
-                        <div>
-                          <div className="heading">Status</div>
-                          <p>{sailingStatus}</p>
-                        </div>
-                      )
-                    }
-                  </Child>
-                </Parent>
-              </Tile>
-            </Ancestor>
-          </div>
-        )
-      }
+        && <CardContent percentFull={percentFull} actualDeparture={actualDeparture} eta={eta} sailingStatus={sailingStatus} />}
     </div>
   );
 });
