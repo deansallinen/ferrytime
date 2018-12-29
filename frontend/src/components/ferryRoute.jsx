@@ -2,12 +2,12 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Link, graphql } from 'gatsby';
 import { request } from 'graphql-request';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Spring, config } from 'react-spring';
 import localforage from 'localforage';
+import posed, { PoseGroup } from 'react-pose';
+
 import FavouriteStar from './favouriteStar';
 import Layout from './layout';
 import Sailing from './sailing';
-import { useTime, TimeContext } from './time-context';
 import {
   H1,
   H2,
@@ -20,8 +20,13 @@ import {
 
 const URL = 'https://ferrytrackerserver.now.sh/graphql';
 
+const PosedDiv = posed.div({
+  enter: { x: 0, opacity: 1 },
+  exit: { x: 500, opacity: 0 },
+});
+
 const SailingWait = props => (
-  <div className="control">
+  <PosedDiv className="control">
     <div className="tags has-addons">
       <div className="tag is-light is-medium">
         <FontAwesomeIcon icon={props.icon} />
@@ -30,7 +35,7 @@ const SailingWait = props => (
         {props.value}
       </div>
     </div>
-  </div>
+  </PosedDiv>
 );
 
 const FerryRoute = (props) => {
@@ -90,6 +95,14 @@ const FerryRoute = (props) => {
   //   config = { config.slow }>
   //   {props => <div>{props.number.toFixed()}</div>}
   // </Spring>
+
+  const PosedAncestor = posed.div({
+    enter: { staggerChildren: 50 },
+  });
+  const PosedParent = posed.div({
+    enter: { x: 0, opacity: 1 },
+    exit: { x: 500, opacity: 0 },
+  });
   return (
     <Layout>
 
@@ -106,8 +119,10 @@ const FerryRoute = (props) => {
             <FavouriteStar routeName={routeName} />
             <H2>Sailing Waits</H2>
             <div className="field is-grouped is-grouped-multiline">
-              <SailingWait value="0" icon="car-side" />
-              <SailingWait value="0" icon="truck" />
+              <PoseGroup>
+                <SailingWait value="0" icon="car-side" key="car" />
+                <SailingWait value="0" icon="truck" key="truck" />
+              </PoseGroup>
             </div>
           </Container>
         </div>
@@ -115,9 +130,9 @@ const FerryRoute = (props) => {
       <div className="section">
         <Container>
           <h3 className="title is-3">Sailings</h3>
-          <Ancestor className="is-vertical">
+          <Ancestor className="tile is-ancestor is-vertical" key="ancestor">
             {sailings.map(sailing => (
-              <Parent key={sailing.id}>
+              <Parent className="tile is-parent" key={sailing.id}>
                 <Child>
                   <Sailing {...sailing} time={time} loading={loading} />
                 </Child>
