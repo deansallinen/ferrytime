@@ -3,51 +3,55 @@
 const scraper = require('table-scraper');
 const { request } = require('graphql-request');
 const moment = require('moment-timezone');
+const { upsertRoute } = require('../queries/upsertRoute')
+const { upsertSailing } = require('../queries/upsertSailing')
+
 
 const endpoint = 'http://localhost:4000/graphql';
-const upsertRoute = `
-mutation updateRoute(
-  $routeName: String
-  $averageSailing: String
-  $sailingDate: String
-) {
-  updateRoute(
-    input: {
-      routeName: $routeName
-      averageSailing: $averageSailing
-      sailingDate: $sailingDate
-    }
-  ) {
-    id
-    routeName
-    averageSailing
-  }
-}`;
-const upsertSailing = `
-mutation sailingUpdate(
-  $routeId: String
-  $scheduledDeparture: String
-  $actualDeparture: String
-  $eta: String
-  $sailingStatus: String
-  $vessel: String
-  $lastUpdated: String
-) {
-  updateSailing(
-    input: {
-      routeId: $routeId
-      scheduledDeparture: $scheduledDeparture
-      actualDeparture: $actualDeparture
-      eta: $eta
-      vessel: $vessel
-      sailingStatus: $sailingStatus
-      lastUpdated: $lastUpdated
-    }
-  ) {
-    routeId
-  }
-}
-`;
+// const upsertRoute = `
+// mutation updateRoute(
+//   $routeName: String
+//   $averageSailing: String
+//   $sailingDate: String
+// ) {
+//   updateRoute(
+//     input: {
+//       routeName: $routeName
+//       averageSailing: $averageSailing
+//       sailingDate: $sailingDate
+//     }
+//   ) {
+//     id
+//     routeName
+//     averageSailing
+//   }
+// }`;
+
+// const upsertSailing = `
+// mutation sailingUpdate(
+//   $routeId: String
+//   $scheduledDeparture: String
+//   $actualDeparture: String
+//   $eta: String
+//   $sailingStatus: String
+//   $vessel: String
+//   $lastUpdated: String
+// ) {
+//   updateSailing(
+//     input: {
+//       routeId: $routeId
+//       scheduledDeparture: $scheduledDeparture
+//       actualDeparture: $actualDeparture
+//       eta: $eta
+//       vessel: $vessel
+//       sailingStatus: $sailingStatus
+//       lastUpdated: $lastUpdated
+//     }
+//   ) {
+//     routeId
+//   }
+// }
+// `;
 
 const makeRouteInfo = array => ({
   routeName: array[0][0].split('Sailing time: ')[0],
@@ -122,7 +126,7 @@ const scrapeSailings = async () => {
   } catch (err) {
     throw err;
   } finally {
-    console.log(`Scraped ${sailings.length} sailings at ${new Date()}`);
+    console.log(`Scraped main at ${new Date()}`);
   }
 };
 

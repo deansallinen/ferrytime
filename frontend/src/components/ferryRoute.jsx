@@ -2,12 +2,9 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Link, graphql } from 'gatsby';
 import { request } from 'graphql-request';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-<<<<<<< HEAD
 import localforage from 'localforage';
 import posed, { PoseGroup } from 'react-pose';
 
-=======
->>>>>>> 1d5026a947adb5c8f26f876eeb79c6749dfa66aa
 import FavouriteStar from './favouriteStar';
 import Layout from './layout';
 import Sailing from './sailing';
@@ -43,7 +40,9 @@ const SailingWait = props => (
 
 const FerryRoute = (props) => {
   const { route } = props.data.ftapi;
-  const { routeName, averageSailing } = route;
+  const {
+    routeName, averageSailing, carWaits, oversizeWaits,
+  } = route;
   const time = new Date();
 
   const [loading, setLoading] = useState(true);
@@ -54,13 +53,15 @@ const FerryRoute = (props) => {
     setLoading(true);
     localforage.getItem(routeName).then((existingSailings) => {
       if (existingSailings) {
-        console.log('existing', existingSailings);
+        console.log('From cache:', existingSailings);
         setSailings(existingSailings);
       }
     });
     const query = `{
       route(routeName: "${routeName}"){
           routeName
+          carWaits
+          oversizeWaits
           sailings {
               id
               vessel
@@ -69,17 +70,18 @@ const FerryRoute = (props) => {
               eta
               sailingStatus
               lastUpdated
+              percentFull
           }
       }
   }`;
     request(URL, query).then(
       (res) => {
-        console.log(res.route.sailings);
+        console.log('From network:', res.route.sailings);
         localforage.setItem(routeName, res.route.sailings);
         setSailings(res.route.sailings);
         setLoading(false);
       },
-    );
+    ).catch((err) => { throw err; });
   }, []);
 
   const [currentStatus, setCurrentStatus] = useState('');
@@ -120,12 +122,10 @@ const FerryRoute = (props) => {
               {currentStatus}
             </H2>
             <FavouriteStar routeName={routeName} />
-            <H2>Sailing Waits</H2>
             <div className="field is-grouped is-grouped-multiline">
-              <PoseGroup>
-                <SailingWait value="0" icon="car-side" key="car" />
-                <SailingWait value="0" icon="truck" key="truck" />
-              </PoseGroup>
+              <H2>Sailing Waits</H2>
+              <SailingWait value={carWaits} icon="car-side" key="car" />
+              <SailingWait value={oversizeWaits} icon="truck" key="truck" />
             </div>
           </Container>
         </div>
@@ -160,7 +160,6 @@ export const query = graphql`
         sailings {
           id
           scheduledDeparture
-
         }
       }
     }

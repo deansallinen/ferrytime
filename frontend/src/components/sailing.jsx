@@ -51,7 +51,7 @@ const PercentageIndicator = (props) => {
 
 const Sailing = React.memo((props) => {
   const {
-    scheduledDeparture = null, actualDeparture = null, eta = null, sailingStatus, time, loading,
+    scheduledDeparture = null, actualDeparture = null, eta = null, sailingStatus, time, loading, percentFull,
   } = props;
 
   const [open, toggleOpen] = useState(false);
@@ -59,7 +59,7 @@ const Sailing = React.memo((props) => {
   useEffect(() => {
     if (!completed && eta && isAfter(time, new Date(eta))) {
       setCompleted(true);
-      console.log(eta);
+      // console.log(eta);
     }
   }, [time]);
 
@@ -108,6 +108,17 @@ const Sailing = React.memo((props) => {
               <Tile className="is-vertical">
                 <Parent>
                   <Child className="level is-mobile">
+                    {percentFull
+                      && (
+                        <div>
+                          <div className="heading">Full</div>
+                          <p>
+                            {percentFull}
+                            %
+</p>
+                        </div>
+                      )
+                    }
                     {actualDeparture && <SailingItem title="Departure" value={actualDeparture} />}
                     {eta && <SailingItem title="Arrival" value={eta} />}
                   </Child>

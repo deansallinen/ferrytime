@@ -23,7 +23,7 @@ const getConditionsPromise = () =>
     scrapeConditions().then(res => {
         // console.log(res)
         return flatten(
-            res.filter(each => each[0][0] ==='Route').map((each) => {
+            res.filter(each => each[0][0] === 'Route').map((each) => {
                 const [headers, ...data] = each;
                 // console.log(data)
                 return data
@@ -31,27 +31,27 @@ const getConditionsPromise = () =>
                     .map((element) => {
                         const route = Object.values(element).filter(Boolean)
                         return {
-                            routeName: route[0], 
+                            routeName: route[0],
                             percentFull: route[1].split(' full') // array of [sailingTime, percentage]
-                                    .filter(Boolean)
-                                    .map((x) => {
-                                        const regex = /(\d{1,2}:\d\d[ap]m)(\d+)%/g
-                                        const res = regex.exec(x)
-                                        // console.log(res)
-                                        if (!res) return null
-                                        const [_, time, percentage] = res
-                                        const timestamp = new moment(
-                                            time,
-                                            'hh:mmaa',
-                                            'America/Vancouver'
-                                        );
-                                        // console.log(time, timestamp)
-                                        return [timestamp.utc().format(), parseInt(percentage)];
-                                    }),
-                            carWaits: parseInt(route[route.length-3]),
-                            oversizeWaits: parseInt(route[route.length-2]),
+                                .filter(Boolean)
+                                .map((x) => {
+                                    const regex = /(\d{1,2}:\d\d[ap]m)(\d+)%/g
+                                    const res = regex.exec(x)
+                                    // console.log(res)
+                                    if (!res) return null
+                                    const [_, time, percentage] = res
+                                    const timestamp = new moment(
+                                        time,
+                                        'hh:mmaa',
+                                        'America/Vancouver'
+                                    );
+                                    // console.log(time, timestamp)
+                                    return [timestamp.utc().format(), parseInt(percentage)];
+                                }),
+                            carWaits: parseInt(route[route.length - 3]),
+                            oversizeWaits: parseInt(route[route.length - 2]),
                         }
-                })
+                    })
             })
         );
     });
@@ -66,11 +66,11 @@ const getRouteId = async (routeName) => {
         }
       }
     `
-    const {route: {id}} = await request(endpoint, query, { routeName });
+    const { route: { id } } = await request(endpoint, query, { routeName });
     return id
 }
 
-const getConditions = getConditionsPromise()
+const getConditions = () => getConditionsPromise()
     .then(res => res.forEach(async route => {
         // console.log(route)
         try {
@@ -79,8 +79,8 @@ const getConditions = getConditionsPromise()
             route.percentFull.forEach(async sailing => {
                 if (sailing) {
                     const [scheduledDeparture, percentFull] = sailing
-                    const result = await request(endpoint, addPercentage, {scheduledDeparture, percentFull, routeId})
-                    console.log(sailing, routeId, result)
+                    const result = await request(endpoint, addPercentage, { scheduledDeparture, percentFull, routeId })
+                    // console.log(sailing, routeId, result)
                 }
             })
             // console.log(res)
@@ -88,7 +88,7 @@ const getConditions = getConditionsPromise()
             throw err
         }
     }
-    ))
+    )).then(console.log(`Scraped secondary at ${new Date()}`))
 
 const scrape = interval => setInterval(getConditions, interval)
 

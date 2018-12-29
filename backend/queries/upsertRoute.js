@@ -1,6 +1,6 @@
 const upsertRoute = `
 mutation updateRoute(
-  $routeName: String
+  $routeName: String!
   $averageSailing: String
   $sailingDate: String
 ) {
