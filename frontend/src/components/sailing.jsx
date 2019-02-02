@@ -84,7 +84,7 @@ const Sailing = React.memo((props) => {
   } = props;
   // console.log('sailing', props);
 
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const toggleOpen = () => setOpen(!open);
 
   const [completed, setCompleted] = useState(false);
