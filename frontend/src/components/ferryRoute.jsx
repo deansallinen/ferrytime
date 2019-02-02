@@ -43,9 +43,14 @@ const Hero = React.memo((props) => {
     <section className="hero">
       <div className="hero-body">
         <Container>
-          <H1>{routeName}</H1>
-          <H2>{averageSailing}</H2>
-          <FavouriteStar routeName={routeName} />
+          <H1>
+            {routeName}
+          </H1>
+          <H2>
+            {averageSailing}
+            {' '}
+            <FavouriteStar routeName={routeName} />
+          </H2>
           <H2>
             Status:
             {' '}
@@ -66,19 +71,12 @@ const FerryRoute = (props) => {
   const { route } = props.data.ftapi;
   const { routeName, averageSailing } = route;
   const time = new Date();
-  const [carWaits, setCarWaits] = useState(null);
-  const [oversizeWaits, setOversizeWaits] = useState(null);
+  const [carWaits, setCarWaits] = useState(0);
+  const [oversizeWaits, setOversizeWaits] = useState(0);
   const [loading, setLoading] = useState(true);
 
   const [sailings, setSailings] = useState(route.sailings);
   useEffect(() => {
-    setLoading(true);
-    localforage.getItem(routeName).then((existingSailings) => {
-      if (existingSailings) {
-        console.log('From cache:', existingSailings);
-        setSailings(existingSailings);
-      }
-    });
     const query = `{
       route(routeName: "${routeName}"){
           routeName
@@ -96,7 +94,13 @@ const FerryRoute = (props) => {
           }
       }
   }`;
-    request(URL, query).then(
+    setLoading(true);
+    localforage.getItem(routeName).then((existingSailings) => {
+      if (existingSailings) {
+        console.log('From cache:', existingSailings);
+        setSailings(existingSailings);
+      }
+    }).then(() => request(URL, query).then(
       (res) => {
         // Too many calls here?
         console.log('From network:', res.route);
@@ -106,7 +110,7 @@ const FerryRoute = (props) => {
         setOversizeWaits(res.route.oversizeWaits);
         setLoading(false);
       },
-    ).catch((err) => { throw err; });
+    )).catch((err) => { throw err; });
   }, []);
 
   const [currentStatus, setCurrentStatus] = useState(undefined);

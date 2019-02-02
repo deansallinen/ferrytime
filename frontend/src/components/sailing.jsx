@@ -24,7 +24,7 @@ const SailingItem = React.memo((props) => {
 
 const CardContent = React.memo((props) => {
   const {
-    percentFull, actualDeparture, eta, sailingStatus
+    percentFull, actualDeparture, eta, sailingStatus,
   } = props;
   return (
     <div className="card-content">
@@ -82,9 +82,11 @@ const Sailing = React.memo((props) => {
   const {
     scheduledDeparture = null, actualDeparture = null, eta = null, sailingStatus, time, percentFull,
   } = props;
-  console.log('sailing', props);
+  // console.log('sailing', props);
 
-  const [open, toggleOpen] = useState(true);
+  const [open, setOpen] = useState(true);
+  const toggleOpen = () => setOpen(!open);
+
   const [completed, setCompleted] = useState(false);
   useEffect(() => {
     if (!completed && eta && isAfter(time, new Date(eta))) {
@@ -96,7 +98,7 @@ const Sailing = React.memo((props) => {
   const isDelayed = !['On Time', 'Cancelled', '', null, undefined].includes(sailingStatus);
 
   // TODO: Waiting on deploy of fix in backend
-  // const isCurrent = !['Cancelled', '', null, undefined].includes(sailingStatus) && isWithinRange(new Date(), new Date(actualDeparture), new Date(eta));
+  const isCurrent = eta && actualDeparture && !['Cancelled', '', null, undefined].includes(sailingStatus) && isWithinRange(new Date(), new Date(actualDeparture), new Date(eta));
 
   const headerClasses = classNames({
     'card-header': true,
@@ -113,13 +115,13 @@ const Sailing = React.memo((props) => {
 
   return (
     <div className="card">
-      <div className={headerClasses} onClick={() => toggleOpen(!open)}>
-        <p className={headerTitleClasses}>
+      <div className={headerClasses} onClick={toggleOpen}>
+        <div className={headerTitleClasses}>
           {format(scheduledDeparture, 'HH:mm')}
           &nbsp;
           {/* TODO: Waiting on deploy of fix in backend */}
-          {/* {isCurrent && <Current />} */}
-        </p>
+          {isCurrent && <Current />}
+        </div>
         {sailingStatus === 'Cancelled' && <Cancelled />}
         {isDelayed && <Delayed />}
         <div className="card-header-icon" aria-label="more options">

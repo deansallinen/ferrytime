@@ -3,14 +3,14 @@ import Img from 'gatsby-image';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Container } from './helpers';
-import {useTime} from './time-context';
-import { format } from 'date-fns';
+// import { useTime } from './time-context';
+// import { format } from 'date-fns';
 
 
-const Clock = () => {
-  const time = useTime()
-  return <div>{format(time, "HH:mm:ss")}</div>
-}
+// const Clock = () => {
+//   const time = useTime()
+//   return <div>{format(time, "HH:mm:ss")}</div>
+// }
 
 const Header = ({ siteTitle }) => (
   <StaticQuery
