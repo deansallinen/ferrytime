@@ -1,6 +1,8 @@
+![Ferrytime app on a phone](https://github.com/deansallinen/deansallinen.ca/blob/master/src/img/ferrytime/three.png)
+
 # Ferrytime
 
-Ferrytime is a simple webapp to track the schedule of the BC Ferries. 
+[Ferrytime](https://ferryti.me) is a simple webapp to track the schedule of the BC Ferries. 
 
 I've spent years of my life travelling on the coastal ferries to visit family, meet up with friends, and commute for work and school. 
 
