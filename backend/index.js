@@ -7,6 +7,7 @@ const cors = require('@koa/cors');
 const mongoose = require('mongoose');
 const { Route, Sailing } = require('./models');
 const scraper = require('./scraper');
+const secondScraper = require('./second-scraper/second-scraper');
 const moment = require('moment-timezone');
 const axios = require('axios');
 require('dotenv').config();
@@ -19,6 +20,7 @@ mongoose.connect(URI, { useNewUrlParser: true });
 const typeDefs = gql`
   type Query {
     route(routeName: String): Route
+    sailing(routeId: String, scheduledDeparture: String): Sailing
     allRoutes: [Route]
     allSailings: [Sailing]
   }
@@ -28,20 +30,31 @@ const typeDefs = gql`
     createRoute(input: RouteInput): Route
     updateRoute(input: RouteInput): Route
     updateSailing(input: SailingInput): Sailing
+    addWaits(input:WaitsInput): Route
   }
 
   type Route {
     id: ID
     routeName: String
     averageSailing: String
+    carWaits: Int
+    oversizeWaits: Int
     sailingDate: String
     sailings: [Sailing]
   }
 
   input RouteInput {
-    routeName: String
+    routeName: String!
     averageSailing: String
     sailingDate: String
+    carWaits: Int
+    oversizeWaits: Int
+  }
+
+  input WaitsInput {
+    routeName: String
+    carWaits: Int
+    oversizeWaits: Int
   }
 
   type Sailing {
@@ -74,7 +87,8 @@ const resolvers = {
   Query: {
     route: (parent, args, context) => Route.findOne({ ...args }),
     allRoutes: (parent, args, context) => Route.find({}),
-    allSailings: (parent, args, context) => Sailing.find({})
+    allSailings: (parent, args, context) => Sailing.find({}),
+    sailing: (parent, args, context) => Sailing.findOne({...args})
   },
   Mutation: {
     createRoute: (parent, args, context) => {
@@ -146,6 +160,7 @@ const keepalive = () => axios.get('https://ferrytrackerserver.now.sh/');
 setInterval(keepalive, 5 * 60 * 1000);
 
 scraper.scrape(60000);
+secondScraper.scrape(60000);
 
 app.listen({ port: 4000 }, () =>
   console.log(`🚀  Server ready at http://localhost:4000${server.graphqlPath}`)

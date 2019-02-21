@@ -1,15 +1,13 @@
 import { Link, StaticQuery, graphql } from 'gatsby';
 import React from 'react';
 import { Container } from './helpers';
-import Brand from './brand';
-import {useTime} from './time-context';
-import { format } from 'date-fns';
+// import { useTime } from './time-context';
+// import { format } from 'date-fns';
 
-
-const Clock = () => {
-  const time = useTime()
-  return <div>{format(time, "HH:mm:ss")}</div>
-}
+// const Clock = () => {
+//   const time = useTime()
+//   return <div>{format(time, "HH:mm:ss")}</div>
+// }
 
 const Header = ({ siteTitle }) => (
   <nav

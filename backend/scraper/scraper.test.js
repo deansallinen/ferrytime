@@ -2,9 +2,13 @@ const scraper = require('./index');
 const { isEqual } = require('date-fns');
 const moment = require('moment-timezone');
 
+beforeEach(() => {
+  return process.env = {...process.env, ENDPOINT: `http://localhost:4000/graphql` }
+})
+
 test('should return properly formatted sailing', () => {
   const date = '2010-12-13';
-  const example = ['boat', '12:00', '12:01', '12:45', 'On Time'];
+  const example = ['boat', '12:00 AM', '12:01 AM', '12:45 AM', 'On Time'];
   const res = scraper.makeSailing(example, date);
   expect(res).toHaveProperty('vessel');
   expect(res).toHaveProperty('sailingStatus');
@@ -37,6 +41,13 @@ test('should validate and concat datetime strings for sailings PM', () => {
 test('should return null for sailings without time', () => {
   const date = '2010-12-13';
   const time = '';
+  const res = scraper.validateTime(date, time);
+  expect(res).toEqual(null);
+});
+
+test('should return null for sailings with string in time', () => {
+  const date = '2010-12-13';
+  const time = '...';
   const res = scraper.validateTime(date, time);
   expect(res).toEqual(null);
 });

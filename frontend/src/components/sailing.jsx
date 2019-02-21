@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  format, isBefore, isAfter, isValid,
+  format, isBefore, isAfter, isValid, isWithinRange,
 } from 'date-fns';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
@@ -11,59 +11,94 @@ import {
   Tile,
 } from './helpers';
 
-const SailingItem = (props) => {
+const SailingItem = React.memo((props) => {
   const { title, value } = props;
   return (
     <div className="">
       <p className="heading">{title}</p>
-      <p className="">{format(value, 'HH:mm')}</p>
+      <p className="">{value}</p>
     </div>
   );
-};
+});
 
-const PercentageIndicator = (props) => {
+
+const CardContent = React.memo((props) => {
   const {
-    scheduledDeparture, actualDeparture, eta, completed, setCompleted, time, loading,
+    percentFull, actualDeparture, eta, sailingStatus,
   } = props;
+  return (
+    <div className="card-content">
+      <Ancestor>
+        <Tile className="is-vertical">
+          <Parent>
+            <Child className="level is-mobile">
+              {percentFull && <SailingItem title="Full" value={`${percentFull}%`} />}
+              {actualDeparture && <SailingItem title="Departure" value={format(actualDeparture, 'HH:mm')} />}
+              {eta && <SailingItem title="Arrival" value={format(eta, 'HH:mm')} />}
+            </Child>
+          </Parent>
 
-  const [percentage, setPercentage] = useState(0);
-  useEffect(() => {
-    if (!completed) {
-      if (isBefore(time, new Date(scheduledDeparture))) return;
+          <Parent>
+            <Child>
+              {sailingStatus && <SailingItem title="Status" value={sailingStatus} />}
+            </Child>
+          </Parent>
+        </Tile>
+      </Ancestor>
+    </div>);
+});
+// const PercentageIndicator = (props) => {
+//   const {
+//     scheduledDeparture, actualDeparture, eta, completed, setCompleted, time, loading,
+//   } = props;
 
-      if (eta && isAfter(time, new Date(eta))) { setCompleted(true); }
+//   const [percentage, setPercentage] = useState(0);
+//   useEffect(() => {
+//     if (!completed) {
+//       if (isBefore(time, new Date(scheduledDeparture))) return;
 
-      if (eta && actualDeparture) {
-        const timeElapsed = time - new Date(actualDeparture);
-        const totalTime = new Date(eta) - new Date(actualDeparture);
-        const p = timeElapsed / totalTime;
+//       if (eta && isAfter(time, new Date(eta))) { setCompleted(true); }
 
-        // console.log(timeElapsed, totalTime, p)
+//       if (eta && actualDeparture) {
+//         const timeElapsed = time - new Date(actualDeparture);
+//         const totalTime = new Date(eta) - new Date(actualDeparture);
+//         const p = timeElapsed / totalTime;
 
-        p > 1 ? setPercentage(1) : setPercentage(p.toFixed(2));
-      }
-    }
-  }, [time]);
+//         // console.log(timeElapsed, totalTime, p)
 
-  return <div>{percentage}</div>;
-};
+//         p > 1 ? setPercentage(1) : setPercentage(p.toFixed(2));
+//       }
+//     }
+//   }, [time]);
 
+//   return <div>{percentage}</div>;
+// };
+
+const Cancelled = () => <div className="tag is-danger">Cancelled</div>;
+const Delayed = () => <FontAwesomeIcon icon="exclamation-triangle" className="has-text-warning" />;
+const Current = () => <div className="tag is-primary">In Progress</div>;
 
 const Sailing = React.memo((props) => {
   const {
-    scheduledDeparture = null, actualDeparture = null, eta = null, sailingStatus, time, loading,
+    scheduledDeparture = null, actualDeparture = null, eta = null, sailingStatus, time, percentFull,
   } = props;
+  // console.log('sailing', props);
 
-  const [open, toggleOpen] = useState(false);
+  const [open, setOpen] = useState(false);
+  const toggleOpen = () => setOpen(!open);
+
   const [completed, setCompleted] = useState(false);
   useEffect(() => {
     if (!completed && eta && isAfter(time, new Date(eta))) {
       setCompleted(true);
+      // console.log(eta);
     }
   }, [time]);
 
-  const Cancelled = () => <div className="tag is-danger">Cancelled</div>;
-  const Delayed = () => <FontAwesomeIcon icon="exclamation-triangle" className="has-text-warning" />;
+  const isDelayed = !['On Time', 'Cancelled', '', null, undefined].includes(sailingStatus);
+
+  // TODO: Waiting on deploy of fix in backend
+  const isCurrent = eta && actualDeparture && !['Cancelled', '', null, undefined].includes(sailingStatus) && isWithinRange(new Date(), new Date(actualDeparture), new Date(eta));
 
   const headerClasses = classNames({
     'card-header': true,
@@ -80,12 +115,15 @@ const Sailing = React.memo((props) => {
 
   return (
     <div className="card">
-      <div className={headerClasses} onClick={() => toggleOpen(!open)}>
-        <p className={headerTitleClasses}>
+      <div className={headerClasses} onClick={toggleOpen}>
+        <div className={headerTitleClasses}>
           {format(scheduledDeparture, 'HH:mm')}
-        </p>
+          &nbsp;
+          {/* TODO: Waiting on deploy of fix in backend */}
+          {isCurrent && <Current />}
+        </div>
         {sailingStatus === 'Cancelled' && <Cancelled />}
-        {!['On Time', 'Cancelled', '', null, undefined].includes(sailingStatus) && <Delayed />}
+        {isDelayed && <Delayed />}
         <div className="card-header-icon" aria-label="more options">
           <span className="icon">
             {open ? <FontAwesomeIcon icon="angle-down" /> : <FontAwesomeIcon icon="angle-right" />}
@@ -93,34 +131,7 @@ const Sailing = React.memo((props) => {
         </div>
       </div>
       {open
-        && (
-          <div className="card-content" style={props}>
-            <Ancestor>
-              <Tile className="is-vertical">
-                <Parent>
-                  <Child className="level is-mobile">
-                    {actualDeparture && <SailingItem title="Departure" value={actualDeparture} />}
-                    {eta && <SailingItem title="Arrival" value={eta} />}
-                  </Child>
-                </Parent>
-
-                <Parent>
-                  <Child>
-                    {sailingStatus
-                      && (
-                        <div>
-                          <div className="heading">Status</div>
-                          <p>{sailingStatus}</p>
-                        </div>
-                      )
-                    }
-                  </Child>
-                </Parent>
-              </Tile>
-            </Ancestor>
-          </div>
-        )
-      }
+        && <CardContent percentFull={percentFull} actualDeparture={actualDeparture} eta={eta} sailingStatus={sailingStatus} />}
     </div>
   );
 });
