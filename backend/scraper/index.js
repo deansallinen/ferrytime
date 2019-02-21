@@ -7,13 +7,13 @@ const { ApolloClient } = require('apollo-client');
 const { HttpLink } = require('apollo-link-http');
 const { InMemoryCache } = require('apollo-cache-inmemory');
 const fetch = require('isomorphic-fetch');
-
 const moment = require('moment-timezone');
 
 const { upsertRouteMutation } = require('../queries/upsertRoute');
 const { upsertSailing } = require('../queries/upsertSailing');
 
 const uri = process.env.ENDPOINT;
+
 const client = new ApolloClient({
   link: new HttpLink({ uri }),
   cache: new InMemoryCache(),
@@ -41,16 +41,16 @@ const validateTime = (date, time) => {
 const makeSailing = (object, date) => {
   const [
     vessel,
-    scheduledDeparture,
-    actualDeparture,
+    scheduled_departure,
+    actual_departure,
     eta,
-    sailingStatus,
+    sailing_status,
   ] = Object.values(object);
   return {
     vessel,
-    sailingStatus,
-    scheduledDeparture: validateTime(date, scheduledDeparture),
-    actualDeparture: validateTime(date, actualDeparture),
+    sailing_status,
+    scheduled_departure: validateTime(date, scheduled_departure),
+    actual_departure: validateTime(date, actual_departure),
     eta: validateTime(date, eta),
   };
 };
@@ -71,10 +71,11 @@ function clean(data) {
   return routesArray;
 }
 
-const upsertSailingsOfRoute = async ({ routeID, sailings }) => {
-  const payload = sailings.map(sailing => ({ ...routeID, ...sailing }));
-  return client.mutate({ mutation: upsertSailing, variables: { payload } });
-};
+const upsertSailingsOfRoute = async ({ route_id, sailings }) =>
+  sailings.map( sailing => {
+    const payload = { route_id, ...sailing }
+    return client.mutate({ mutation: upsertSailing, variables:  {objects: payload}  });
+  });
 
 const upsertRoute = async ({ routeInfo }) =>
   client.mutate({ mutation: upsertRouteMutation, variables: routeInfo });
@@ -85,15 +86,12 @@ const getRawSchedule = async () =>
 const scrapeSailings = async () => {
   try {
     const data = clean(await getRawSchedule());
-    console.log(data[0]);
     data.map(async route => {
       const { sailings, ...routeInfo } = route;
       const { data } = await upsertRoute({ routeInfo });
-      const { routeID } = data.insert_route.returning[0].id;
+      const route_id = data.insert_route.returning[0].id;
+      upsertSailingsOfRoute({ route_id, sailings });
 
-      const sailingResult = await upsertSailingsOfRoute({ routeID, sailings });
-
-      console.log(sailingResult);
     });
   } catch (err) {
     throw err;

@@ -3,20 +3,20 @@ const gql = require('graphql-tag');
 const upsertRouteMutation = gql`
   mutation upsertRoute(
     $routeName: String!
-    $averageSailing: String
+    $averageSailing: String!
     $sailingDate: String
   ) {
     insert_route(
       objects: [
         {
-          routeName: $routeName
-          averageSailing: $averageSailing
-          sailingDate: $sailingDate
+          route_name: $routeName
+          average_sailing: $averageSailing
+          sailing_date: $sailingDate
         }
       ]
       on_conflict: {
-        constraint: route_routeName_key
-        update_columns: [averageSailing, carWaits, oversizeWaits, sailingDate]
+        constraint: route_route_name_key
+        update_columns: [average_sailing, car_waits, oversize_waits, sailing_date]
       }
     ) {
       returning {
