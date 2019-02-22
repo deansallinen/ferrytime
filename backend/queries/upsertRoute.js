@@ -1,41 +1,47 @@
-const upsertRoute = `
-mutation updateRoute(
-  $routeName: String!
-  $averageSailing: String
-  $sailingDate: String
-) {
-  updateRoute(
-    input: {
-      routeName: $routeName
-      averageSailing: $averageSailing
-      sailingDate: $sailingDate
-    }
-  ) {
-    id
-    routeName
-    averageSailing
-  }
-}`;
+const gql = require('graphql-tag');
 
-const addWaits = `
-mutation addWaits(
-  $routeName: String!
-  $carWaits: Int
-  $oversizeWaits: Int
-) {
-  updateRoute(
-    input: {
-      carWaits: $carWaits 
-      oversizeWaits: $oversizeWaits 
-      routeName: $routeName
-    }
+const upsertRouteMutation = gql`
+  mutation upsertRoute(
+    $routeName: String!
+    $averageSailing: String
+    $sailingDate: String
   ) {
-    id
-    routeName
-    averageSailing
-    carWaits
-    oversizeWaits
+    insert_route(
+      objects: [
+        {
+          routeName: $routeName
+          averageSailing: $averageSailing
+          sailingDate: $sailingDate
+        }
+      ]
+      on_conflict: {
+        constraint: route_routeName_key
+        update_columns: [averageSailing, carWaits, oversizeWaits, sailingDate]
+      }
+    ) {
+      returning {
+        id
+      }
+    }
   }
-}`;
+`;
 
-module.exports = { upsertRoute, addWaits }
+const addWaits = gql`
+  mutation addWaits($routeName: String!, $carWaits: Int, $oversizeWaits: Int) {
+    updateRoute(
+      input: {
+        carWaits: $carWaits
+        oversizeWaits: $oversizeWaits
+        routeName: $routeName
+      }
+    ) {
+      id
+      routeName
+      averageSailing
+      carWaits
+      oversizeWaits
+    }
+  }
+`;
+
+module.exports = { upsertRouteMutation, addWaits };
