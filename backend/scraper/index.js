@@ -100,7 +100,7 @@ const scrapeSailings = async () => {
   }
 };
 
-scrapeSailings();
+// scrapeSailings();
 
 const scrape = interval => setInterval(scrapeSailings, interval);
 
