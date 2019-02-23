@@ -16,7 +16,7 @@ const uri = 'https://ferry-time.herokuapp.com/v1alpha1/graphql';
 const keepalive = () => fetch('https://ferrytrackerserver.now.sh/');
 setInterval(keepalive, 5 * 60 * 1000); // 5 minutes
 
-// scraper.scrape(60000);
+scraper.scrape(60000);
 secondScraper.scrape(60000);
 
 app.listen({ port: 4000 }, () =>
