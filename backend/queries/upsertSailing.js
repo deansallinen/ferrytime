@@ -25,24 +25,17 @@ const upsertSailing = gql`
   }
 `;
 
-const addPercentage = `
-mutation addPercentage(
-  $routeId: String
-  $scheduledDeparture: String
-  $percentFull: Int
-) {
-  updateSailing(
-    input: {
-      routeId: $routeId
-      scheduledDeparture: $scheduledDeparture
-      percentFull: $percentFull
+const addPercentage = gql`
+mutation addPercentage($route_id: uuid, $scheduled_departure: date, $percent_full: Int) {
+  update_sailing(where: {route_id: {_eq: $route_id}, scheduled_departure: {_eq: $scheduled_departure}}, _set: {percent_full: $percent_full}) {
+    returning {
+      route_id
+      scheduled_departure
+      percent_full
     }
-  ) {
-    routeId
-    scheduledDeparture
-    vessel
   }
 }
+
 `;
 
 module.exports = { upsertSailing, getSailing, addPercentage };

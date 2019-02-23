@@ -2,95 +2,104 @@ require('dotenv').config();
 const scraper = require('table-scraper');
 const { fromPairs, flatten } = require('lodash');
 const moment = require('moment-timezone');
-const { request } = require('graphql-request');
-const { addWaits } = require('../queries/upsertRoute')
+const { ApolloClient } = require('apollo-client');
+const { HttpLink } = require('apollo-link-http');
+const { InMemoryCache } = require('apollo-cache-inmemory');
+const fetch = require('isomorphic-fetch');
+
+const { addWaits, getRouteIDbyName } = require('../queries/upsertRoute')
 const { getSailing, addPercentage } = require('../queries/upsertSailing')
-const endpoint = process.env.ENDPOINT
 
+const uri = process.env.ENDPOINT
 
-const scrapeConditions = async () => {
-    try {
-        const res = await scraper.get(
-            'https://orca.bcferries.com/cc/marqui/at-a-glance.asp'
-        );
-        return res;
-    } catch (err) {
-        throw err;
-    }
-};
+const client = new ApolloClient({
+  link: new HttpLink({ uri }),
+  cache: new InMemoryCache(),
+  fetch,
+});
 
-const getConditionsPromise = () =>
-    scrapeConditions().then(res => {
-        // console.log(res)
-        return flatten(
-            res.filter(each => each[0][0] === 'Route').map((each) => {
-                const [headers, ...data] = each;
-                // console.log(data)
-                return data
-                    .filter((element) => Object.keys(element).length > 3 && element[0])
-                    .map((element) => {
-                        const route = Object.values(element).filter(Boolean)
-                        return {
-                            routeName: route[0],
-                            percentFull: route[1].split(' full') // array of [sailingTime, percentage]
-                                .filter(Boolean)
-                                .map((x) => {
-                                    const regex = /(\d{1,2}:\d\d[ap]m)(\d+)%/g
-                                    const res = regex.exec(x)
-                                    // console.log(res)
-                                    if (!res) return null
-                                    const [_, time, percentage] = res
-                                    // const baseDate = new moment.tz("America/Vancouver")
-                                    const timestamp = moment.tz(
-                                        time,
-                                        'hh:mmaa',
-                                        'America/Vancouver'
-                                    );
-                                    console.log(time, timestamp, timestamp.utc().format())
-                                    return [timestamp.utc().format(), parseInt(percentage)];
-                                }),
-                            carWaits: parseInt(route[route.length - 3]),
-                            oversizeWaits: parseInt(route[route.length - 2]),
-                        }
-                    })
-            })
-        );
-    });
+const scrapeConditionsPage = async () => scraper.get('https://orca.bcferries.com/cc/marqui/at-a-glance.asp');
 
-const getRouteId = async (routeName) => {
-    // console.log(process.env.ENDPOINT)
-    const query = `
-    query routeId($routeName: String) {
-        route(routeName: $routeName) {
-          id
-          routeName
-        }
-      }
-    `
-    const { route: { id } } = await request(endpoint, query, { routeName });
-    return id
+const regex = /(\d{1,2}:\d\d[ap]m)(\d+)%/g
+
+const splitTimeFromPercent = (input) => {
+  const res = regex.exec(input)
+  if (!res) return null
+  const [_, time, percentage] = res
+  const timestamp = moment.tz(
+      time,
+      'hh:mmaa',
+      'America/Vancouver'
+  );
+  // console.log(time, timestamp.utc().format())
+  return [timestamp.utc().format(), parseInt(percentage)];
 }
 
-const getConditions = () => getConditionsPromise()
-    .then(res => res.forEach(async route => {
-        // console.log(route)
-        try {
-            const routeId = await getRouteId(route.routeName)
-            const res = await request(endpoint, addWaits, route);
-            route.percentFull.forEach(async sailing => {
-                if (sailing) {
-                    const [scheduledDeparture, percentFull] = sailing
-                    const result = await request(endpoint, addPercentage, { scheduledDeparture, percentFull, routeId })
-                    // console.log(sailing, routeId, result)
-                }
-            })
-            // console.log(res)
-        } catch (err) {
-            throw err
-        }
-    }
-    )).then(console.log(`Scraped secondary at ${new Date()}`))
+const getPercentArray = (input) => (
+  input.split(' full')
+    .filter(Boolean)
+    .map(x => splitTimeFromPercent(x))
+)
 
-const scrape = interval => setInterval(getConditions, interval)
+const removeBlankRows = (rows) => rows.filter((element) => Object.keys(element).length > 3 && element[0])
 
-module.exports = { getConditionsPromise, getRouteId, scrape };
+const removeBlankValues = (row) => Object.values(row).filter(Boolean)
+
+const getRouteTables = (pageData) => pageData.filter(each => each[0][0] === 'Route')
+
+const getRouteID = async (route) => {
+  const {data} = await client.query({query: getRouteIDbyName, variables: {route_name: route[0]}})
+  return data.route[0].id
+}
+
+const createRouteObject = async (route) => ({
+    route_id: await getRouteID(route),
+    route_name: route[0],
+    sailings: getPercentArray(route[1]),
+    car_waits: parseInt(route[route.length - 3]),
+    oversize_waits: parseInt(route[route.length - 2]),
+})
+
+const getRouteObjects = (routeTables) => (
+  routeTables.map((routeTable) => {
+    const [headers, ...rows] = routeTable;
+    return removeBlankRows(rows).map(async (row) => {
+      const route = removeBlankValues(row)
+      return await createRouteObject(route)
+    })
+  })
+)
+
+const getConditionsPromise = async () => {
+    const page = await scrapeConditionsPage()
+    const routeTables = getRouteTables(page)
+    const routeObjects = getRouteObjects(routeTables)
+    return flatten(routeObjects);
+  }
+
+const updateRouteWaits = async ({ route_name, oversize_waits, car_waits }) =>
+  client.mutate({ mutation: addWaits, variables: {route_name, oversize_waits, car_waits} });
+  
+const updateSailingPercentage = async ({ route_id, scheduled_departure, percent_full }) =>
+  client.mutate({ mutation: addPercentage, variables: {route_id, scheduled_departure, percent_full} });
+
+const setConditions = async () => {
+  const routes = await Promise.all(await getConditionsPromise())
+  routes.forEach(route => {
+    const {route_id} = route
+    updateRouteWaits(route)
+    route.sailings.forEach(sailing => {
+      if (sailing) {
+        const [scheduled_departure, percent_full] = sailing
+        // console.log(sailing)
+        updateSailingPercentage({route_id, scheduled_departure, percent_full})
+      }
+    })
+  })
+}
+
+const scrape = interval => setInterval(setConditions, interval)
+
+// setConditions()
+
+module.exports = { getConditionsPromise, scrape };

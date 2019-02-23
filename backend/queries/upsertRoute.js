@@ -26,22 +26,24 @@ const upsertRouteMutation = gql`
   }
 `;
 
+/* GraphQL */
+
+const getRouteIDbyName = gql`
+query getRouteID($route_name: String!) {
+  route(where: {route_name: {_ilike: $route_name}}) {
+    id
+  }
+}
+`
+
 const addWaits = gql`
-  mutation addWaits($routeName: String!, $carWaits: Int, $oversizeWaits: Int) {
-    updateRoute(
-      input: {
-        carWaits: $carWaits
-        oversizeWaits: $oversizeWaits
-        routeName: $routeName
-      }
-    ) {
+mutation addWaitsToRoute($route_name: String!, $car_waits:Int, $oversize_waits: Int){
+  update_route(where:{route_name:{_ilike: $route_name}} _set:{car_waits: $car_waits, oversize_waits:$oversize_waits}){
+    returning{
       id
-      routeName
-      averageSailing
-      carWaits
-      oversizeWaits
     }
   }
+}
 `;
 
-module.exports = { upsertRouteMutation, addWaits };
+module.exports = { upsertRouteMutation, addWaits, getRouteIDbyName};
