@@ -12,42 +12,15 @@ query oneSailing($routeId: String, $scheduledDeparture: String){
 `;
 
 const upsertSailing = gql`
-  mutation upsertSailing(
-    $routeId: Int
-    $scheduledDeparture: String
-    $actualDeparture: String
-    $eta: String
-    $sailingStatus: String
-    $vessel: String
-    $lastUpdated: String
-  ) {
+  mutation upsertManySailings($objects: [sailing_insert_input!]!) {
     insert_sailing(
-      objects: [
-        {
-          routeId: $routeId
-          scheduled_departure: $scheduledDeparture
-          actualDeparture: $actualDeparture
-          eta: $eta
-          vessel: $vessel
-          sailingStatus: $sailingStatus
-          lastUpdated: $lastUpdated
-        }
-      ]
+      objects: $objects
       on_conflict: {
         constraint: sailing_pkey
-        update_columns: [
-          actualDeparture
-          eta
-          lastUpdated
-          percentFull
-          sailingStatus
-          scheduled_departure
-        ]
+        update_columns: [scheduled_departure, actual_departure]
       }
     ) {
-      returning {
-        id
-      }
+      affected_rows
     }
   }
 `;
