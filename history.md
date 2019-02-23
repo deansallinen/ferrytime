@@ -6,5 +6,7 @@
 - Added React as a front-end framework with Styled-Components for CSS
 - Moved to Postgres for Database with RESTful backend using Knex as ORM
 - Fell back to using pg-promise and writing SQL by hand for simplicity
-- Rewrote entire backend for hosted Mongodb (mLab) and Graphql
+- Rewrote backend for hosted Mongodb (mLab) and Graphql
 - Added Bulma for quicker UI development
+- Rewrote backend to use Hasura for Graphql server and PostgresDB
+- Remove Bulma, add Tailwind for more flexibility
