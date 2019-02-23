@@ -1,3 +1,5 @@
+const gql = require('graphql-tag');
+
 const getSailing = `
 query oneSailing($routeId: String, $scheduledDeparture: String){
     sailing(routeId: $routeId, scheduledDeparture: $scheduledDeparture){
@@ -9,50 +11,31 @@ query oneSailing($routeId: String, $scheduledDeparture: String){
   }
 `;
 
-const upsertSailing = `
-mutation sailingUpdate(
-  $routeId: String
-  $scheduledDeparture: String
-  $actualDeparture: String
-  $eta: String
-  $sailingStatus: String
-  $vessel: String
-  $lastUpdated: String
-) {
-  updateSailing(
-    input: {
-      routeId: $routeId
-      scheduledDeparture: $scheduledDeparture
-      actualDeparture: $actualDeparture
-      eta: $eta
-      vessel: $vessel
-      sailingStatus: $sailingStatus
-      lastUpdated: $lastUpdated
+const upsertSailing = gql`
+  mutation upsertManySailings($objects: [sailing_insert_input!]!) {
+    insert_sailing(
+      objects: $objects
+      on_conflict: {
+        constraint: sailing_pkey
+        update_columns: [scheduled_departure, actual_departure]
+      }
+    ) {
+      affected_rows
     }
-  ) {
-    routeId
   }
-}
 `;
 
-const addPercentage = `
-mutation addPercentage(
-  $routeId: String
-  $scheduledDeparture: String
-  $percentFull: Int
-) {
-  updateSailing(
-    input: {
-      routeId: $routeId
-      scheduledDeparture: $scheduledDeparture
-      percentFull: $percentFull
+const addPercentage = gql`
+mutation addPercentage($route_id: uuid, $scheduled_departure: date, $percent_full: Int) {
+  update_sailing(where: {route_id: {_eq: $route_id}, scheduled_departure: {_eq: $scheduled_departure}}, _set: {percent_full: $percent_full}) {
+    returning {
+      route_id
+      scheduled_departure
+      percent_full
     }
-  ) {
-    routeId
-    scheduledDeparture
-    vessel
   }
 }
+
 `;
 
-module.exports = { upsertSailing, getSailing, addPercentage }
+module.exports = { upsertSailing, getSailing, addPercentage };

@@ -1,66 +1,33 @@
 // scraper
 
+require('dotenv').config();
+
 const scraper = require('table-scraper');
-const { request } = require('graphql-request');
+const { ApolloClient } = require('apollo-client');
+const { HttpLink } = require('apollo-link-http');
+const { InMemoryCache } = require('apollo-cache-inmemory');
+const fetch = require('isomorphic-fetch');
 const moment = require('moment-timezone');
-const { upsertRoute } = require('../queries/upsertRoute')
-const { upsertSailing } = require('../queries/upsertSailing')
 
+const { upsertRouteMutation } = require('../queries/upsertRoute');
+const { upsertSailing } = require('../queries/upsertSailing');
 
-const endpoint = 'http://localhost:4000/graphql';
-// const upsertRoute = `
-// mutation updateRoute(
-//   $routeName: String
-//   $averageSailing: String
-//   $sailingDate: String
-// ) {
-//   updateRoute(
-//     input: {
-//       routeName: $routeName
-//       averageSailing: $averageSailing
-//       sailingDate: $sailingDate
-//     }
-//   ) {
-//     id
-//     routeName
-//     averageSailing
-//   }
-// }`;
+const uri = process.env.ENDPOINT;
 
-// const upsertSailing = `
-// mutation sailingUpdate(
-//   $routeId: String
-//   $scheduledDeparture: String
-//   $actualDeparture: String
-//   $eta: String
-//   $sailingStatus: String
-//   $vessel: String
-//   $lastUpdated: String
-// ) {
-//   updateSailing(
-//     input: {
-//       routeId: $routeId
-//       scheduledDeparture: $scheduledDeparture
-//       actualDeparture: $actualDeparture
-//       eta: $eta
-//       vessel: $vessel
-//       sailingStatus: $sailingStatus
-//       lastUpdated: $lastUpdated
-//     }
-//   ) {
-//     routeId
-//   }
-// }
-// `;
+const client = new ApolloClient({
+  link: new HttpLink({ uri }),
+  cache: new InMemoryCache(),
+  fetch,
+});
 
 const makeRouteInfo = array => ({
   routeName: array[0][0].split('Sailing time: ')[0],
   averageSailing: array[0][0].split('Sailing time: ')[1],
-  sailingDate: new Date(array[0][1]).toISOString().substr(0, 10)
+  sailingDate: new Date(array[0][1]).toISOString().substr(0, 10),
 });
 
 const validateTime = (date, time) => {
-  const isTime = /\d+:\d\d [AP]M/.test(time)
+  const isTime = /\d+:\d\d [AP]M/.test(time);
   // console.log(time, isTime)
   if (!isTime) return null;
   const dateTime = moment.tz(
@@ -74,17 +41,17 @@ const validateTime = (date, time) => {
 const makeSailing = (object, date) => {
   const [
     vessel,
-    scheduledDeparture,
-    actualDeparture,
+    scheduled_departure,
+    actual_departure,
     eta,
-    sailingStatus
+    sailing_status,
   ] = Object.values(object);
   return {
     vessel,
-    sailingStatus,
-    scheduledDeparture: validateTime(date, scheduledDeparture),
-    actualDeparture: validateTime(date, actualDeparture),
-    eta: validateTime(date, eta)
+    sailing_status,
+    scheduled_departure: validateTime(date, scheduled_departure),
+    actual_departure: validateTime(date, actual_departure),
+    eta: validateTime(date, eta),
   };
 };
 
@@ -104,24 +71,27 @@ function clean(data) {
   return routesArray;
 }
 
+const upsertSailingsOfRoute = async ({ route_id, sailings }) =>
+  sailings.map( sailing => {
+    const payload = { route_id, ...sailing }
+    return client.mutate({ mutation: upsertSailing, variables:  {objects: payload}  });
+  });
+
+const upsertRoute = async ({ routeInfo }) =>
+  client.mutate({ mutation: upsertRouteMutation, variables: routeInfo });
+
+const getRawSchedule = async () =>
+  scraper.get('http://orca.bcferries.com:8080/cc/marqui/actualDepartures.asp');
+
 const scrapeSailings = async () => {
   try {
-    const rawSchedule = await scraper.get(
-      'http://orca.bcferries.com:8080/cc/marqui/actualDepartures.asp'
-    );
-    const data = await clean(rawSchedule);
+    const data = clean(await getRawSchedule());
     data.map(async route => {
-      const { sailings, ...routeVariables } = route;
-      const result = await request(endpoint, upsertRoute, routeVariables);
-      const routeId = result.updateRoute.id;
-      sailings.map(async sailing => {
-        const sailingResult = await request(endpoint, upsertSailing, {
-          ...sailing,
-          routeId,
-          lastUpdated: new Date()
-        });
-        // console.log(sailingResult);
-      });
+      const { sailings, ...routeInfo } = route;
+      const { data } = await upsertRoute({ routeInfo });
+      const route_id = data.insert_route.returning[0].id;
+      upsertSailingsOfRoute({ route_id, sailings });
+
     });
   } catch (err) {
     throw err;
@@ -130,12 +100,16 @@ const scrapeSailings = async () => {
   }
 };
 
+scrapeSailings();
+
 const scrape = interval => setInterval(scrapeSailings, interval);
 
 module.exports = {
   scrape,
   makeSailing,
-  validateTime
+  validateTime,
+  upsertRoute,
+  upsertSailingsOfRoute,
+  clean,
+  getRawSchedule,
 };
-
-// module.exports = () => setInterval(scrapeSailings, 20000);
