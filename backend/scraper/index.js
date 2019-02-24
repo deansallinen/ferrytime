@@ -12,7 +12,8 @@ const moment = require('moment-timezone');
 const { upsertRouteMutation } = require('../queries/upsertRoute');
 const { upsertSailing } = require('../queries/upsertSailing');
 
-const uri = process.env.ENDPOINT;
+// const uri = process.env.ENDPOINT;
+const uri = 'https://ferry-time.herokuapp.com/v1alpha1/graphql'
 
 const client = new ApolloClient({
   link: new HttpLink({ uri }),
@@ -74,6 +75,7 @@ function clean(data) {
 const upsertSailingsOfRoute = async ({ route_id, sailings }) =>
   sailings.map( sailing => {
     const payload = { route_id, ...sailing }
+    // console.log(payload)
     return client.mutate({ mutation: upsertSailing, variables:  {objects: payload}  });
   });
 
@@ -85,7 +87,9 @@ const getRawSchedule = async () =>
 
 const scrapeSailings = async () => {
   try {
+    console.log("Scraping schedule...")
     const data = clean(await getRawSchedule());
+    console.log("Scraped routes:", data.length)
     data.map(async route => {
       const { sailings, ...routeInfo } = route;
       const { data } = await upsertRoute({ routeInfo });
@@ -96,7 +100,7 @@ const scrapeSailings = async () => {
   } catch (err) {
     throw err;
   } finally {
-    console.log(`Scraped main at ${new Date()}`);
+    console.log(`Scraped at ${new Date()}`);
   }
 };
 
