@@ -1,10 +1,10 @@
-import { Link } from 'gatsby';
-import PropTypes from 'prop-types';
-import React, { useState } from 'react';
-import logo from '../images/favicon.png';
+import { Link } from 'gatsby'
+import PropTypes from 'prop-types'
+import React, { useState } from 'react'
+import logo from '../images/favicon.png'
 
 function Header({ siteTitle }) {
-  const [isExpanded, toggleExpansion] = useState(false);
+  // const [isExpanded, toggleExpansion] = useState(false)
 
   return (
     <nav className="bg-blue antialiased">
@@ -16,7 +16,7 @@ function Header({ siteTitle }) {
           </span>
         </Link>
 
-        <button
+        {/* <button
           className="block md:hidden border border-white flex items-center px-3 py-2 rounded text-white"
           onClick={() => toggleExpansion(!isExpanded)}
         >
@@ -42,7 +42,7 @@ function Header({ siteTitle }) {
             >
               Home
             </Link>
-            {/* 
+            
             <Link
               to="/about"
               className="block md:inline-block mt-4 md:mt-0 mr-6 no-underline text-white"
@@ -55,20 +55,20 @@ function Header({ siteTitle }) {
               className="block md:inline-block mt-4 md:mt-0 no-underline text-white"
             >
               Contact
-            </Link> */}
+            </Link>
           </div>
-        </div>
+        </div> */}
       </div>
     </nav>
-  );
+  )
 }
 
 Header.propTypes = {
   siteTitle: PropTypes.string,
-};
+}
 
 Header.defaultProps = {
   siteTitle: ``,
-};
+}
 
-export default Header;
+export default Header

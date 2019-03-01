@@ -1,11 +1,11 @@
-import React from 'react';
-import gql from 'graphql-tag';
-import { Query } from 'react-apollo';
+import React from 'react'
+import gql from 'graphql-tag'
+import { Query } from 'react-apollo'
 // import {Link} from 'gatsby'
-import { format } from 'date-fns';
+import { format } from 'date-fns'
 
-import Layout from '../components/layout';
-import SEO from '../components/seo';
+import Layout from '../components/layout'
+import SEO from '../components/seo'
 
 const GET_ALL_SAILINGS = gql`
   query getAllSailings($route_id: uuid) {
@@ -22,7 +22,7 @@ const GET_ALL_SAILINGS = gql`
       vessel
     }
   }
-`;
+`
 
 const Sailing = ({ sailing }) => {
   const {
@@ -32,7 +32,7 @@ const Sailing = ({ sailing }) => {
     percent_full,
     sailing_status,
     vessel,
-  } = sailing;
+  } = sailing
   return (
     <div className="mb-6">
       <div className="text-xl font-bold">
@@ -47,12 +47,8 @@ const Sailing = ({ sailing }) => {
       <div>{sailing_status}</div>
       <div>{vessel}</div>
     </div>
-  );
-};
-
-//             <pre>
-// {JSON.stringify(sailing, null, 2)}
-//       </pre>
+  )
+}
 
 const Sailings = ({ sailings }) => {
   return (
@@ -62,11 +58,15 @@ const Sailings = ({ sailings }) => {
         <Sailing sailing={sailing} key={sailing.id} />
       ))}
     </div>
-  );
-};
+  )
+}
 
-const RouteInfo = ({ props }) => {
-  const { route_name, average_sailing, car_waits, oversize_waits } = props;
+const RouteInfo = ({
+  route_name,
+  average_sailing,
+  car_waits,
+  oversize_waits,
+}) => {
   return (
     <div className="rounded-lg bg-white">
       <h1>{route_name}</h1>
@@ -76,38 +76,50 @@ const RouteInfo = ({ props }) => {
         <p>Oversize waits: {oversize_waits || 0}</p>
       </div>
     </div>
-  );
-};
+  )
+}
 
 function RoutePage(props) {
+  const {
+    pageContext,
+    location: { state },
+  } = props
   return (
     <Layout>
       <SEO
-        title={props.pathContext.route_name}
+        title={pageContext.route_name}
         keywords={[`gatsby`, `tailwind`, `react`, `tailwindcss`]}
       />
 
       <div className="">
-        <RouteInfo props={props.location.state} />
-
+        {/* <pre>{JSON.stringify(pageContext, null, 2)}</pre>
+        <pre>{JSON.stringify(state, null, 2)}</pre> */}
         <Query
           query={GET_ALL_SAILINGS}
           pollInterval={60000}
-          variables={{ route_id: props.pathContext.id }}
+          variables={{ route_id: pageContext.id }}
         >
           {({ loading, error, data }) => {
             if (loading)
               return (
-                <Sailings sailings={props.location.state.sailingsByrouteId} />
-              );
-            if (error) return `Error! ${error.message}`;
+                <>
+                  <RouteInfo {...pageContext} />
+                  <Sailings sailings={state ? state.sailingsByrouteId : []} />
+                </>
+              )
+            if (error) return `Error! ${error.message}`
 
-            return <Sailings sailings={data.todays_sailings} />;
+            return (
+              <>
+                <RouteInfo {...pageContext} />
+                <Sailings sailings={data.todays_sailings} />
+              </>
+            )
           }}
         </Query>
       </div>
     </Layout>
-  );
+  )
 }
 
-export default RoutePage;
+export default RoutePage

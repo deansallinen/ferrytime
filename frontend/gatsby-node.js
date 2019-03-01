@@ -3,25 +3,26 @@
  *
  * See: https://www.gatsbyjs.org/docs/node-apis/
  */
-const path = require('path');
+const path = require('path')
 
 exports.createPages = async ({ actions, graphql }) => {
-  const {data} = await graphql(`
-  {
-    ftapi {
-      route {
-        id
-        route_name
+  const { data } = await graphql(`
+    {
+      ftapi {
+        route {
+          id
+          route_name
+          average_sailing
+        }
       }
     }
-  }
-  `);
+  `)
 
-  data.ftapi.route.forEach(({ id, route_name }) => {
+  data.ftapi.route.forEach(({ id, route_name, average_sailing }) => {
     const linkPath = route_name
       .toLowerCase()
       .replace(/[^a-zA-Z0-9 -]/g, '')
-      .replace(/ /g, '_');
+      .replace(/ /g, '_')
 
     actions.createPage({
       path: `route/${linkPath}`,
@@ -29,7 +30,8 @@ exports.createPages = async ({ actions, graphql }) => {
       context: {
         id,
         route_name,
+        average_sailing,
       },
-    });
-  });
-};
+    })
+  })
+}
