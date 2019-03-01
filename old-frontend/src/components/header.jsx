@@ -18,13 +18,10 @@ const Header = ({ siteTitle }) => (
   >
     <Container>
       <div className="navbar-brand">
-        <Link className="navbar-item" to="/">
-          <Brand siteTitle={siteTitle}/>
-        </Link>
+        <Link className="navbar-item" to="/" />
       </div>
     </Container>
   </nav>
-
 );
 
 export default Header;

@@ -6,29 +6,29 @@
 const path = require('path');
 
 exports.createPages = async ({ actions, graphql }) => {
-  const {data} = await graphql(`
-  {
-    ftapi {
-      route {
-        id
-        route_name
+  const { data } = await graphql(`
+    query {
+      ftapi {
+        allRoutes {
+          id
+          routeName
+        }
       }
     }
-  }
   `);
 
-  data.ftapi.route.forEach(({ id, route_name }) => {
-    const linkPath = route_name
+  data.ftapi.allRoutes.forEach(({ id, routeName }) => {
+    const linkPath = routeName
       .toLowerCase()
       .replace(/[^a-zA-Z0-9 -]/g, '')
       .replace(/ /g, '_');
 
     actions.createPage({
       path: `route/${linkPath}`,
-      component: path.resolve('./src/templates/routePage.js'),
+      component: path.resolve('./src/components/ferryRoute.jsx'),
       context: {
-        id,
-        route_name,
+        routeId: id,
+        routeName,
       },
     });
   });
