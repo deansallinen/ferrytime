@@ -20,9 +20,9 @@ const client = new ApolloClient({
 
 const scrapeConditionsPage = async () => scraper.get('https://orca.bcferries.com/cc/marqui/at-a-glance.asp');
 
-const regex = /(\d{1,2}:\d\d[ap]m)(\d+)%/g
 
 const splitTimeFromPercent = (input) => {
+  const regex = /(\d{1,2}:\d\d[ap]m)(\d+)%/g
   const res = regex.exec(input)
   if (!res) return null
   const [_, time, percentage] = res
