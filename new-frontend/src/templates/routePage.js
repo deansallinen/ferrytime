@@ -1,15 +1,18 @@
-import React from "react";
-import gql from "graphql-tag";
-import { Query } from "react-apollo";
+import React from 'react';
+import gql from 'graphql-tag';
+import { Query } from 'react-apollo';
 // import {Link} from 'gatsby'
-import { format } from 'date-fns'
+import { format } from 'date-fns';
 
-import Layout from "../components/layout";
-import SEO from "../components/seo";
+import Layout from '../components/layout';
+import SEO from '../components/seo';
 
 const GET_ALL_SAILINGS = gql`
   query getAllSailings($route_id: uuid) {
-    todays_sailings(where: { route_id: { _eq: $route_id } } order_by:{scheduled_departure: asc}) {
+    todays_sailings(
+      where: { route_id: { _eq: $route_id } }
+      order_by: { scheduled_departure: asc }
+    ) {
       id
       scheduled_departure
       actual_departure
@@ -22,16 +25,27 @@ const GET_ALL_SAILINGS = gql`
 `;
 
 const Sailing = ({ sailing }) => {
-  const {scheduled_departure, actual_departure, eta, percent_full, sailing_status, vessel} = sailing
+  const {
+    scheduled_departure,
+    actual_departure,
+    eta,
+    percent_full,
+    sailing_status,
+    vessel,
+  } = sailing;
   return (
-    <div className='mb-6'>
-      <div className='text-xl'>{format(scheduled_departure, "HH:mm")}</div>
-      <div>{actual_departure && format(actual_departure, "HH:mm")}</div>
+    <div className="mb-6">
+      <div className="text-xl font-bold">
+        {format(scheduled_departure, 'HH:mm')}
+        {eta && <span> ~> {format(eta, 'HH:mm')}</span>}
+      </div>
+      <div className="text-grey-darker text-sm">
+        {actual_departure && format(actual_departure, 'HH:mm')}
+      </div>
       <div>{percent_full && `${percent_full} percent full`}</div>
-      <div>{eta && format(eta, "HH:mm")}</div>
+      <div />
       <div>{sailing_status}</div>
       <div>{vessel}</div>
-
     </div>
   );
 };
@@ -40,36 +54,41 @@ const Sailing = ({ sailing }) => {
 // {JSON.stringify(sailing, null, 2)}
 //       </pre>
 
-
 const Sailings = ({ sailings }) => {
   return (
-    <div className='my-6'>
-      <h2>Sailings</h2>
-        {sailings.map(sailing => <Sailing sailing={sailing} key={sailing.id} />)}
+    <div className="my-6">
+      <h2 className="mb-4">Sailings</h2>
+      {sailings.map(sailing => (
+        <Sailing sailing={sailing} key={sailing.id} />
+      ))}
     </div>
   );
 };
 
-const RouteInfo = ({props}) => {
-  const {route_name, average_sailing, car_waits, oversize_waits} = props
-  return <div className='rounded-lg bg-white'>
-    <h1>{route_name}</h1>
-    <p>{average_sailing}</p>
-    <p>Car waits: {car_waits || 0}</p>
-    <p>Oversize waits: {oversize_waits || 0}</p>
-  </div>
-}
+const RouteInfo = ({ props }) => {
+  const { route_name, average_sailing, car_waits, oversize_waits } = props;
+  return (
+    <div className="rounded-lg bg-white">
+      <h1>{route_name}</h1>
+      <p>{average_sailing}</p>
+      <div className="my-2">
+        <p>Car waits: {car_waits || 0}</p>
+        <p>Oversize waits: {oversize_waits || 0}</p>
+      </div>
+    </div>
+  );
+};
 
 function RoutePage(props) {
   return (
     <Layout>
       <SEO
-        title="Home"
+        title={props.pathContext.route_name}
         keywords={[`gatsby`, `tailwind`, `react`, `tailwindcss`]}
       />
 
       <div className="">
-        <RouteInfo props={props.location.state}/>
+        <RouteInfo props={props.location.state} />
 
         <Query
           query={GET_ALL_SAILINGS}
