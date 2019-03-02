@@ -44,18 +44,18 @@ const Sailing = ({ sailing }) => {
           {eta && <span> &rarr; {format(eta, 'HH:mm')}</span>}
         </div>
         <div className="ml-4 border-l-2 border-grey-lighter pl-4 leading-normal">
-          <div className="text-grey-dark text-sm">
-            {actual_departure &&
-              `Departed at ${format(actual_departure, 'HH:mm')}`}
-          </div>
+          <div className="text-grey-dark text-sm" />
           {percent_full && (
             <div>
               <span className="font-bold">{percent_full}</span> percent full
             </div>
           )}
-          <div />
           <div>{sailing_status}</div>
-          <div className="text-xs text-grey-dark">{vessel}</div>
+          <div className="text-xs text-grey-dark">
+            {vessel}
+            {actual_departure &&
+              ` departed at ${format(actual_departure, 'HH:mm')}`}
+          </div>
         </div>
       </div>
     </div>
@@ -117,7 +117,11 @@ function RoutePage(props) {
               return (
                 <>
                   <RouteInfo {...pageContext} />
-                  <Sailings sailings={state ? state.sailingsByrouteId : []} />
+                  <Sailings
+                    sailings={
+                      state.sailingsByrouteId ? state.sailingsByrouteId : []
+                    }
+                  />
                 </>
               );
             if (error) return `Error! ${error.message}`;
