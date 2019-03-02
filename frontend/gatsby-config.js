@@ -1,18 +1,11 @@
 module.exports = {
   siteMetadata: {
-    title: 'Ferryti.me',
+    title: `Ferrytime`,
+    description: `A simple interface to track the BC Ferries`,
+    author: `@deansallinen`,
   },
   plugins: [
-    'gatsby-plugin-react-helmet',
-    {
-      resolve: 'gatsby-source-filesystem',
-      options: {
-        name: 'images',
-        path: `${__dirname}/src/images`,
-      },
-    },
-    'gatsby-transformer-sharp',
-    'gatsby-plugin-sharp',
+    `gatsby-plugin-react-helmet`,
     {
       resolve: 'gatsby-plugin-manifest',
       options: {
@@ -34,7 +27,7 @@ module.exports = {
         // This is the field under which it's accessible
         fieldName: 'ftapi',
         // URL to query from
-        url: 'https://ferrytrackerserver.now.sh/graphql',
+        url: 'https://ferry-time.herokuapp.com/v1alpha1/graphql',
       },
     },
     'gatsby-plugin-offline',
@@ -56,6 +49,14 @@ module.exports = {
         // sampleRate: 5,
         // siteSpeedSampleRate: 10,
         // cookieDomain: 'ferryti.me',
+      },
+    },
+    `gatsby-plugin-postcss`,
+    {
+      resolve: 'gatsby-plugin-purgecss',
+      options: {
+        tailwind: true,
+        purgeOnly: ['src/css/style.css'],
       },
     },
   ],

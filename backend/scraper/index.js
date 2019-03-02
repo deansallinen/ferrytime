@@ -1,25 +1,25 @@
 // scraper
 
-require('dotenv').config();
+// require('dotenv').config();
 
-const scraper = require('table-scraper');
-const { ApolloClient } = require('apollo-client');
-const { HttpLink } = require('apollo-link-http');
-const { InMemoryCache } = require('apollo-cache-inmemory');
-const fetch = require('isomorphic-fetch');
-const moment = require('moment-timezone');
+// const scraper = require('table-scraper');
+// const { ApolloClient } = require('apollo-client');
+// const { HttpLink } = require('apollo-link-http');
+// const { InMemoryCache } = require('apollo-cache-inmemory');
+// const fetch = require('isomorphic-fetch');
+// const moment = require('moment-timezone');
 
-const { upsertRouteMutation } = require('../queries/upsertRoute');
-const { upsertSailing } = require('../queries/upsertSailing');
+// const { upsertRouteMutation } = require('../queries/upsertRoute');
+// const { upsertSailing } = require('../queries/upsertSailing');
 
-// const uri = process.env.ENDPOINT;
-const uri = 'https://ferry-time.herokuapp.com/v1alpha1/graphql'
+// // const uri = process.env.ENDPOINT;
+// const uri = 'https://ferry-time.herokuapp.com/v1alpha1/graphql'
 
-const client = new ApolloClient({
-  link: new HttpLink({ uri }),
-  cache: new InMemoryCache(),
-  fetch,
-});
+// const client = new ApolloClient({
+//   link: new HttpLink({ uri }),
+//   cache: new InMemoryCache(),
+//   fetch,
+// });
 
 const makeRouteInfo = array => ({
   routeName: array[0][0].split('Sailing time: ')[0],
@@ -82,8 +82,8 @@ const upsertSailingsOfRoute = async ({ route_id, sailings }) =>
 const upsertRoute = async ({ routeInfo }) =>
   client.mutate({ mutation: upsertRouteMutation, variables: routeInfo });
 
-const getRawSchedule = async () =>
-  scraper.get('http://orca.bcferries.com:8080/cc/marqui/actualDepartures.asp');
+// const getRawSchedule = async () =>
+//   scraper.get('http://orca.bcferries.com:8080/cc/marqui/actualDepartures.asp');
 
 const scrapeSailings = async () => {
   try {
@@ -105,6 +105,8 @@ const scrapeSailings = async () => {
 };
 
 // scrapeSailings();
+
+
 
 const scrape = interval => setInterval(scrapeSailings, interval);
 

@@ -1,24 +1,24 @@
-require('dotenv').config();
-const scraper = require('table-scraper');
-const { fromPairs, flatten } = require('lodash');
-const moment = require('moment-timezone');
-const { ApolloClient } = require('apollo-client');
-const { HttpLink } = require('apollo-link-http');
-const { InMemoryCache } = require('apollo-cache-inmemory');
-const fetch = require('isomorphic-fetch');
+// require('dotenv').config();
+// const scraper = require('table-scraper');
+// const { fromPairs, flatten } = require('lodash');
+// const moment = require('moment-timezone');
+// const { ApolloClient } = require('apollo-client');
+// const { HttpLink } = require('apollo-link-http');
+// const { InMemoryCache } = require('apollo-cache-inmemory');
+// const fetch = require('isomorphic-fetch');
 
-const { addWaits, getRouteIDbyName } = require('../queries/upsertRoute')
-const { getSailing, addPercentage } = require('../queries/upsertSailing')
+// const { addWaits, getRouteIDbyName } = require('../queries/upsertRoute')
+// const { getSailing, addPercentage } = require('../queries/upsertSailing')
 
-const uri = process.env.ENDPOINT
+// const uri = process.env.ENDPOINT
 
-const client = new ApolloClient({
-  link: new HttpLink({ uri }),
-  cache: new InMemoryCache(),
-  fetch,
-});
+// const client = new ApolloClient({
+//   link: new HttpLink({ uri }),
+//   cache: new InMemoryCache(),
+//   fetch,
+// });
 
-const scrapeConditionsPage = async () => scraper.get('https://orca.bcferries.com/cc/marqui/at-a-glance.asp');
+// const scrapeConditionsPage = async () => scraper.get('https://orca.bcferries.com/cc/marqui/at-a-glance.asp');
 
 
 const splitTimeFromPercent = (input) => {
