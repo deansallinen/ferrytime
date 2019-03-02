@@ -1,11 +1,12 @@
-import React from 'react'
-import gql from 'graphql-tag'
-import { Query } from 'react-apollo'
+import React from 'react';
+import gql from 'graphql-tag';
+import { Query } from 'react-apollo';
 // import {Link} from 'gatsby'
-import { format } from 'date-fns'
+import { format } from 'date-fns';
 
-import Layout from '../components/layout'
-import SEO from '../components/seo'
+import Layout from '../components/layout';
+import SEO from '../components/seo';
+import Favourite from '../components/addFavourite';
 
 const GET_ALL_SAILINGS = gql`
   query getAllSailings($route_id: uuid) {
@@ -22,7 +23,7 @@ const GET_ALL_SAILINGS = gql`
       vessel
     }
   }
-`
+`;
 
 const Sailing = ({ sailing }) => {
   const {
@@ -31,10 +32,10 @@ const Sailing = ({ sailing }) => {
     eta,
     percent_full,
     sailing_status,
-    vessel,
-  } = sailing
+    vessel
+  } = sailing;
   return (
-    <div className="pb-4 mb-4 border-b-2 border-grey-lightest">
+    <div className="pb-4 mb-4">
       <div className="card flex">
         <div className="w-24 text-right">
           <div className="text-3xl font-bold">
@@ -45,7 +46,7 @@ const Sailing = ({ sailing }) => {
         <div className="ml-4 border-l-2 border-grey-lighter pl-4 leading-normal">
           <div className="text-grey-dark text-sm">
             {actual_departure &&
-              `departed at ${format(actual_departure, 'HH:mm')}`}
+              `Departed at ${format(actual_departure, 'HH:mm')}`}
           </div>
           {percent_full && (
             <div>
@@ -54,12 +55,12 @@ const Sailing = ({ sailing }) => {
           )}
           <div />
           <div>{sailing_status}</div>
-          <div className="text-xs">{vessel}</div>
+          <div className="text-xs text-grey-dark">{vessel}</div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 const Sailings = ({ sailings }) => {
   return (
@@ -69,14 +70,14 @@ const Sailings = ({ sailings }) => {
         <Sailing sailing={sailing} key={sailing.id} />
       ))}
     </div>
-  )
-}
+  );
+};
 
 const RouteInfo = ({
   route_name,
   average_sailing,
   car_waits,
-  oversize_waits,
+  oversize_waits
 }) => {
   return (
     <div className="rounded-lg bg-white">
@@ -86,15 +87,16 @@ const RouteInfo = ({
         <p>Car waits: {car_waits || 0}</p>
         <p>Oversize waits: {oversize_waits || 0}</p>
       </div>
+      <Favourite routeName={route_name} />
     </div>
-  )
-}
+  );
+};
 
 function RoutePage(props) {
   const {
     pageContext,
-    location: { state },
-  } = props
+    location: { state }
+  } = props;
   return (
     <Layout>
       <SEO
@@ -117,20 +119,20 @@ function RoutePage(props) {
                   <RouteInfo {...pageContext} />
                   <Sailings sailings={state ? state.sailingsByrouteId : []} />
                 </>
-              )
-            if (error) return `Error! ${error.message}`
+              );
+            if (error) return `Error! ${error.message}`;
 
             return (
               <>
                 <RouteInfo {...pageContext} />
                 <Sailings sailings={data.todays_sailings} />
               </>
-            )
+            );
           }}
         </Query>
       </div>
     </Layout>
-  )
+  );
 }
 
-export default RoutePage
+export default RoutePage;
