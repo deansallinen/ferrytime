@@ -42,21 +42,25 @@ const Favourites = ({ edges }) => {
       {edges
         .filter(each => /^\/route/.test(each.node.path))
         .filter(each => favourites.includes(each.node.context.route_name))
-        .map(each => (
-          <div className="my-4" key={each.node.context.id}>
-            <Link
-              to={each.node.path}
-              key={each.node.context.id}
-              state={each.node.context}
-              className="no-underline hover:underline text-grey-darkest text-xl"
-            >
-              {each.node.context.route_name}
-            </Link>
-          </div>
+        .map(({ node }) => (
+          <Route {...node} />
         ))}
     </div>
   ) : null;
 };
+
+const Route = ({ path, context, state }) => (
+  <div className="my-4" key={context.id}>
+    <Link
+      to={path}
+      key={context.id}
+      state={state}
+      className="no-underline hover:underline text-grey-darkest text-xl"
+    >
+      {context.route_name}
+    </Link>
+  </div>
+);
 
 function IndexPage({ data: { allSitePage } }) {
   return (
@@ -75,38 +79,16 @@ function IndexPage({ data: { allSitePage } }) {
         >
           {({ loading, error, data }) => {
             if (loading)
-              return allSitePage.edges.map(each => {
-                return (
-                  <div className="my-4" key={each.node.context.id}>
-                    <Link
-                      to={each.node.path}
-                      key={each.node.context.id}
-                      state={each.node.context}
-                      className="no-underline hover:underline text-grey-darkest text-xl"
-                    >
-                      {each.node.context.route_name}
-                    </Link>
-                  </div>
-                );
+              return allSitePage.edges.map(({ node }) => {
+                return <Route {...node} />;
               });
             if (error) return `Error! ${error.message}`;
 
-            return allSitePage.edges.map(each => {
+            return allSitePage.edges.map(({ node }) => {
               const [routeInfo] = data.route.filter(
-                route => route.id === each.node.context.id
+                route => route.id === node.context.id
               );
-              return (
-                <div className="my-4" key={each.node.context.id}>
-                  <Link
-                    to={each.node.path}
-                    key={each.node.context.id}
-                    state={routeInfo}
-                    className="no-underline hover:underline text-grey-darkest text-xl"
-                  >
-                    {each.node.context.route_name}
-                  </Link>
-                </div>
-              );
+              return <Route {...node} state={routeInfo} />;
             });
           }}
         </Query>
