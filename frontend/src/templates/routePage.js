@@ -34,18 +34,29 @@ const Sailing = ({ sailing }) => {
     vessel,
   } = sailing
   return (
-    <div className="mb-6">
-      <div className="text-xl font-bold">
-        {format(scheduled_departure, 'HH:mm')}
-        {eta && <span> ~> {format(eta, 'HH:mm')}</span>}
+    <div className="pb-4 mb-4 border-b-2 border-grey-lightest">
+      <div className="card flex">
+        <div className="w-24 text-right">
+          <div className="text-3xl font-bold">
+            {format(scheduled_departure, 'HH:mm')}
+          </div>
+          {eta && <span> &rarr; {format(eta, 'HH:mm')}</span>}
+        </div>
+        <div className="ml-4 border-l-2 border-grey-lighter pl-4 leading-normal">
+          <div className="text-grey-dark text-sm">
+            {actual_departure &&
+              `departed at ${format(actual_departure, 'HH:mm')}`}
+          </div>
+          {percent_full && (
+            <div>
+              <span className="font-bold">{percent_full}</span> percent full
+            </div>
+          )}
+          <div />
+          <div>{sailing_status}</div>
+          <div className="text-xs">{vessel}</div>
+        </div>
       </div>
-      <div className="text-grey-darker text-sm">
-        {actual_departure && format(actual_departure, 'HH:mm')}
-      </div>
-      <div>{percent_full && `${percent_full} percent full`}</div>
-      <div />
-      <div>{sailing_status}</div>
-      <div>{vessel}</div>
     </div>
   )
 }
@@ -53,7 +64,7 @@ const Sailing = ({ sailing }) => {
 const Sailings = ({ sailings }) => {
   return (
     <div className="my-6">
-      <h2 className="mb-4">Sailings</h2>
+      <h2 className="mb-4 text-lg font-normal ">Sailings</h2>
       {sailings.map(sailing => (
         <Sailing sailing={sailing} key={sailing.id} />
       ))}
