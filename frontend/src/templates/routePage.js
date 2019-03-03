@@ -39,9 +39,9 @@ const Sailing = ({ sailing }) => {
       <div className="card flex">
         <div className="w-24 text-right">
           <div className="text-3xl font-bold">
-            {format(scheduled_departure, 'HH:mm')}
+            {format(scheduled_departure, 'H:mm')}
           </div>
-          {eta && <span> &rarr; {format(eta, 'HH:mm')}</span>}
+          {eta && <span> &rarr; {format(eta, 'H:mm')}</span>}
         </div>
         <div className="ml-4 border-l-2 border-grey-lighter pl-4 leading-normal">
           <div className="text-grey-dark text-sm" />
@@ -54,7 +54,7 @@ const Sailing = ({ sailing }) => {
           <div className="text-xs text-grey-dark">
             {vessel}
             {actual_departure &&
-              ` departed at ${format(actual_departure, 'HH:mm')}`}
+              ` departed at ${format(actual_departure, 'H:mm')}`}
           </div>
         </div>
       </div>

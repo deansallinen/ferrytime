@@ -1,17 +1,19 @@
-const gql = require('graphql-tag');
-
-const upsertRouteMutation = gql`
+const upsertRoute = /* GraphQL */ `
   mutation upsertRoute(
-    $routeName: String!
-    $averageSailing: String!
-    $sailingDate: String
+    $route_name: String!
+    $average_sailing: String!
+    $sailing_date: String
+    $oversize_waits: Int
+    $car_waits: Int
   ) {
     insert_route(
       objects: [
         {
-          route_name: $routeName
-          average_sailing: $averageSailing
-          sailing_date: $sailingDate
+          route_name: $route_name
+          average_sailing: $average_sailing
+          sailing_date: $sailing_date
+          oversize_waits: $oversize_waits
+          car_waits: $car_waits
         }
       ]
       on_conflict: {
@@ -31,45 +33,7 @@ const upsertRouteMutation = gql`
   }
 `;
 
-/* GraphQL */
-
-const getRouteIDbyName = gql`
-  query getRouteID($route_name: String!) {
-    route(where: { route_name: { _ilike: $route_name } }) {
-      id
-    }
-  }
-`;
-
-const addWaits = gql`
-  mutation addWaitsToRoute(
-    $route_name: String!
-    $car_waits: Int
-    $oversize_waits: Int
-  ) {
-    update_route(
-      where: { route_name: { _ilike: $route_name } }
-      _set: { car_waits: $car_waits, oversize_waits: $oversize_waits }
-    ) {
-      returning {
-        id
-      }
-    }
-  }
-`;
-
-const getSailing = `
-query oneSailing($routeId: String, $scheduledDeparture: String){
-    sailing(routeId: $routeId, scheduledDeparture: $scheduledDeparture){
-      id
-      scheduledDeparture
-      sailingStatus
-      vessel
-    }
-  }
-`;
-
-const upsertSailing = gql`
+const upsertSailing = /* GraphQL */ `
   mutation upsertManySailings($objects: [sailing_insert_input!]!) {
     insert_sailing(
       objects: $objects
@@ -81,6 +45,7 @@ const upsertSailing = gql`
           eta
           sailing_status
           vessel
+          percent_full
         ]
       }
     ) {
@@ -89,33 +54,7 @@ const upsertSailing = gql`
   }
 `;
 
-const addPercentage = gql`
-  mutation addPercentage(
-    $route_id: uuid
-    $scheduled_departure: date
-    $percent_full: Int
-  ) {
-    update_sailing(
-      where: {
-        route_id: { _eq: $route_id }
-        scheduled_departure: { _eq: $scheduled_departure }
-      }
-      _set: { percent_full: $percent_full }
-    ) {
-      returning {
-        route_id
-        scheduled_departure
-        percent_full
-      }
-    }
-  }
-`;
-
 module.exports = {
-  upsertRouteMutation,
-  addWaits,
-  getRouteIDbyName,
-  upsertSailing,
-  getSailing,
-  addPercentage
+  upsertRoute,
+  upsertSailing
 };
