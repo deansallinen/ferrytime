@@ -25,12 +25,19 @@ export default ({ routeName }) => {
     }
   }, [isFavourite]);
 
-  return (
+  return isFavourite ? (
     <button
-      className=" py-4 px-6 rounded-lg shadow hover:shadow-md bg-blue text-white"
+      className=" m-2 rounded-lg  bg-white text-blue transition text-3xl"
       onClick={toggleFavourite}
     >
-      Add to favourites
+      <span>&#9733;</span>
+    </button>
+  ) : (
+    <button
+      className=" m-2 rounded-lg  bg-white text-blue transition text-3xl"
+      onClick={toggleFavourite}
+    >
+      &#9734;
     </button>
   );
 };

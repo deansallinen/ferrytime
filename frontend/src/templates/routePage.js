@@ -81,13 +81,14 @@ const RouteInfo = ({
 }) => {
   return (
     <div className="rounded-lg bg-white">
-      <h1>{route_name}</h1>
+      <h1>
+        {route_name} <Favourite routeName={route_name} />
+      </h1>
       <p>{average_sailing}</p>
       <div className="my-2">
         <p>Car waits: {car_waits || 0}</p>
         <p>Oversize waits: {oversize_waits || 0}</p>
       </div>
-      <Favourite routeName={route_name} />
     </div>
   );
 };
@@ -119,7 +120,9 @@ function RoutePage(props) {
                   <RouteInfo {...pageContext} />
                   <Sailings
                     sailings={
-                      state.sailingsByrouteId ? state.sailingsByrouteId : []
+                      state && state.sailingsByrouteId
+                        ? state.sailingsByrouteId
+                        : []
                     }
                   />
                 </>
