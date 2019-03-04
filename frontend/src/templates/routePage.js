@@ -99,15 +99,15 @@ function RoutePage(props) {
     location: { state }
   } = props;
   return (
-    <Layout>
+    <Layout {...pageContext}>
       <SEO
         title={pageContext.route_name}
         keywords={[`gatsby`, `tailwind`, `react`, `tailwindcss`]}
       />
 
       <div className="">
-        {/* <pre>{JSON.stringify(pageContext, null, 2)}</pre>
-        <pre>{JSON.stringify(state, null, 2)}</pre> */}
+        <pre>{JSON.stringify(pageContext, null, 2)}</pre>
+        {/* <pre>{JSON.stringify(state, null, 2)}</pre> */}
         <Query
           query={GET_ALL_SAILINGS}
           pollInterval={60000}
