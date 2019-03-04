@@ -93,8 +93,9 @@ const splitTimeFromPercent = input => {
   };
 };
 
-const getPercentArray = input => {
-  const percentArray = input
+const getSailingsObject = percentString => {
+  if (!/^\d/.test(percentString)) return {}
+  const percentArray = percentString
     .split(' full')
     .filter(Boolean)
     .map(splitTimeFromPercent);
@@ -102,13 +103,12 @@ const getPercentArray = input => {
     (obj, sailing) => ((obj[sailing.scheduled_departure] = sailing), obj),
     {}
   );
-  // console.log(percentObject);
   return percentObject;
 };
 
 const createRouteObject = route => ({
   route_name: route[0],
-  sailings: getPercentArray(route[1]),
+  sailings: getSailingsObject(route[1]),
   car_waits: parseInt(route[route.length - 3]),
   oversize_waits: parseInt(route[route.length - 2])
 });
