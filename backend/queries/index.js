@@ -49,7 +49,11 @@ const upsertSailing = /* GraphQL */ `
         ]
       }
     ) {
-      affected_rows
+      returning {
+        route_id
+        scheduled_departure
+        vessel
+      }
     }
   }
 `;

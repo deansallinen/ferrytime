@@ -55,14 +55,14 @@ const makeSailing = object => {
   const scheduled_departure = getUTCTime(scheduled_departure_time);
   const actual_departure = getUTCTime(actual_departure_time);
   const eta = getUTCTime(eta_time);
-  const percent_full = null;
+  // const percent_full = null;
   return {
     vessel,
     sailing_status,
     scheduled_departure,
     actual_departure,
-    eta,
-    percent_full
+    eta
+    // percent_full
   };
 };
 
@@ -163,7 +163,7 @@ const scrape = async () => {
   // console.log(JSON.stringify(sailings, null, 2))
 
   const result = merge(sort(sailings), sort(conditions));
-  // console.log(JSON.stringify(result, null, 2))
+  console.log(JSON.stringify(result, null, 2));
 
   console.log(`Scraped ${result.length} routes`);
   return result;
@@ -173,16 +173,18 @@ const insert = async routes => {
   const routesResult = await Promise.all(
     routes.map(async route => {
       const { sailings, ...routePayload } = route;
+      // console.log(JSON.stringify(route, null, 2));
       const routeResult = await request(uri, upsertRoute, routePayload);
       console.log(`\nUpserted route info for ${route.route_name}`);
+      // console.log(JSON.stringify(routeResult, null, 2));
 
       const route_id = routeResult.insert_route.returning[0].id;
       const sailingResults = Object.values(sailings).map(async sailing => {
         const sailingPayload = { ...sailing, route_id };
-        // console.log(sailingPayload, route.route_name);
         return request(uri, upsertSailing, {
           objects: sailingPayload
         });
+        // console.log(JSON.stringify(res, null, 2));
       });
 
       console.log(
