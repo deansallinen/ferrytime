@@ -15,19 +15,36 @@ const makeRouteInfo = array => ({
   sailing_date: new Date(array[0][1]).toISOString().substr(0, 10)
 });
 
-const validateTime = (date, time) => {
-  const isTime = /\d+:\d\d [AP]M/.test(time);
-  // console.log(time, isTime)
+const validateTime = time => {
+  const isTime = /\d+:\d\d[AP]M/i.test(time.replace(/\s/g, ''));
+  return isTime;
+};
+
+const getHourAndMinute = time =>
+  moment(time, 'hh:mm a')
+    .format('HH:mm')
+    .split(':');
+
+const getUTCTime = rawTime => {
+  const isTime = validateTime(rawTime);
   if (!isTime) return null;
-  const dateTime = moment.tz(
-    date.concat(' ', time),
-    'YYYY-MM-DD hh:mm a',
-    'America/Vancouver'
-  );
+  const [hour, minute] = getHourAndMinute(rawTime);
+  const dateTime = moment
+    .tz('America/Vancouver')
+    .hour(hour)
+    .minute(minute)
+    .second(0);
+  // console.log(
+  //   rawTime,
+  //   hour,
+  //   minute,
+  //   dateTime.format(),
+  //   dateTime.utc().format()
+  // );
   return dateTime.utc().format();
 };
 
-const makeSailing = (object, date) => {
+const makeSailing = object => {
   const [
     vessel,
     scheduled_departure_time,
@@ -35,9 +52,9 @@ const makeSailing = (object, date) => {
     eta_time,
     sailing_status
   ] = Object.values(object);
-  const scheduled_departure = validateTime(date, scheduled_departure_time);
-  const actual_departure = validateTime(date, actual_departure_time);
-  const eta = validateTime(date, eta_time);
+  const scheduled_departure = getUTCTime(scheduled_departure_time);
+  const actual_departure = getUTCTime(actual_departure_time);
+  const eta = getUTCTime(eta_time);
   const percent_full = null;
   return {
     vessel,
@@ -49,14 +66,16 @@ const makeSailing = (object, date) => {
   };
 };
 
-const compileSailings = (rawSchedule, date) => {
-  rawSchedule.shift();
-  const sailingsArray = rawSchedule.map(x => makeSailing(x, date));
-  const sailingsObject = sailingsArray.reduce(
+const objectifySailingArray = array =>
+  array.reduce(
     (obj, sailing) => ((obj[sailing.scheduled_departure] = sailing), obj),
     {}
   );
 
+const compileSailings = rawSchedule => {
+  rawSchedule.shift();
+  const sailingsArray = rawSchedule.map(x => makeSailing(x));
+  const sailingsObject = objectifySailingArray(sailingsArray);
   return sailingsObject;
 };
 
@@ -65,7 +84,7 @@ const getSailingsArray = data => {
   const routesArray = [];
   for (let i = 2; i < l; i += 2) {
     const route = makeRouteInfo(data[i]);
-    route.sailings = compileSailings(data[i + 1], route.sailing_date);
+    route.sailings = compileSailings(data[i + 1]);
     routesArray.push(route);
   }
   return routesArray;
@@ -85,24 +104,20 @@ const splitTimeFromPercent = input => {
   const res = regex.exec(input);
   if (!res) return null;
   const [_, time, percentage] = res;
-  const timestamp = moment.tz(time, 'hh:mmaa', 'America/Vancouver');
-  // console.log(time, timestamp.utc().format())
+  const scheduled_departure = getUTCTime(time);
   return {
-    scheduled_departure: timestamp.utc().format(),
+    scheduled_departure,
     percent_full: parseInt(percentage)
   };
 };
 
 const getSailingsObject = percentString => {
-  if (!/^\d/.test(percentString)) return {}
+  if (!/^\d/.test(percentString)) return {};
   const percentArray = percentString
     .split(' full')
     .filter(Boolean)
     .map(splitTimeFromPercent);
-  const percentObject = percentArray.reduce(
-    (obj, sailing) => ((obj[sailing.scheduled_departure] = sailing), obj),
-    {}
-  );
+  const percentObject = objectifySailingArray(percentArray);
   return percentObject;
 };
 
@@ -129,6 +144,15 @@ const getConditionsArray = pageData => {
   );
 };
 
+const sort = routeArray =>
+  routeArray.sort((a, b) => {
+    const routeA = a.route_name.toUpperCase();
+    const routeB = b.route_name.toUpperCase();
+    if (routeA < routeB) return -1;
+    if (routeA > routeB) return 1;
+    return 0;
+  });
+
 const scrape = async () => {
   console.log('\nScraping sailings schedule...');
   const sailingPage = await scrapeSailingsPage();
@@ -136,8 +160,11 @@ const scrape = async () => {
 
   const sailings = getSailingsArray(sailingPage);
   const conditions = getConditionsArray(conditionsPage);
+  // console.log(JSON.stringify(sailings, null, 2))
 
-  const result = merge(sailings, conditions);
+  const result = merge(sort(sailings), sort(conditions));
+  // console.log(JSON.stringify(result, null, 2))
+
   console.log(`Scraped ${result.length} routes`);
   return result;
 };
@@ -152,6 +179,7 @@ const insert = async routes => {
       const route_id = routeResult.insert_route.returning[0].id;
       const sailingResults = Object.values(sailings).map(async sailing => {
         const sailingPayload = { ...sailing, route_id };
+        // console.log(sailingPayload, route.route_name);
         return request(uri, upsertSailing, {
           objects: sailingPayload
         });
