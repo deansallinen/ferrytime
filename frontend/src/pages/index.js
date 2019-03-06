@@ -38,7 +38,7 @@ const Favourites = ({ edges }) => {
 
   return favourites.length ? (
     <div className='mb-12'>
-      <h2 className='text-white antialiased'>Favourites</h2>
+      <h2 className='text-white text-lg font-semibold antialiased'>Favourites</h2>
       {edges
         .filter(each => /^\/route/.test(each.node.path))
         .filter(each => favourites.includes(each.node.context.route_name))
@@ -59,7 +59,8 @@ const Route = ({ path, context, state }) => {
       state={state}
       className="no-underline hover:underline text-grey-darkest text-xl"
     >
-      <span className='font-bold'>{departureTerminal}</span> to {arrivalTerminal}
+      <div className='font-bold'>{departureTerminal}</div>
+      <div className='text-grey-dark'>to {arrivalTerminal}</div>
     </Link>
   </div>
 };
@@ -74,7 +75,7 @@ function IndexPage({ data: { allSitePage } }) {
 
       <div className="">
         <Favourites {...allSitePage} />
-        <h2 className='text-white antialiased'>All routes</h2>
+        <h2 className='text-white text-lg font-semibold antialiased'>All routes</h2>
         <Query
           query={GET_ALL_ROUTES}
           variables={{ today: startOfDay(new Date()) }}

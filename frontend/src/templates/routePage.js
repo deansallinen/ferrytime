@@ -43,7 +43,9 @@ const Sailing = ({ sailing }) => {
           <div className="text-3xl font-bold">
             {format(scheduled_departure, 'H:mm')}
           </div>
+          <div className='text-right'>
           {eta && <span> &rarr; {format(eta, 'H:mm')}</span>}
+          </div>
         </div>
 
         <div className="ml-4 pl-4 leading-normal">
@@ -51,7 +53,7 @@ const Sailing = ({ sailing }) => {
           <div className="text-grey-dark text-sm" />
           {percent_full && (
             <div>
-              <span className="font-bold">{percent_full}</span> percent full
+              <span className="font-bold">{percent_full}</span>% full
             </div>
           )}
           {/* <div>{sailing_status}</div> */}

@@ -17,13 +17,13 @@ function Layout({ children, route_name }) {
         }
       `}
       render={data => (
-        <div className="flex flex-col font-sans min-h-screen text-grey-darkest">
+        <div className="flex flex-col font-sans min-h-screen text-grey-darkest bg-blue">
           <Header
             siteTitle={data.site.siteMetadata.title}
             route_name={route_name}
           />
 
-          <div className="flex flex-col flex-1  max-w-xl mx-auto px-4 py-8 md:p-8 w-full bg-blue">
+          <div className="flex flex-col flex-1  max-w-xl mx-auto px-4 py-8 md:p-8 w-full ">
             {children}
           </div>
 
