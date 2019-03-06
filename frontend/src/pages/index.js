@@ -50,7 +50,7 @@ const Favourites = ({ edges }) => {
 };
 
 const Route = ({ path, context, state }) => (
-  <div className="my-4" key={context.id}>
+  <div className="my-4 bg-white rounded-lg px-4 py-4" key={context.id}>
     <Link
       to={path}
       key={context.id}
@@ -72,7 +72,7 @@ function IndexPage({ data: { allSitePage } }) {
 
       <div className="">
         <Favourites {...allSitePage} />
-        <h2>All routes</h2>
+        <h2 className='text-white antialiased'>All routes</h2>
         <Query
           query={GET_ALL_ROUTES}
           variables={{ today: startOfDay(new Date()) }}
