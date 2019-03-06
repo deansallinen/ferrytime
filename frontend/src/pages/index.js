@@ -37,8 +37,8 @@ const Favourites = ({ edges }) => {
       : [];
 
   return favourites.length ? (
-    <div>
-      <h2>Favourites</h2>
+    <div className='mb-12'>
+      <h2 className='text-white antialiased'>Favourites</h2>
       {edges
         .filter(each => /^\/route/.test(each.node.path))
         .filter(each => favourites.includes(each.node.context.route_name))
@@ -49,18 +49,20 @@ const Favourites = ({ edges }) => {
   ) : null;
 };
 
-const Route = ({ path, context, state }) => (
-  <div className="my-4 bg-white rounded-lg px-4 py-4" key={context.id}>
+const Route = ({ path, context, state }) => {
+  const {route_name, id} = context
+  const [departureTerminal, arrivalTerminal] = route_name.split(' to ')
+  return <div className="my-4 bg-white rounded-lg px-4 py-4 shadow" key={context.id}>
     <Link
       to={path}
       key={context.id}
       state={state}
       className="no-underline hover:underline text-grey-darkest text-xl"
     >
-      {context.route_name}
+      <span className='font-bold'>{departureTerminal}</span> to {arrivalTerminal}
     </Link>
   </div>
-);
+};
 
 function IndexPage({ data: { allSitePage } }) {
   return (

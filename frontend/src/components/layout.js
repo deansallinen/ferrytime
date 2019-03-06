@@ -27,7 +27,7 @@ function Layout({ children, route_name }) {
             {children}
           </div>
 
-          <footer className="bg-blue">
+          <footer className="bg-blue antialiased">
             <div className="flex justify-between max-w-xl mx-auto p-4 md:p-8 text-sm">
               <p className="text-white">
                 Created by{' '}

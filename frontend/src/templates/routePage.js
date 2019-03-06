@@ -36,15 +36,17 @@ const Sailing = ({ sailing }) => {
     vessel
   } = sailing;
   return (
-    <div className="pb-4 mb-4">
+    <div className="pb-4 mb-2">
       <div className="card flex bg-white rounded-lg py-4 px-4 shadow">
-        <div className="w-24 text-right">
+
+        <div className="">
           <div className="text-3xl font-bold">
             {format(scheduled_departure, 'H:mm')}
           </div>
           {eta && <span> &rarr; {format(eta, 'H:mm')}</span>}
         </div>
-        <div className="ml-4 border-l-2 border-grey-lighter pl-4 leading-normal">
+
+        <div className="ml-4 pl-4 leading-normal">
           <SailingStatus {...sailing} />
           <div className="text-grey-dark text-sm" />
           {percent_full && (
@@ -82,7 +84,7 @@ const RouteInfo = ({
   oversize_waits
 }) => {
   return (
-    <div className="rounded-lg bg-white px-4 py-4 shadow">
+    <div className="rounded-lg bg-white px-4 py-4 shadow mb-12">
       <h1 className='leading-none'>
         {route_name} <Favourite routeName={route_name} />
       </h1>
