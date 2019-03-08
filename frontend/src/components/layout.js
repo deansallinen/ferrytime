@@ -23,7 +23,7 @@ function Layout({ children, route_name }) {
             route_name={route_name}
           />
 
-          <div className="flex flex-col flex-1  max-w-xl mx-auto px-4 py-8 md:p-8 w-full ">
+          <div className="flex flex-col flex-1  max-w-xl mx-auto px-3 py-8 md:p-8 w-full ">
             {children}
           </div>
 

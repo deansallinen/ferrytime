@@ -56,7 +56,7 @@ const Route = ({ path, context, state }) => {
   const [departureTerminal, arrivalTerminal] = route_name.split(' to ');
   return (
     <div
-      className="my-4 bg-white rounded-lg px-4 py-4 shadow border-b-4 border-grey-dark"
+      className="my-4 bg-white rounded-lg px-4 py-4 shadow border-b-4 border-blue-light"
       key={context.id}
     >
       <Link
@@ -65,8 +65,8 @@ const Route = ({ path, context, state }) => {
         state={state}
         className="no-underline hover:underline text-grey-darkest text-xl"
       >
-        <div className="font-bold">{departureTerminal}</div>
-        <div className="text-grey-dark">to {arrivalTerminal}</div>
+        <div className="font-bold pb-1">{departureTerminal}</div>
+        <div className="text-grey-dark text-lg">to {arrivalTerminal}</div>
       </Link>
     </div>
   );

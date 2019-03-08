@@ -27,14 +27,14 @@ export default ({ routeName }) => {
 
   return isFavourite ? (
     <button
-      className=" m-2 rounded-lg  bg-white text-blue transition text-3xl"
+      className="rounded-lg  bg-white text-yellow-dark transition text-3xl"
       onClick={toggleFavourite}
     >
       <span>&#9733;</span>
     </button>
   ) : (
     <button
-      className=" m-2 rounded-lg  bg-white text-blue transition text-3xl"
+      className="rounded-lg  bg-white text-yellow-dark transition text-3xl"
       onClick={toggleFavourite}
     >
       &#9734;

@@ -163,7 +163,7 @@ const scrape = async () => {
   // console.log(JSON.stringify(sailings, null, 2))
 
   const result = merge(sort(sailings), sort(conditions));
-  console.log(JSON.stringify(result, null, 2));
+  // console.log(JSON.stringify(result, null, 2));
 
   console.log(`Scraped ${result.length} routes`);
   return result;
