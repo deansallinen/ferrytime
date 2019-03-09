@@ -100,6 +100,7 @@ function IndexPage({ data: { allSitePage } }) {
               const [routeInfo] = data.route.filter(
                 route => route.id === node.context.id
               );
+              console.log(routeInfo);
               return <Route {...node} state={routeInfo} />;
             });
           }}

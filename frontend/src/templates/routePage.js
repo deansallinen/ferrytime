@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 // import {Link} from 'gatsby'
-import { format, isWithinRange } from 'date-fns';
+import { format, isWithinRange, startOfDay } from 'date-fns';
 
 import Layout from '../components/layout';
 import SEO from '../components/seo';
@@ -10,18 +10,24 @@ import Favourite from '../components/addFavourite';
 import SailingStatus from '../components/sailingStatus';
 
 const GET_ALL_SAILINGS = gql`
-  query getAllSailings($route_id: uuid) {
-    todays_sailings(
-      where: { route_id: { _eq: $route_id } }
-      order_by: { scheduled_departure: asc }
-    ) {
+  query getOneRoute($route_id: uuid, $today: timestamptz) {
+    route(where: { id: { _eq: $route_id } }) {
       id
-      scheduled_departure
-      actual_departure
-      eta
-      percent_full
-      sailing_status
-      vessel
+      route_name
+      car_waits
+      oversize_waits
+      sailingsByrouteId(
+        where: { scheduled_departure: { _gt: $today } }
+        order_by: { scheduled_departure: asc }
+      ) {
+        id
+        scheduled_departure
+        actual_departure
+        eta
+        sailing_status
+        percent_full
+        vessel
+      }
     }
   }
 `;
@@ -169,10 +175,17 @@ const RouteInfo = ({
       <div className="mb-2">
         <h1 className="leading-none">{route_name}</h1>
       </div>
-      <p>{average_sailing}</p>
-      <div className="my-2">
-        <p>Car waits: {car_waits || 0}</p>
-        <p>Oversize waits: {oversize_waits || 0}</p>
+      <div className="">
+        <div className="mt-2">
+          <p className="text-xs text-grey-dark ">Duration</p>
+          {average_sailing}
+        </div>
+        <div className="mt-2">
+          <p className="text-xs text-grey-dark ">Sailing waits</p>
+          Car: <span className="mr-2 font-bold">{car_waits || 0}</span>
+          Oversize:{' '}
+          <span className="mr-2 font-bold">{oversize_waits || 0}</span>
+        </div>
       </div>
     </div>
   );
@@ -196,7 +209,10 @@ function RoutePage(props) {
         <Query
           query={GET_ALL_SAILINGS}
           pollInterval={60000}
-          variables={{ route_id: pageContext.id }}
+          variables={{
+            route_id: pageContext.id,
+            today: startOfDay(new Date())
+          }}
         >
           {({ loading, error, data }) => {
             if (loading)
@@ -216,8 +232,16 @@ function RoutePage(props) {
 
             return (
               <>
-                <RouteInfo {...pageContext} />
-                <Sailings sailings={data.todays_sailings} />
+                <RouteInfo
+                  {...pageContext}
+                  car_waits={data.route[0].car_waits}
+                  oversize_waits={data.route[0].oversize_waits}
+                />
+                <pre className="text-white">
+                  {/* {JSON.stringify(props, null, 2)} */}
+                  {/* {JSON.stringify(data, null, 2)} */}
+                </pre>
+                <Sailings sailings={data.route[0].sailingsByrouteId} />
               </>
             );
           }}
