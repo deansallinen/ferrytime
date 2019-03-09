@@ -165,7 +165,8 @@ const RouteInfo = ({
   route_name,
   average_sailing,
   car_waits,
-  oversize_waits
+  oversize_waits,
+  current_status
 }) => {
   return (
     <div className="rounded-lg bg-white px-4 py-4 shadow mb-12">
@@ -185,6 +186,10 @@ const RouteInfo = ({
           Car: <span className="mr-2 font-bold">{car_waits || 0}</span>
           Oversize:{' '}
           <span className="mr-2 font-bold">{oversize_waits || 0}</span>
+        </div>
+        <div className="mt-2">
+          <p className="text-xs text-grey-dark ">Current Status</p>
+          {current_status}
         </div>
       </div>
     </div>
@@ -230,18 +235,24 @@ function RoutePage(props) {
               );
             if (error) return `Error! ${error.message}`;
 
+            const [route] = data.route;
+            const latestSailing = route.sailingsByrouteId
+              .filter(sailing => sailing.actual_departure)
+              .pop();
+            const current_status = latestSailing.sailing_status;
             return (
               <>
                 <RouteInfo
                   {...pageContext}
-                  car_waits={data.route[0].car_waits}
-                  oversize_waits={data.route[0].oversize_waits}
+                  car_waits={route.car_waits}
+                  oversize_waits={route.oversize_waits}
+                  current_status={current_status}
                 />
                 <pre className="text-white">
                   {/* {JSON.stringify(props, null, 2)} */}
-                  {/* {JSON.stringify(data, null, 2)} */}
+                  {/* {JSON.stringify(latestSailing, null, 2)} */}
                 </pre>
-                <Sailings sailings={data.route[0].sailingsByrouteId} />
+                <Sailings sailings={route.sailingsByrouteId} />
               </>
             );
           }}
