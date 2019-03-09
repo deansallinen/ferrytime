@@ -70,7 +70,7 @@ const Sailing = ({ sailing }) => {
           : ''
       }${
         isCancelled
-          ? 'bg-red-lightest border-t-4 -mt-1 -mb-1 border-b-4 border-red-light'
+          ? 'bg-red-lightest border-t-4 -mt-1 -mb-1 border-b-4 border-red-lighter'
           : ''
       }`}
     >

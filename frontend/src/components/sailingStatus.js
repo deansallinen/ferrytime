@@ -21,7 +21,7 @@ const InfoIcon = () => (
 
 const Cancelled = () => (
   <div>
-    <span className="bg-red-lightest text-red-dark rounded text-xs px-2 py-1 ">
+    <span className="bg-red-lighter text-red-darker rounded text-xs px-2 py-1 ">
       Cancelled
     </span>
   </div>

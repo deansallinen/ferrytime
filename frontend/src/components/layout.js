@@ -28,23 +28,14 @@ function Layout({ children, route_name }) {
           </div>
 
           <footer className="bg-blue antialiased">
-            <div className="flex justify-between max-w-xl mx-auto p-4 md:p-8 text-sm">
-              <p className="text-white">
+            <div className="max-w-xl mx-auto p-4 md:p-8 text-sm">
+              <p className="text-white text-center">
                 Created by{' '}
-                <a
-                  href="https://www.deansallinen.ca"
-                  className="font-bold no-underline text-white"
-                >
-                  Dean Sallinen
-                </a>
-              </p>
-
-              <p>
                 <a
                   href="https://github.com/deansallinen/ferrytime"
                   className="font-bold no-underline text-white"
                 >
-                  GitHub
+                  Dean Sallinen
                 </a>
               </p>
             </div>
