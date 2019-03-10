@@ -1,40 +1,44 @@
 const rp = require('request-promise');
 const cheerio = require('cheerio');
-const { format } = require('date-fns');
+const  moment  = require('moment-timezone');
 
-const inputs = { scheduled_departure: '1800', route_name: 'name of route' };
+const getPercentFull = ({ scheduled_departure, departure_term, route_num_str }) => {
+  
+  const inputTime = moment(scheduled_departure).format('HHmm')
 
-const dict = {
-  'name of route': { routeNum: '01', dept: 'TSA' },
-};
-
-function main({ scheduled_departure, route_name }) {
-  const ID = scheduled_departure;
-  const { routeNum, dept } = dict[route_name];
-  //   console.log(routeNum, dept, ID);
   const options = {
-    uri: `https://orca.bcferries.com/cc/marqui/sailingDetail.asp?route=${routeNum}&dept=${dept}&ID=${ID}&src=ltr`,
-    transform: function(body) {
-      return cheerio.load(body);
-    },
+    uri: `https://orca.bcferries.com/cc/marqui/sailingDetail.asp?route=${route_num_str}&dept=${departure_term}&ID=${inputTime}&src=ltr`,
+    transform: (body) => cheerio.load(body)
   };
 
-  rp(options).then($ => {
-    const percent = $(
-      'table tbody tr td table tbody tr td form table tbody tr td div table tbody tr td table'
-    ).attr('width');
-    const [sailingTime] = $('.white-header-bold-lg')
+  return rp(options).then($ => {
+    const sailingTime = $('.white-header-bold-lg')
       .text()
       .match(/\d+:\d+\s[AP]M/);
+      
+    if (!sailingTime) return null
+    
+    const outputTime = moment(sailingTime[0], 'hh:mm aa').format('HHmm')
+    
+    if (inputTime !== outputTime) return null
+      
+    const [percent] = $(
+      'table tbody tr td table tbody tr td form table tbody tr td div table tbody tr td table'
+    ).attr('width').match(/\d{1,2}/);
+    
     const [parking] = $('.ccInfoTitle')
       .parent()
       .text()
       .match(/\d+%/);
+      
     const [carWaits, oversizeWaits] = $('#quicklink-box tr td div')
       .text()
       .match(/(\d+)/);
-    console.log(percent, sailingTime, parking, carWaits, oversizeWaits);
+      
+    return {percent, parking, carWaits, oversizeWaits};
   });
 }
 
-main(inputs);
+// getPercentFull(inputs).then(res => console.log( res))
+
+module.exports = {getPercentFull}

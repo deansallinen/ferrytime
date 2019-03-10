@@ -45,20 +45,35 @@ const upsertSailing = /* GraphQL */ `
           eta
           sailing_status
           vessel
-          percent_full
         ]
       }
     ) {
       returning {
-        route_id
+        id
         scheduled_departure
-        vessel
+        routeByrouteId {
+          departure_term
+          route_num_str
+        }
       }
     }
   }
 `;
 
+const upsertSailingPercent = /* GraphQL */ `
+mutation updateSailingPercentage($id: uuid, $percent_full: Int) {
+  update_sailing(where: {id: {_eq: $id}}, _set: {percent_full: $percent_full}) {
+    returning {
+      id
+      percent_full
+    }
+  }
+}
+
+`;
+
 module.exports = {
   upsertRoute,
-  upsertSailing
+  upsertSailing,
+  upsertSailingPercent,
 };

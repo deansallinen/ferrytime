@@ -1,0 +1,1626 @@
+{
+  "nodes": {
+    "SitePage /dev-404-page/": {
+      "jsonName": "dev-404-page-5f9",
+      "internalComponentName": "ComponentDev404Page",
+      "path": "/dev-404-page/",
+      "component": "/home/deza604/ferrytime/new-frontend/.cache/dev-404-page.js",
+      "componentChunkName": "component---cache-dev-404-page-js",
+      "context": {},
+      "pluginCreator___NODE": "d48d1c52-fe48-53cb-8f08-aa4b47dde5a5",
+      "pluginCreatorId": "d48d1c52-fe48-53cb-8f08-aa4b47dde5a5",
+      "componentPath": "/home/deza604/ferrytime/new-frontend/.cache/dev-404-page.js",
+      "id": "SitePage /dev-404-page/",
+      "parent": null,
+      "children": [],
+      "internal": {
+        "type": "SitePage",
+        "contentDigest": "95722f1352a4f072c681adf296697fa4",
+        "description": "d48d1c52-fe48-53cb-8f08-aa4b47dde5a5",
+        "owner": "internal-data-bridge"
+      }
+    },
+    "d48d1c52-fe48-53cb-8f08-aa4b47dde5a5": {
+      "resolve": "/home/deza604/ferrytime/new-frontend/node_modules/gatsby/dist/internal-plugins/dev-404-page",
+      "id": "d48d1c52-fe48-53cb-8f08-aa4b47dde5a5",
+      "name": "dev-404-page",
+      "version": "1.0.0",
+      "pluginOptions": {
+        "plugins": []
+      },
+      "nodeAPIs": [
+        "createPagesStatefully"
+      ],
+      "browserAPIs": [],
+      "ssrAPIs": [],
+      "pluginFilepath": "/home/deza604/ferrytime/new-frontend/node_modules/gatsby/dist/internal-plugins/dev-404-page",
+      "packageJson": {
+        "name": "dev-404-page",
+        "description": "Internal plugin to add a 404 page in development with helpful information",
+        "version": "1.0.0",
+        "main": "index.js",
+        "author": "Kyle Mathews <mathews.kyle@gmail.com>",
+        "license": "MIT",
+        "dependencies": [],
+        "devDependencies": [],
+        "peerDependencies": [],
+        "optionalDependecies": [],
+        "bundledDependecies": []
+      },
+      "parent": null,
+      "children": [],
+      "internal": {
+        "contentDigest": "671cfaa1842a544196da46dc2d58ff2f",
+        "type": "SitePlugin",
+        "owner": "internal-data-bridge"
+      }
+    },
+    "1fc32581-893a-55e8-8927-bcd667e2b700": {
+      "resolve": "/home/deza604/ferrytime/new-frontend/node_modules/gatsby/dist/internal-plugins/load-babel-config",
+      "id": "1fc32581-893a-55e8-8927-bcd667e2b700",
+      "name": "load-babel-config",
+      "version": "1.0.0",
+      "pluginOptions": {
+        "plugins": []
+      },
+      "nodeAPIs": [
+        "onPreBootstrap"
+      ],
+      "browserAPIs": [],
+      "ssrAPIs": [],
+      "pluginFilepath": "/home/deza604/ferrytime/new-frontend/node_modules/gatsby/dist/internal-plugins/load-babel-config",
+      "packageJson": {
+        "name": "load-babel-config",
+        "description": "Internal plugin that handles loading Babel configs",
+        "version": "1.0.0",
+        "main": "index.js",
+        "author": "Kyle Mathews <mathews.kyle@gmail.com>",
+        "license": "MIT",
+        "dependencies": [],
+        "devDependencies": [],
+        "peerDependencies": [],
+        "optionalDependecies": [],
+        "bundledDependecies": []
+      },
+      "parent": null,
+      "children": [],
+      "internal": {
+        "contentDigest": "9991304cbdacedb4e15650447d8830a1",
+        "type": "SitePlugin",
+        "owner": "internal-data-bridge"
+      }
+    },
+    "a5079d69-ba80-53dc-82f9-0f440bd5448c": {
+      "resolve": "/home/deza604/ferrytime/new-frontend/node_modules/gatsby/dist/internal-plugins/internal-data-bridge",
+      "id": "a5079d69-ba80-53dc-82f9-0f440bd5448c",
+      "name": "internal-data-bridge",
+      "version": "1.0.0",
+      "pluginOptions": {
+        "plugins": []
+      },
+      "nodeAPIs": [
+        "sourceNodes",
+        "onCreatePage"
+      ],
+      "browserAPIs": [],
+      "ssrAPIs": [],
+      "pluginFilepath": "/home/deza604/ferrytime/new-frontend/node_modules/gatsby/dist/internal-plugins/internal-data-bridge",
+      "packageJson": {
+        "name": "internal-data-bridge",
+        "description": "An internal Gatsby plugin which creates data nodes from internal data",
+        "version": "1.0.0",
+        "main": "index.js",
+        "author": "Kyle Mathews <mathews.kyle@gmail.com>",
+        "license": "MIT",
+        "dependencies": [],
+        "devDependencies": [],
+        "peerDependencies": [],
+        "optionalDependecies": [],
+        "bundledDependecies": []
+      },
+      "parent": null,
+      "children": [],
+      "internal": {
+        "contentDigest": "72b0e45fe0456685d60566adf465482f",
+        "type": "SitePlugin",
+        "owner": "internal-data-bridge"
+      }
+    },
+    "f795702c-a3b8-5a88-88ee-5d06019d44fa": {
+      "resolve": "/home/deza604/ferrytime/new-frontend/node_modules/gatsby/dist/internal-plugins/prod-404",
+      "id": "f795702c-a3b8-5a88-88ee-5d06019d44fa",
+      "name": "prod-404",
+      "version": "1.0.0",
+      "pluginOptions": {
+        "plugins": []
+      },
+      "nodeAPIs": [
+        "onCreatePage"
+      ],
+      "browserAPIs": [],
+      "ssrAPIs": [],
+      "pluginFilepath": "/home/deza604/ferrytime/new-frontend/node_modules/gatsby/dist/internal-plugins/prod-404",
+      "packageJson": {
+        "name": "prod-404",
+        "description": "Internal plugin to detect various flavors of 404 pages and ensure there's a 404.html path created as well to ensure compatability with static hosts",
+        "version": "1.0.0",
+        "main": "index.js",
+        "author": "Kyle Mathews <mathews.kyle@gmail.com>",
+        "license": "MIT",
+        "dependencies": [],
+        "devDependencies": [],
+        "peerDependencies": [],
+        "optionalDependecies": [],
+        "bundledDependecies": []
+      },
+      "parent": null,
+      "children": [],
+      "internal": {
+        "contentDigest": "ff1ab42e33dcae5e54ee443ea0ee91b5",
+        "type": "SitePlugin",
+        "owner": "internal-data-bridge"
+      }
+    },
+    "84dad27f-1d44-51fc-ac56-4db2e5222995": {
+      "resolve": "/home/deza604/ferrytime/new-frontend/node_modules/gatsby/dist/internal-plugins/query-runner",
+      "id": "84dad27f-1d44-51fc-ac56-4db2e5222995",
+      "name": "query-runner",
+      "version": "1.0.0",
+      "pluginOptions": {
+        "plugins": []
+      },
+      "nodeAPIs": [
+        "onCreatePage"
+      ],
+      "browserAPIs": [],
+      "ssrAPIs": [],
+      "pluginFilepath": "/home/deza604/ferrytime/new-frontend/node_modules/gatsby/dist/internal-plugins/query-runner",
+      "packageJson": {
+        "name": "query-runner",
+        "description": "Internal plugin for running queries",
+        "version": "1.0.0",
+        "main": "index.js",
+        "author": "",
+        "license": "MIT",
+        "dependencies": [],
+        "devDependencies": [],
+        "peerDependencies": [],
+        "optionalDependecies": [],
+        "bundledDependecies": []
+      },
+      "parent": null,
+      "children": [],
+      "internal": {
+        "contentDigest": "38b980b801c597e129ee6e86c552b87c",
+        "type": "SitePlugin",
+        "owner": "internal-data-bridge"
+      }
+    },
+    "6f4b2fa9-66b5-5205-a03f-140005a2cfe5": {
+      "resolve": "/home/deza604/ferrytime/new-frontend/node_modules/gatsby/dist/internal-plugins/webpack-theme-component-shadowing",
+      "id": "6f4b2fa9-66b5-5205-a03f-140005a2cfe5",
+      "name": "webpack-theme-component-shadowing",
+      "version": "1.0.0",
+      "pluginOptions": {
+        "plugins": []
+      },
+      "nodeAPIs": [
+        "onCreateWebpackConfig"
+      ],
+      "browserAPIs": [],
+      "ssrAPIs": [],
+      "pluginFilepath": "/home/deza604/ferrytime/new-frontend/node_modules/gatsby/dist/internal-plugins/webpack-theme-component-shadowing",
+      "packageJson": {
+        "name": "webpack-theme-component-shadowing",
+        "description": "An internal Gatsby plugin which handles configuring webpack to ensure theme components fall back from the user's site to theme modules.",
+        "version": "1.0.0",
+        "main": "index.js",
+        "author": "Chris Biscardi <chris@christopherbiscardi.com>",
+        "license": "MIT",
+        "dependencies": [],
+        "devDependencies": [],
+        "peerDependencies": [],
+        "optionalDependecies": [],
+        "bundledDependecies": []
+      },
+      "parent": null,
+      "children": [],
+      "internal": {
+        "contentDigest": "9bb947d9f707a891629246a5b6b87f4f",
+        "type": "SitePlugin",
+        "owner": "internal-data-bridge"
+      }
+    },
+    "1943ff2f-9c0c-558d-8d0c-006603e8106a": {
+      "resolve": "/home/deza604/ferrytime/new-frontend/node_modules/gatsby-plugin-react-helmet",
+      "id": "1943ff2f-9c0c-558d-8d0c-006603e8106a",
+      "name": "gatsby-plugin-react-helmet",
+      "version": "3.0.6",
+      "pluginOptions": {
+        "plugins": []
+      },
+      "nodeAPIs": [],
+      "browserAPIs": [],
+      "ssrAPIs": [
+        "onRenderBody"
+      ],
+      "pluginFilepath": "/home/deza604/ferrytime/new-frontend/node_modules/gatsby-plugin-react-helmet",
+      "packageJson": {
+        "name": "gatsby-plugin-react-helmet",
+        "description": "Manage document head data with react-helmet. Provides drop-in server rendering support for Gatsby.",
+        "version": "3.0.6",
+        "main": "index.js",
+        "keywords": [
+          "gatsby",
+          "gatsby-plugin",
+          "favicon",
+          "react-helmet",
+          "seo",
+          "document",
+          "head",
+          "title",
+          "meta",
+          "link",
+          "script",
+          "base",
+          "noscript",
+          "style"
+        ],
+        "author": {
+          "name": "Kyle Mathews",
+          "email": "matthews.kyle@gmail.com"
+        },
+        "license": "MIT",
+        "dependencies": [
+          {
+            "name": "@babel/runtime",
+            "version": "^7.0.0"
+          }
+        ],
+        "devDependencies": [
+          {
+            "name": "@babel/cli",
+            "version": "^7.0.0"
+          },
+          {
+            "name": "@babel/core",
+            "version": "^7.0.0"
+          },
+          {
+            "name": "babel-preset-gatsby-package",
+            "version": "^0.1.3"
+          },
+          {
+            "name": "cross-env",
+            "version": "^5.1.4"
+          }
+        ],
+        "peerDependencies": [
+          {
+            "name": "gatsby",
+            "version": "^2.0.0"
+          },
+          {
+            "name": "react-helmet",
+            "version": "^5.1.3"
+          }
+        ],
+        "optionalDependecies": [],
+        "bundledDependecies": []
+      },
+      "parent": null,
+      "children": [],
+      "internal": {
+        "contentDigest": "9491af388a4ac76c86233cc0e22e637c",
+        "type": "SitePlugin",
+        "owner": "internal-data-bridge"
+      }
+    },
+    "0fb49e48-d53c-55db-b36d-f31d888c5775": {
+      "resolve": "/home/deza604/ferrytime/new-frontend/node_modules/gatsby-plugin-manifest",
+      "id": "0fb49e48-d53c-55db-b36d-f31d888c5775",
+      "name": "gatsby-plugin-manifest",
+      "version": "2.0.17",
+      "pluginOptions": {
+        "plugins": [],
+        "name": "gatsby-starter-tailwind",
+        "short_name": "starter",
+        "start_url": "/",
+        "background_color": "#ffffff",
+        "theme_color": "#4dc0b5",
+        "display": "minimal-ui",
+        "icon": "src/images/tailwind-icon.png"
+      },
+      "nodeAPIs": [
+        "onPostBootstrap"
+      ],
+      "browserAPIs": [],
+      "ssrAPIs": [
+        "onRenderBody"
+      ],
+      "pluginFilepath": "/home/deza604/ferrytime/new-frontend/node_modules/gatsby-plugin-manifest",
+      "packageJson": {
+        "name": "gatsby-plugin-manifest",
+        "description": "Gatsby plugin which adds a manifest.webmanifest to make sites progressive web apps",
+        "version": "2.0.17",
+        "main": "index.js",
+        "keywords": [
+          "gatsby",
+          "gatsby-plugin",
+          "favicon",
+          "icons",
+          "manifest.webmanifest",
+          "progressive-web-app",
+          "pwa"
+        ],
+        "author": {
+          "name": "Kyle Mathews",
+          "email": "mathews.kyle@gmail.com"
+        },
+        "license": "MIT",
+        "dependencies": [
+          {
+            "name": "@babel/runtime",
+            "version": "^7.0.0"
+          },
+          {
+            "name": "bluebird",
+            "version": "^3.5.0"
+          },
+          {
+            "name": "sharp",
+            "version": "^0.21.3"
+          }
+        ],
+        "devDependencies": [
+          {
+            "name": "@babel/cli",
+            "version": "^7.0.0"
+          },
+          {
+            "name": "@babel/core",
+            "version": "^7.0.0"
+          },
+          {
+            "name": "babel-preset-gatsby-package",
+            "version": "^0.1.3"
+          },
+          {
+            "name": "cross-env",
+            "version": "^5.1.4"
+          }
+        ],
+        "peerDependencies": [
+          {
+            "name": "gatsby",
+            "version": "^2.0.0"
+          }
+        ],
+        "optionalDependecies": [],
+        "bundledDependecies": []
+      },
+      "parent": null,
+      "children": [],
+      "internal": {
+        "contentDigest": "e4920d22117dafb4a6f3ca5950fdcf97",
+        "type": "SitePlugin",
+        "owner": "internal-data-bridge"
+      }
+    },
+    "a3d0184d-2ccd-585a-b4e1-5007e436138e": {
+      "resolve": "/home/deza604/ferrytime/new-frontend/node_modules/gatsby-source-graphql",
+      "id": "a3d0184d-2ccd-585a-b4e1-5007e436138e",
+      "name": "gatsby-source-graphql",
+      "version": "2.0.10",
+      "pluginOptions": {
+        "plugins": [],
+        "typeName": "FTAPI",
+        "fieldName": "ftapi",
+        "url": "https://ferry-time.herokuapp.com/v1alpha1/graphql"
+      },
+      "nodeAPIs": [
+        "sourceNodes"
+      ],
+      "browserAPIs": [],
+      "ssrAPIs": [],
+      "pluginFilepath": "/home/deza604/ferrytime/new-frontend/node_modules/gatsby-source-graphql",
+      "packageJson": {
+        "name": "gatsby-source-graphql",
+        "description": "Gatsby plugin which adds a third-party GraphQL API to Gatsby GraphQL",
+        "version": "2.0.10",
+        "keywords": [
+          "gatsby",
+          "gatsby-plugin"
+        ],
+        "author": {
+          "name": "Mikhail Novikov",
+          "email": "freiksenet@gmail.com"
+        },
+        "license": "MIT",
+        "dependencies": [
+          {
+            "name": "@babel/runtime",
+            "version": "^7.0.0"
+          },
+          {
+            "name": "apollo-link",
+            "version": "1.2.1"
+          },
+          {
+            "name": "apollo-link-http",
+            "version": "^1.5.4"
+          },
+          {
+            "name": "graphql",
+            "version": "^14.1.1"
+          },
+          {
+            "name": "graphql-tools",
+            "version": "^3.0.4"
+          },
+          {
+            "name": "invariant",
+            "version": "^2.2.4"
+          },
+          {
+            "name": "node-fetch",
+            "version": "^1.7.3"
+          },
+          {
+            "name": "uuid",
+            "version": "^3.1.0"
+          }
+        ],
+        "devDependencies": [
+          {
+            "name": "@babel/cli",
+            "version": "^7.0.0"
+          },
+          {
+            "name": "@babel/core",
+            "version": "^7.0.0"
+          },
+          {
+            "name": "babel-preset-gatsby-package",
+            "version": "^0.1.3"
+          },
+          {
+            "name": "cross-env",
+            "version": "^5.1.4"
+          }
+        ],
+        "peerDependencies": [
+          {
+            "name": "gatsby",
+            "version": "^2.0.0"
+          }
+        ],
+        "optionalDependecies": [],
+        "bundledDependecies": []
+      },
+      "parent": null,
+      "children": [],
+      "internal": {
+        "contentDigest": "4ab955d11ebe5354320366e2ec96dbe1",
+        "type": "SitePlugin",
+        "owner": "internal-data-bridge"
+      }
+    },
+    "63e5f7ff-e5f1-58f7-8e2c-55872ac42281": {
+      "resolve": "/home/deza604/ferrytime/new-frontend/node_modules/gatsby-plugin-offline",
+      "id": "63e5f7ff-e5f1-58f7-8e2c-55872ac42281",
+      "name": "gatsby-plugin-offline",
+      "version": "2.0.24",
+      "pluginOptions": {
+        "plugins": []
+      },
+      "nodeAPIs": [
+        "createPages",
+        "onPostBuild"
+      ],
+      "browserAPIs": [
+        "registerServiceWorker",
+        "onServiceWorkerActive",
+        "onPostPrefetchPathname"
+      ],
+      "ssrAPIs": [],
+      "pluginFilepath": "/home/deza604/ferrytime/new-frontend/node_modules/gatsby-plugin-offline",
+      "packageJson": {
+        "name": "gatsby-plugin-offline",
+        "description": "Gatsby plugin which sets up a site to be able to run offline",
+        "version": "2.0.24",
+        "main": "index.js",
+        "keywords": [
+          "gatsby",
+          "gatsby-plugin",
+          "offline",
+          "precache",
+          "service-worker"
+        ],
+        "author": {
+          "name": "Kyle Mathews",
+          "email": "mathews.kyle@gmail.com"
+        },
+        "license": "MIT",
+        "dependencies": [
+          {
+            "name": "@babel/runtime",
+            "version": "^7.0.0"
+          },
+          {
+            "name": "cheerio",
+            "version": "^1.0.0-rc.2"
+          },
+          {
+            "name": "idb-keyval",
+            "version": "^3.1.0"
+          },
+          {
+            "name": "lodash",
+            "version": "^4.17.10"
+          },
+          {
+            "name": "workbox-build",
+            "version": "^3.6.3"
+          }
+        ],
+        "devDependencies": [
+          {
+            "name": "@babel/cli",
+            "version": "^7.0.0"
+          },
+          {
+            "name": "@babel/core",
+            "version": "^7.0.0"
+          },
+          {
+            "name": "babel-preset-gatsby-package",
+            "version": "^0.1.3"
+          },
+          {
+            "name": "cpx",
+            "version": "^1.5.0"
+          },
+          {
+            "name": "cross-env",
+            "version": "^5.1.4"
+          }
+        ],
+        "peerDependencies": [
+          {
+            "name": "gatsby",
+            "version": "^2.0.100"
+          }
+        ],
+        "optionalDependecies": [],
+        "bundledDependecies": []
+      },
+      "parent": null,
+      "children": [],
+      "internal": {
+        "contentDigest": "848f9e0db808fcfb0eca64af974c2888",
+        "type": "SitePlugin",
+        "owner": "internal-data-bridge"
+      }
+    },
+    "fa5d0385-7fc8-580a-872f-976ccfd92bb6": {
+      "resolve": "/home/deza604/ferrytime/new-frontend/node_modules/gatsby-plugin-google-analytics",
+      "id": "fa5d0385-7fc8-580a-872f-976ccfd92bb6",
+      "name": "gatsby-plugin-google-analytics",
+      "version": "2.0.14",
+      "pluginOptions": {
+        "plugins": [],
+        "trackingId": "UA-51101141-2",
+        "head": true,
+        "respectDNT": true
+      },
+      "nodeAPIs": [],
+      "browserAPIs": [
+        "onRouteUpdate"
+      ],
+      "ssrAPIs": [
+        "onRenderBody"
+      ],
+      "pluginFilepath": "/home/deza604/ferrytime/new-frontend/node_modules/gatsby-plugin-google-analytics",
+      "packageJson": {
+        "name": "gatsby-plugin-google-analytics",
+        "description": "Gatsby plugin to add google analytics onto a site",
+        "version": "2.0.14",
+        "main": "index.js",
+        "keywords": [
+          "gatsby",
+          "gatsby-plugin",
+          "google analytics"
+        ],
+        "author": {
+          "name": "Kyle Mathews",
+          "email": "mathews.kyle@gmail.com"
+        },
+        "license": "MIT",
+        "dependencies": [
+          {
+            "name": "@babel/runtime",
+            "version": "^7.0.0"
+          }
+        ],
+        "devDependencies": [
+          {
+            "name": "@babel/cli",
+            "version": "^7.0.0"
+          },
+          {
+            "name": "@babel/core",
+            "version": "^7.0.0"
+          },
+          {
+            "name": "babel-preset-gatsby-package",
+            "version": "^0.1.3"
+          },
+          {
+            "name": "cross-env",
+            "version": "^5.1.4"
+          }
+        ],
+        "peerDependencies": [
+          {
+            "name": "gatsby",
+            "version": "^2.0.0"
+          }
+        ],
+        "optionalDependecies": [],
+        "bundledDependecies": []
+      },
+      "parent": null,
+      "children": [],
+      "internal": {
+        "contentDigest": "2a477e9fafaef534ea27565067fde2ca",
+        "type": "SitePlugin",
+        "owner": "internal-data-bridge"
+      }
+    },
+    "1eb101f5-b8d0-5e54-be8c-f89585c248b3": {
+      "resolve": "/home/deza604/ferrytime/new-frontend/node_modules/gatsby-plugin-postcss",
+      "id": "1eb101f5-b8d0-5e54-be8c-f89585c248b3",
+      "name": "gatsby-plugin-postcss",
+      "version": "2.0.5",
+      "pluginOptions": {
+        "plugins": []
+      },
+      "nodeAPIs": [
+        "onCreateWebpackConfig"
+      ],
+      "browserAPIs": [],
+      "ssrAPIs": [],
+      "pluginFilepath": "/home/deza604/ferrytime/new-frontend/node_modules/gatsby-plugin-postcss",
+      "packageJson": {
+        "name": "gatsby-plugin-postcss",
+        "description": "Gatsby plugin to handle PostCSS",
+        "version": "2.0.5",
+        "main": "index.js",
+        "keywords": [
+          "gatsby",
+          "gatsby-plugin",
+          "postcss"
+        ],
+        "author": {
+          "name": "Marat Dreizin",
+          "email": "marat.dreizin@gmail.com"
+        },
+        "license": "MIT",
+        "dependencies": [
+          {
+            "name": "@babel/runtime",
+            "version": "^7.0.0"
+          },
+          {
+            "name": "postcss-loader",
+            "version": "^3.0.0"
+          }
+        ],
+        "devDependencies": [
+          {
+            "name": "@babel/cli",
+            "version": "^7.0.0"
+          },
+          {
+            "name": "@babel/core",
+            "version": "^7.0.0"
+          },
+          {
+            "name": "babel-preset-gatsby-package",
+            "version": "^0.1.3"
+          },
+          {
+            "name": "cross-env",
+            "version": "^5.1.4"
+          }
+        ],
+        "peerDependencies": [
+          {
+            "name": "gatsby",
+            "version": "^2.0.0"
+          }
+        ],
+        "optionalDependecies": [],
+        "bundledDependecies": []
+      },
+      "parent": null,
+      "children": [],
+      "internal": {
+        "contentDigest": "a2fe834df23eda4ef1c8b808947db3fc",
+        "type": "SitePlugin",
+        "owner": "internal-data-bridge"
+      }
+    },
+    "274a78c0-2c8a-5c1e-ad95-3a739e919a70": {
+      "resolve": "/home/deza604/ferrytime/new-frontend/node_modules/gatsby-plugin-purgecss",
+      "id": "274a78c0-2c8a-5c1e-ad95-3a739e919a70",
+      "name": "gatsby-plugin-purgecss",
+      "version": "3.1.0",
+      "pluginOptions": {
+        "plugins": [],
+        "tailwind": true,
+        "purgeOnly": [
+          "src/css/style.css"
+        ]
+      },
+      "nodeAPIs": [
+        "onCreateWebpackConfig"
+      ],
+      "browserAPIs": [],
+      "ssrAPIs": [],
+      "pluginFilepath": "/home/deza604/ferrytime/new-frontend/node_modules/gatsby-plugin-purgecss",
+      "packageJson": {
+        "name": "gatsby-plugin-purgecss",
+        "description": "Gatsby plugin for purgecss. Removes unused css/sass/less/stylus from files and modules. Supports Tailwindcss, Bootstrap, Bulma etc.",
+        "version": "3.1.0",
+        "main": "index.js",
+        "keywords": [
+          "gatsby",
+          "gatsby-plugin",
+          "css",
+          "sass",
+          "scss",
+          "stylus",
+          "less",
+          "optimize",
+          "clean",
+          "purgecss",
+          "purify",
+          "purifycss"
+        ],
+        "author": {
+          "name": "Ananto Ghosh"
+        },
+        "license": "MIT",
+        "dependencies": [
+          {
+            "name": "fs-extra",
+            "version": "^7.0.0"
+          },
+          {
+            "name": "loader-utils",
+            "version": "^1.1.0"
+          },
+          {
+            "name": "purgecss",
+            "version": "^1.0.1"
+          }
+        ],
+        "devDependencies": [
+          {
+            "name": "babel-cli",
+            "version": "6.26.0"
+          },
+          {
+            "name": "babel-plugin-transform-object-rest-spread",
+            "version": "6.26.0"
+          },
+          {
+            "name": "babel-preset-env",
+            "version": "1.7.0"
+          },
+          {
+            "name": "coveralls",
+            "version": "3.0.2"
+          },
+          {
+            "name": "dotenv",
+            "version": "6.2.0"
+          },
+          {
+            "name": "gatsby",
+            "version": "2.0.79"
+          },
+          {
+            "name": "gatsby-plugin-less",
+            "version": "2.0.8"
+          },
+          {
+            "name": "gatsby-plugin-postcss",
+            "version": "2.0.2"
+          },
+          {
+            "name": "gatsby-plugin-sass",
+            "version": "2.0.7"
+          },
+          {
+            "name": "gatsby-plugin-stylus",
+            "version": "2.0.3"
+          },
+          {
+            "name": "jest",
+            "version": "23.6.0"
+          },
+          {
+            "name": "less",
+            "version": "3.9.0"
+          },
+          {
+            "name": "node-sass",
+            "version": "4.11.0"
+          },
+          {
+            "name": "react",
+            "version": "16.7.0"
+          },
+          {
+            "name": "react-dom",
+            "version": "16.7.0"
+          },
+          {
+            "name": "release-it",
+            "version": "9.4.3"
+          },
+          {
+            "name": "runjs",
+            "version": "4.3.2"
+          },
+          {
+            "name": "symlink-dir",
+            "version": "2.0.2"
+          },
+          {
+            "name": "tailwindcss",
+            "version": "0.7.3"
+          }
+        ],
+        "peerDependencies": [
+          {
+            "name": "gatsby",
+            "version": ">2.0.0-beta"
+          }
+        ],
+        "optionalDependecies": [],
+        "bundledDependecies": []
+      },
+      "parent": null,
+      "children": [],
+      "internal": {
+        "contentDigest": "279c4ba405caf42437414f61fb7f3d3b",
+        "type": "SitePlugin",
+        "owner": "internal-data-bridge"
+      }
+    },
+    "7374ebf2-d961-52ee-92a2-c25e7cb387a9": {
+      "resolve": "/home/deza604/ferrytime/new-frontend",
+      "id": "7374ebf2-d961-52ee-92a2-c25e7cb387a9",
+      "name": "default-site-plugin",
+      "version": "08c76fc5705b57b4964697a7ef23cd28",
+      "pluginOptions": {
+        "plugins": []
+      },
+      "nodeAPIs": [
+        "createPages"
+      ],
+      "browserAPIs": [
+        "wrapRootElement"
+      ],
+      "ssrAPIs": [
+        "wrapRootElement"
+      ],
+      "pluginFilepath": "/home/deza604/ferrytime/new-frontend",
+      "packageJson": {
+        "name": "gatsby-starter-tailwind",
+        "description": "Gatsby starter styled with Tailwind",
+        "version": "2.1.0",
+        "keywords": [
+          "gatsby",
+          "tailwind",
+          "tailwindcss",
+          "purgecss"
+        ],
+        "author": "Taylor Bryant <taylor@bryant.io>",
+        "license": "MIT",
+        "dependencies": [
+          {
+            "name": "apollo-boost",
+            "version": "^0.1.28"
+          },
+          {
+            "name": "date-fns",
+            "version": "^1.30.1"
+          },
+          {
+            "name": "gatsby",
+            "version": "^2.1.4"
+          },
+          {
+            "name": "gatsby-plugin-google-analytics",
+            "version": "^2.0.14"
+          },
+          {
+            "name": "gatsby-plugin-manifest",
+            "version": "^2.0.17"
+          },
+          {
+            "name": "gatsby-plugin-offline",
+            "version": "^2.0.24"
+          },
+          {
+            "name": "gatsby-plugin-postcss",
+            "version": "^2.0.5"
+          },
+          {
+            "name": "gatsby-plugin-purgecss",
+            "version": "^3.1.0"
+          },
+          {
+            "name": "gatsby-plugin-react-helmet",
+            "version": "^3.0.6"
+          },
+          {
+            "name": "gatsby-source-graphql",
+            "version": "^2.0.10"
+          },
+          {
+            "name": "graphql",
+            "version": "^14.1.1"
+          },
+          {
+            "name": "isomorphic-fetch",
+            "version": "^2.2.1"
+          },
+          {
+            "name": "prop-types",
+            "version": "^15.7.2"
+          },
+          {
+            "name": "react",
+            "version": "^16.8.2"
+          },
+          {
+            "name": "react-apollo",
+            "version": "^2.4.1"
+          },
+          {
+            "name": "react-dom",
+            "version": "^16.8.2"
+          },
+          {
+            "name": "react-helmet",
+            "version": "^5.2.0"
+          }
+        ],
+        "devDependencies": [
+          {
+            "name": "prettier",
+            "version": "^1.16.4"
+          },
+          {
+            "name": "tailwindcss",
+            "version": "^0.7.4"
+          }
+        ],
+        "peerDependencies": [],
+        "optionalDependecies": [],
+        "bundledDependecies": []
+      },
+      "parent": null,
+      "children": [],
+      "internal": {
+        "contentDigest": "d47c73330969770899de84e0ddface2e",
+        "type": "SitePlugin",
+        "owner": "internal-data-bridge"
+      }
+    },
+    "6c2ffeb8-0ddc-50f3-b944-045386affcf4": {
+      "resolve": "/home/deza604/ferrytime/new-frontend/node_modules/gatsby-plugin-page-creator",
+      "id": "6c2ffeb8-0ddc-50f3-b944-045386affcf4",
+      "name": "gatsby-plugin-page-creator",
+      "version": "2.0.6",
+      "pluginOptions": {
+        "plugins": [],
+        "path": "/home/deza604/ferrytime/new-frontend/src/pages",
+        "pathCheck": false
+      },
+      "nodeAPIs": [
+        "createPagesStatefully"
+      ],
+      "browserAPIs": [],
+      "ssrAPIs": [],
+      "pluginFilepath": "/home/deza604/ferrytime/new-frontend/node_modules/gatsby-plugin-page-creator",
+      "packageJson": {
+        "name": "gatsby-plugin-page-creator",
+        "description": "Gatsby plugin that automatically creates pages from React components in specified directories",
+        "version": "2.0.6",
+        "main": "index.js",
+        "keywords": [
+          "gatsby",
+          "gatsby-plugin"
+        ],
+        "author": {
+          "name": "Kyle Mathews",
+          "email": "mathews.kyle@gmail.com"
+        },
+        "license": "MIT",
+        "dependencies": [
+          {
+            "name": "@babel/runtime",
+            "version": "^7.0.0"
+          },
+          {
+            "name": "bluebird",
+            "version": "^3.5.0"
+          },
+          {
+            "name": "chokidar",
+            "version": "^1.7.0"
+          },
+          {
+            "name": "fs-exists-cached",
+            "version": "^1.0.0"
+          },
+          {
+            "name": "glob",
+            "version": "^7.1.1"
+          },
+          {
+            "name": "lodash",
+            "version": "^4.17.10"
+          },
+          {
+            "name": "micromatch",
+            "version": "^3.1.10"
+          },
+          {
+            "name": "parse-filepath",
+            "version": "^1.0.1"
+          },
+          {
+            "name": "slash",
+            "version": "^1.0.0"
+          }
+        ],
+        "devDependencies": [
+          {
+            "name": "@babel/cli",
+            "version": "^7.0.0"
+          },
+          {
+            "name": "@babel/core",
+            "version": "^7.0.0"
+          },
+          {
+            "name": "babel-preset-gatsby-package",
+            "version": "^0.1.3"
+          },
+          {
+            "name": "cross-env",
+            "version": "^5.0.5"
+          }
+        ],
+        "peerDependencies": [
+          {
+            "name": "gatsby",
+            "version": "^2.0.0"
+          }
+        ],
+        "optionalDependecies": [],
+        "bundledDependecies": []
+      },
+      "parent": null,
+      "children": [],
+      "internal": {
+        "contentDigest": "be372786366d0845ba79d90e5ded0a24",
+        "type": "SitePlugin",
+        "owner": "internal-data-bridge"
+      }
+    },
+    "Site": {
+      "siteMetadata": {
+        "title": "Ferrytime",
+        "description": "A simple interface to track the BC Ferries",
+        "author": "@deansallinen"
+      },
+      "port": "8000",
+      "host": "localhost",
+      "pathPrefix": "",
+      "polyfill": true,
+      "buildTime": "2019-02-24T03:49:05.713Z",
+      "id": "Site",
+      "parent": null,
+      "children": [],
+      "internal": {
+        "contentDigest": "11101fd113ccd56f6ee1d838c074991d",
+        "type": "Site",
+        "owner": "internal-data-bridge"
+      }
+    },
+    "895543c1-93fd-5179-858e-902592db23ca": {
+      "id": "895543c1-93fd-5179-858e-902592db23ca",
+      "typeName": "FTAPI",
+      "fieldName": "ftapi",
+      "parent": null,
+      "children": [],
+      "internal": {
+        "type": "GraphQLSource",
+        "contentDigest": "4a007428c0d9e3487cf79cff22ac365a",
+        "ignoreType": true,
+        "owner": "gatsby-source-graphql"
+      }
+    },
+    "SitePage /route/departure_bay_to_horseshoe_bay": {
+      "jsonName": "route-departure-bay-to-horseshoe-bay-162",
+      "internalComponentName": "ComponentRouteDepartureBayToHorseshoeBay",
+      "path": "/route/departure_bay_to_horseshoe_bay",
+      "component": "/home/deza604/ferrytime/new-frontend/src/templates/routePage.js",
+      "componentChunkName": "component---src-templates-route-page-js",
+      "context": {
+        "id": "62127d44-0e18-4592-bcf7-3d5b5dffa553",
+        "route_name": "Departure Bay to Horseshoe Bay"
+      },
+      "pluginCreator___NODE": "7374ebf2-d961-52ee-92a2-c25e7cb387a9",
+      "pluginCreatorId": "7374ebf2-d961-52ee-92a2-c25e7cb387a9",
+      "componentPath": "/home/deza604/ferrytime/new-frontend/src/templates/routePage.js",
+      "id": "SitePage /route/departure_bay_to_horseshoe_bay",
+      "parent": null,
+      "children": [],
+      "internal": {
+        "type": "SitePage",
+        "contentDigest": "4b21dad6f413ec03529b439b259ac4ed",
+        "description": "7374ebf2-d961-52ee-92a2-c25e7cb387a9",
+        "owner": "internal-data-bridge"
+      }
+    },
+    "SitePage /route/tsawwassen_to_duke_point": {
+      "jsonName": "route-tsawwassen-to-duke-point-3c9",
+      "internalComponentName": "ComponentRouteTsawwassenToDukePoint",
+      "path": "/route/tsawwassen_to_duke_point",
+      "component": "/home/deza604/ferrytime/new-frontend/src/templates/routePage.js",
+      "componentChunkName": "component---src-templates-route-page-js",
+      "context": {
+        "id": "cabccf63-8cec-4ddb-9474-5ca1c5c70ddc",
+        "route_name": "Tsawwassen to Duke Point"
+      },
+      "pluginCreator___NODE": "7374ebf2-d961-52ee-92a2-c25e7cb387a9",
+      "pluginCreatorId": "7374ebf2-d961-52ee-92a2-c25e7cb387a9",
+      "componentPath": "/home/deza604/ferrytime/new-frontend/src/templates/routePage.js",
+      "id": "SitePage /route/tsawwassen_to_duke_point",
+      "parent": null,
+      "children": [],
+      "internal": {
+        "type": "SitePage",
+        "contentDigest": "bea8964ee83e7674ebdb34e39d9edbd4",
+        "description": "7374ebf2-d961-52ee-92a2-c25e7cb387a9",
+        "owner": "internal-data-bridge"
+      }
+    },
+    "SitePage /route/swartz_bay_to_southern_gulf_islands": {
+      "jsonName": "route-swartz-bay-to-southern-gulf-islands-1d8",
+      "internalComponentName": "ComponentRouteSwartzBayToSouthernGulfIslands",
+      "path": "/route/swartz_bay_to_southern_gulf_islands",
+      "component": "/home/deza604/ferrytime/new-frontend/src/templates/routePage.js",
+      "componentChunkName": "component---src-templates-route-page-js",
+      "context": {
+        "id": "e0f99a23-3870-4353-af06-28105bd074e1",
+        "route_name": "Swartz Bay to Southern Gulf Islands"
+      },
+      "pluginCreator___NODE": "7374ebf2-d961-52ee-92a2-c25e7cb387a9",
+      "pluginCreatorId": "7374ebf2-d961-52ee-92a2-c25e7cb387a9",
+      "componentPath": "/home/deza604/ferrytime/new-frontend/src/templates/routePage.js",
+      "id": "SitePage /route/swartz_bay_to_southern_gulf_islands",
+      "parent": null,
+      "children": [],
+      "internal": {
+        "type": "SitePage",
+        "contentDigest": "5eab14191250a4644ef14fbb935f2f9b",
+        "description": "7374ebf2-d961-52ee-92a2-c25e7cb387a9",
+        "owner": "internal-data-bridge"
+      }
+    },
+    "SitePage /route/langdale_to_horseshoe_bay": {
+      "jsonName": "route-langdale-to-horseshoe-bay-edd",
+      "internalComponentName": "ComponentRouteLangdaleToHorseshoeBay",
+      "path": "/route/langdale_to_horseshoe_bay",
+      "component": "/home/deza604/ferrytime/new-frontend/src/templates/routePage.js",
+      "componentChunkName": "component---src-templates-route-page-js",
+      "context": {
+        "id": "5eb46c22-2acc-4747-b0f6-82c2b3b39003",
+        "route_name": "Langdale to Horseshoe Bay"
+      },
+      "pluginCreator___NODE": "7374ebf2-d961-52ee-92a2-c25e7cb387a9",
+      "pluginCreatorId": "7374ebf2-d961-52ee-92a2-c25e7cb387a9",
+      "componentPath": "/home/deza604/ferrytime/new-frontend/src/templates/routePage.js",
+      "id": "SitePage /route/langdale_to_horseshoe_bay",
+      "parent": null,
+      "children": [],
+      "internal": {
+        "type": "SitePage",
+        "contentDigest": "9ecc21c2c369d12f4210755952080c0f",
+        "description": "7374ebf2-d961-52ee-92a2-c25e7cb387a9",
+        "owner": "internal-data-bridge"
+      }
+    },
+    "SitePage /route/horseshoe_bay_to_langdale": {
+      "jsonName": "route-horseshoe-bay-to-langdale-995",
+      "internalComponentName": "ComponentRouteHorseshoeBayToLangdale",
+      "path": "/route/horseshoe_bay_to_langdale",
+      "component": "/home/deza604/ferrytime/new-frontend/src/templates/routePage.js",
+      "componentChunkName": "component---src-templates-route-page-js",
+      "context": {
+        "id": "f749acdd-83b7-4c39-88b1-35c5a288c11e",
+        "route_name": "Horseshoe Bay to Langdale"
+      },
+      "pluginCreator___NODE": "7374ebf2-d961-52ee-92a2-c25e7cb387a9",
+      "pluginCreatorId": "7374ebf2-d961-52ee-92a2-c25e7cb387a9",
+      "componentPath": "/home/deza604/ferrytime/new-frontend/src/templates/routePage.js",
+      "id": "SitePage /route/horseshoe_bay_to_langdale",
+      "parent": null,
+      "children": [],
+      "internal": {
+        "type": "SitePage",
+        "contentDigest": "35fd17ed1a9815e7aa350099ddc64c65",
+        "description": "7374ebf2-d961-52ee-92a2-c25e7cb387a9",
+        "owner": "internal-data-bridge"
+      }
+    },
+    "SitePage /route/horseshoe_bay_to_departure_bay": {
+      "jsonName": "route-horseshoe-bay-to-departure-bay-f96",
+      "internalComponentName": "ComponentRouteHorseshoeBayToDepartureBay",
+      "path": "/route/horseshoe_bay_to_departure_bay",
+      "component": "/home/deza604/ferrytime/new-frontend/src/templates/routePage.js",
+      "componentChunkName": "component---src-templates-route-page-js",
+      "context": {
+        "id": "b3ab6d84-eb30-441b-b450-caecf5df85fb",
+        "route_name": "Horseshoe Bay to Departure Bay"
+      },
+      "pluginCreator___NODE": "7374ebf2-d961-52ee-92a2-c25e7cb387a9",
+      "pluginCreatorId": "7374ebf2-d961-52ee-92a2-c25e7cb387a9",
+      "componentPath": "/home/deza604/ferrytime/new-frontend/src/templates/routePage.js",
+      "id": "SitePage /route/horseshoe_bay_to_departure_bay",
+      "parent": null,
+      "children": [],
+      "internal": {
+        "type": "SitePage",
+        "contentDigest": "ce031c6dee59cf9e7a60be9128ce9629",
+        "description": "7374ebf2-d961-52ee-92a2-c25e7cb387a9",
+        "owner": "internal-data-bridge"
+      }
+    },
+    "SitePage /route/duke_point_to_tsawwassen": {
+      "jsonName": "route-duke-point-to-tsawwassen-448",
+      "internalComponentName": "ComponentRouteDukePointToTsawwassen",
+      "path": "/route/duke_point_to_tsawwassen",
+      "component": "/home/deza604/ferrytime/new-frontend/src/templates/routePage.js",
+      "componentChunkName": "component---src-templates-route-page-js",
+      "context": {
+        "id": "0609b4e0-3eff-4de4-9744-00b02557e6a2",
+        "route_name": "Duke Point to Tsawwassen"
+      },
+      "pluginCreator___NODE": "7374ebf2-d961-52ee-92a2-c25e7cb387a9",
+      "pluginCreatorId": "7374ebf2-d961-52ee-92a2-c25e7cb387a9",
+      "componentPath": "/home/deza604/ferrytime/new-frontend/src/templates/routePage.js",
+      "id": "SitePage /route/duke_point_to_tsawwassen",
+      "parent": null,
+      "children": [],
+      "internal": {
+        "type": "SitePage",
+        "contentDigest": "4ea8aa2adf499ca5f1edac4c9609be45",
+        "description": "7374ebf2-d961-52ee-92a2-c25e7cb387a9",
+        "owner": "internal-data-bridge"
+      }
+    },
+    "SitePage /route/tsawwassen_to_swartz_bay": {
+      "jsonName": "route-tsawwassen-to-swartz-bay-a28",
+      "internalComponentName": "ComponentRouteTsawwassenToSwartzBay",
+      "path": "/route/tsawwassen_to_swartz_bay",
+      "component": "/home/deza604/ferrytime/new-frontend/src/templates/routePage.js",
+      "componentChunkName": "component---src-templates-route-page-js",
+      "context": {
+        "id": "bcfa9706-fca4-4d50-a66a-82d5b1e6fe3f",
+        "route_name": "Tsawwassen to Swartz Bay"
+      },
+      "pluginCreator___NODE": "7374ebf2-d961-52ee-92a2-c25e7cb387a9",
+      "pluginCreatorId": "7374ebf2-d961-52ee-92a2-c25e7cb387a9",
+      "componentPath": "/home/deza604/ferrytime/new-frontend/src/templates/routePage.js",
+      "id": "SitePage /route/tsawwassen_to_swartz_bay",
+      "parent": null,
+      "children": [],
+      "internal": {
+        "type": "SitePage",
+        "contentDigest": "4c7bfe0628b9a01029e96ddc175e4dc0",
+        "description": "7374ebf2-d961-52ee-92a2-c25e7cb387a9",
+        "owner": "internal-data-bridge"
+      }
+    },
+    "SitePage /route/tsawwassen_to_southern_gulf_islands": {
+      "jsonName": "route-tsawwassen-to-southern-gulf-islands-a01",
+      "internalComponentName": "ComponentRouteTsawwassenToSouthernGulfIslands",
+      "path": "/route/tsawwassen_to_southern_gulf_islands",
+      "component": "/home/deza604/ferrytime/new-frontend/src/templates/routePage.js",
+      "componentChunkName": "component---src-templates-route-page-js",
+      "context": {
+        "id": "ad46a1a9-c659-4773-a7a5-8d7447ca07d8",
+        "route_name": "Tsawwassen to Southern Gulf Islands"
+      },
+      "pluginCreator___NODE": "7374ebf2-d961-52ee-92a2-c25e7cb387a9",
+      "pluginCreatorId": "7374ebf2-d961-52ee-92a2-c25e7cb387a9",
+      "componentPath": "/home/deza604/ferrytime/new-frontend/src/templates/routePage.js",
+      "id": "SitePage /route/tsawwassen_to_southern_gulf_islands",
+      "parent": null,
+      "children": [],
+      "internal": {
+        "type": "SitePage",
+        "contentDigest": "de0533a6fa8514fe2c621f0880438cec",
+        "description": "7374ebf2-d961-52ee-92a2-c25e7cb387a9",
+        "owner": "internal-data-bridge"
+      }
+    },
+    "SitePage /route/swartz_bay_to_tsawwassen": {
+      "jsonName": "route-swartz-bay-to-tsawwassen-bab",
+      "internalComponentName": "ComponentRouteSwartzBayToTsawwassen",
+      "path": "/route/swartz_bay_to_tsawwassen",
+      "component": "/home/deza604/ferrytime/new-frontend/src/templates/routePage.js",
+      "componentChunkName": "component---src-templates-route-page-js",
+      "context": {
+        "id": "a5ee7425-fdd1-4131-8c19-2d8ed2f5ee40",
+        "route_name": "Swartz Bay to Tsawwassen"
+      },
+      "pluginCreator___NODE": "7374ebf2-d961-52ee-92a2-c25e7cb387a9",
+      "pluginCreatorId": "7374ebf2-d961-52ee-92a2-c25e7cb387a9",
+      "componentPath": "/home/deza604/ferrytime/new-frontend/src/templates/routePage.js",
+      "id": "SitePage /route/swartz_bay_to_tsawwassen",
+      "parent": null,
+      "children": [],
+      "internal": {
+        "type": "SitePage",
+        "contentDigest": "ebb16dfce93d05b488e630adf2bb9955",
+        "description": "7374ebf2-d961-52ee-92a2-c25e7cb387a9",
+        "owner": "internal-data-bridge"
+      }
+    },
+    "SitePage /route/swartz_bay_to_fulford_harbour_saltspring_is": {
+      "jsonName": "route-swartz-bay-to-fulford-harbour-saltspring-is-464",
+      "internalComponentName": "ComponentRouteSwartzBayToFulfordHarbourSaltspringIs",
+      "path": "/route/swartz_bay_to_fulford_harbour_saltspring_is",
+      "component": "/home/deza604/ferrytime/new-frontend/src/templates/routePage.js",
+      "componentChunkName": "component---src-templates-route-page-js",
+      "context": {
+        "id": "a1932007-cea3-4a94-be41-a492e99052cd",
+        "route_name": "Swartz Bay to Fulford Harbour (Saltspring Is.)"
+      },
+      "pluginCreator___NODE": "7374ebf2-d961-52ee-92a2-c25e7cb387a9",
+      "pluginCreatorId": "7374ebf2-d961-52ee-92a2-c25e7cb387a9",
+      "componentPath": "/home/deza604/ferrytime/new-frontend/src/templates/routePage.js",
+      "id": "SitePage /route/swartz_bay_to_fulford_harbour_saltspring_is",
+      "parent": null,
+      "children": [],
+      "internal": {
+        "type": "SitePage",
+        "contentDigest": "1f72edcf3e93a56d154f87c4271afeec",
+        "description": "7374ebf2-d961-52ee-92a2-c25e7cb387a9",
+        "owner": "internal-data-bridge"
+      }
+    },
+    "SitePage /route/horseshoe_bay_to_snug_cove_bowen_is": {
+      "jsonName": "route-horseshoe-bay-to-snug-cove-bowen-is-6ee",
+      "internalComponentName": "ComponentRouteHorseshoeBayToSnugCoveBowenIs",
+      "path": "/route/horseshoe_bay_to_snug_cove_bowen_is",
+      "component": "/home/deza604/ferrytime/new-frontend/src/templates/routePage.js",
+      "componentChunkName": "component---src-templates-route-page-js",
+      "context": {
+        "id": "b6ca80be-c3ea-4dbc-a07c-2e34a691ef74",
+        "route_name": "Horseshoe Bay to Snug Cove (Bowen Is.)"
+      },
+      "pluginCreator___NODE": "7374ebf2-d961-52ee-92a2-c25e7cb387a9",
+      "pluginCreatorId": "7374ebf2-d961-52ee-92a2-c25e7cb387a9",
+      "componentPath": "/home/deza604/ferrytime/new-frontend/src/templates/routePage.js",
+      "id": "SitePage /route/horseshoe_bay_to_snug_cove_bowen_is",
+      "parent": null,
+      "children": [],
+      "internal": {
+        "type": "SitePage",
+        "contentDigest": "cf440c1502e3485553ba6435f421f3aa",
+        "description": "7374ebf2-d961-52ee-92a2-c25e7cb387a9",
+        "owner": "internal-data-bridge"
+      }
+    },
+    "SitePage /404/": {
+      "jsonName": "404-22d",
+      "internalComponentName": "Component404",
+      "path": "/404/",
+      "component": "/home/deza604/ferrytime/new-frontend/src/pages/404.js",
+      "componentChunkName": "component---src-pages-404-js",
+      "context": {},
+      "pluginCreator___NODE": "6c2ffeb8-0ddc-50f3-b944-045386affcf4",
+      "pluginCreatorId": "6c2ffeb8-0ddc-50f3-b944-045386affcf4",
+      "componentPath": "/home/deza604/ferrytime/new-frontend/src/pages/404.js",
+      "id": "SitePage /404/",
+      "parent": null,
+      "children": [],
+      "internal": {
+        "type": "SitePage",
+        "contentDigest": "756f468fd611095b0adf364c726e15ba",
+        "description": "6c2ffeb8-0ddc-50f3-b944-045386affcf4",
+        "owner": "internal-data-bridge"
+      }
+    },
+    "SitePage /about/": {
+      "jsonName": "about-f34",
+      "internalComponentName": "ComponentAbout",
+      "path": "/about/",
+      "component": "/home/deza604/ferrytime/new-frontend/src/pages/about.js",
+      "componentChunkName": "component---src-pages-about-js",
+      "context": {},
+      "pluginCreator___NODE": "6c2ffeb8-0ddc-50f3-b944-045386affcf4",
+      "pluginCreatorId": "6c2ffeb8-0ddc-50f3-b944-045386affcf4",
+      "componentPath": "/home/deza604/ferrytime/new-frontend/src/pages/about.js",
+      "id": "SitePage /about/",
+      "parent": null,
+      "children": [],
+      "internal": {
+        "type": "SitePage",
+        "contentDigest": "3c317f5a0516a0e6e9ac41739dea4d46",
+        "description": "6c2ffeb8-0ddc-50f3-b944-045386affcf4",
+        "owner": "internal-data-bridge"
+      }
+    },
+    "SitePage /contact/": {
+      "jsonName": "contact-26a",
+      "internalComponentName": "ComponentContact",
+      "path": "/contact/",
+      "component": "/home/deza604/ferrytime/new-frontend/src/pages/contact.js",
+      "componentChunkName": "component---src-pages-contact-js",
+      "context": {},
+      "pluginCreator___NODE": "6c2ffeb8-0ddc-50f3-b944-045386affcf4",
+      "pluginCreatorId": "6c2ffeb8-0ddc-50f3-b944-045386affcf4",
+      "componentPath": "/home/deza604/ferrytime/new-frontend/src/pages/contact.js",
+      "id": "SitePage /contact/",
+      "parent": null,
+      "children": [],
+      "internal": {
+        "type": "SitePage",
+        "contentDigest": "5b2f7816755e8f0c3c1ba4b220cabc73",
+        "description": "6c2ffeb8-0ddc-50f3-b944-045386affcf4",
+        "owner": "internal-data-bridge"
+      }
+    },
+    "SitePage /": {
+      "jsonName": "index",
+      "internalComponentName": "ComponentIndex",
+      "path": "/",
+      "component": "/home/deza604/ferrytime/new-frontend/src/pages/index.js",
+      "componentChunkName": "component---src-pages-index-js",
+      "context": {},
+      "pluginCreator___NODE": "6c2ffeb8-0ddc-50f3-b944-045386affcf4",
+      "pluginCreatorId": "6c2ffeb8-0ddc-50f3-b944-045386affcf4",
+      "componentPath": "/home/deza604/ferrytime/new-frontend/src/pages/index.js",
+      "id": "SitePage /",
+      "parent": null,
+      "children": [],
+      "internal": {
+        "type": "SitePage",
+        "contentDigest": "66d0ebfb5d9ea10efd6d86da1e2289f7",
+        "description": "6c2ffeb8-0ddc-50f3-b944-045386affcf4",
+        "owner": "internal-data-bridge"
+      }
+    },
+    "SitePage /404.html": {
+      "jsonName": "404-html-516",
+      "internalComponentName": "Component404Html",
+      "path": "/404.html",
+      "component": "/home/deza604/ferrytime/new-frontend/src/pages/404.js",
+      "componentChunkName": "component---src-pages-404-js",
+      "context": {},
+      "pluginCreator___NODE": "f795702c-a3b8-5a88-88ee-5d06019d44fa",
+      "pluginCreatorId": "f795702c-a3b8-5a88-88ee-5d06019d44fa",
+      "componentPath": "/home/deza604/ferrytime/new-frontend/src/pages/404.js",
+      "id": "SitePage /404.html",
+      "parent": null,
+      "children": [],
+      "internal": {
+        "type": "SitePage",
+        "contentDigest": "004aa2755a1842979c0541a513f273b9",
+        "description": "f795702c-a3b8-5a88-88ee-5d06019d44fa",
+        "owner": "internal-data-bridge"
+      }
+    }
+  },
+  "status": {
+    "plugins": {},
+    "PLUGINS_HASH": "84bfd3548a4dbb9cebde9e52bf647455"
+  },
+  "componentDataDependencies": {
+    "nodes": {
+      "895543c1-93fd-5179-858e-902592db23ca": [
+        null
+      ],
+      "Site": [
+        "sq--src-components-layout-js",
+        "sq--src-components-seo-js"
+      ]
+    },
+    "connections": {
+      "SitePage": [
+        "/"
+      ]
+    }
+  },
+  "jsonDataPaths": {
+    "dev-404-page-5f9": "920/path---dev-404-page-5-f-9-fab-NZuapzHg3X9TaN1iIixfv1W23E",
+    "404-22d": "44/path---404-22-d-bce-NZuapzHg3X9TaN1iIixfv1W23E",
+    "sq--src-components-layout-js": 2994927498,
+    "sq--src-components-seo-js": 1025518380,
+    "contact-26a": "686/path---contact-26-a-cd9-NZuapzHg3X9TaN1iIixfv1W23E",
+    "about-f34": "125/path---about-f-34-4c2-NZuapzHg3X9TaN1iIixfv1W23E",
+    "index": "968/path---index-6a9-kZAP8FWOPzOYvcMhuK8nzugYVW0",
+    "404-html-516": "164/path---404-html-516-62a-NZuapzHg3X9TaN1iIixfv1W23E",
+    "route-tsawwassen-to-swartz-bay-a28": "897/path---route-tsawwassen-to-swartz-bay-a-28-c62-fsZmWtmHf8nH2rG0d3yPxUUGQ",
+    "route-tsawwassen-to-southern-gulf-islands-a01": "837/path---route-tsawwassen-to-southern-gulf-islands-a-01-9d1-7WPU5OPzLwlntwSQHjEiI5mB4RE",
+    "route-departure-bay-to-horseshoe-bay-162": "364/path---route-departure-bay-to-horseshoe-bay-162-77d-BvfcOlOy3XXqT2Fa53NkDcEum5Q",
+    "route-swartz-bay-to-fulford-harbour-saltspring-is-464": "680/path---route-swartz-bay-to-fulford-harbour-saltspring-is-464-c79-QPseCwhPU789geRdlJLUSk5ZMQ",
+    "route-duke-point-to-tsawwassen-448": "263/path---route-duke-point-to-tsawwassen-448-7b3-kWsASJzt4V0H3jitaeyvaYEyU",
+    "route-horseshoe-bay-to-langdale-995": "181/path---route-horseshoe-bay-to-langdale-995-2a1-ST3iyWeS3Orc2dm9uQ1oh17oxQQ",
+    "route-langdale-to-horseshoe-bay-edd": "678/path---route-langdale-to-horseshoe-bay-edd-cfc-gtTeMopSFavrng9J7wlRWUsuxA",
+    "route-horseshoe-bay-to-departure-bay-f96": "170/path---route-horseshoe-bay-to-departure-bay-f-96-534-3R2ffbmOHuBfPQfmNCQWtMxOk",
+    "route-horseshoe-bay-to-snug-cove-bowen-is-6ee": "400/path---route-horseshoe-bay-to-snug-cove-bowen-is-6-ee-2c0-sZ1rIFmxkzgEGM6qQEWZs9PFek",
+    "route-swartz-bay-to-southern-gulf-islands-1d8": "958/path---route-swartz-bay-to-southern-gulf-islands-1-d-8-fe9-a1mwbtSM6LbOuNPYyFt53dBMRg",
+    "route-tsawwassen-to-duke-point-3c9": "714/path---route-tsawwassen-to-duke-point-3-c-9-892-lboLdt5zPdsuowTlvvhV8ep6N3c",
+    "route-swartz-bay-to-tsawwassen-bab": "459/path---route-swartz-bay-to-tsawwassen-bab-b2f-Wv0BoJLueY24YEiqkbW666WMN0"
+  },
+  "components": {
+    "/home/deza604/ferrytime/new-frontend/src/templates/routePage.js": {
+      "query": "",
+      "componentPath": "/home/deza604/ferrytime/new-frontend/src/templates/routePage.js"
+    },
+    "/home/deza604/ferrytime/new-frontend/.cache/dev-404-page.js": {
+      "query": "",
+      "componentPath": "/home/deza604/ferrytime/new-frontend/.cache/dev-404-page.js"
+    },
+    "/home/deza604/ferrytime/new-frontend/src/pages/404.js": {
+      "query": "",
+      "componentPath": "/home/deza604/ferrytime/new-frontend/src/pages/404.js"
+    },
+    "/home/deza604/ferrytime/new-frontend/src/pages/about.js": {
+      "query": "",
+      "componentPath": "/home/deza604/ferrytime/new-frontend/src/pages/about.js"
+    },
+    "/home/deza604/ferrytime/new-frontend/src/pages/contact.js": {
+      "query": "",
+      "componentPath": "/home/deza604/ferrytime/new-frontend/src/pages/contact.js"
+    },
+    "/home/deza604/ferrytime/new-frontend/src/pages/index.js": {
+      "query": "query Home {\n  allSitePage(filter: {path: {regex: \"/^\\\\/route/\"}}, sort: {fields: path, order: ASC}) {\n    edges {\n      node {\n        path\n        context {\n          id\n          route_name\n        }\n      }\n    }\n  }\n}\n",
+      "componentPath": "/home/deza604/ferrytime/new-frontend/src/pages/index.js"
+    }
+  },
+  "staticQueryComponents": {
+    "sq--src-components-layout-js": {
+      "name": "SiteTitleQuery",
+      "componentPath": "/home/deza604/ferrytime/new-frontend/src/components/layout.js",
+      "id": "sq--src-components-layout-js",
+      "jsonName": "sq--src-components-layout-js",
+      "query": "query SiteTitleQuery {\n  site {\n    siteMetadata {\n      title\n    }\n  }\n}\n",
+      "hash": 2994927498
+    },
+    "sq--src-components-seo-js": {
+      "name": "DefaultSEOQuery",
+      "componentPath": "/home/deza604/ferrytime/new-frontend/src/components/seo.js",
+      "id": "sq--src-components-seo-js",
+      "jsonName": "sq--src-components-seo-js",
+      "query": "query DefaultSEOQuery {\n  site {\n    siteMetadata {\n      title\n      description\n      author\n    }\n  }\n}\n",
+      "hash": 1025518380
+    }
+  }
+}

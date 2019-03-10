@@ -5,7 +5,9 @@ const { request } = require('graphql-request');
 const moment = require('moment-timezone');
 const { flatten, merge } = require('lodash');
 
-const { upsertRoute, upsertSailing } = require('../queries');
+const { upsertRoute, upsertSailing, upsertSailingPercent } = require('../queries');
+
+const {getPercentFull} = require('./cheerio.js')
 
 const uri = process.env.ENDPOINT;
 
@@ -123,7 +125,7 @@ const getSailingsObject = percentString => {
 
 const createRouteObject = route => ({
   route_name: route[0],
-  sailings: getSailingsObject(route[1]),
+  // sailings: getSailingsObject(route[1]),
   car_waits: parseInt(route[route.length - 3]),
   oversize_waits: parseInt(route[route.length - 2])
 });
@@ -161,6 +163,7 @@ const scrape = async () => {
   const sailings = getSailingsArray(sailingPage);
   const conditions = getConditionsArray(conditionsPage);
   // console.log(JSON.stringify(sailings, null, 2))
+  // console.log(JSON.stringify(conditions, null, 2))
 
   const result = merge(sort(sailings), sort(conditions));
   // console.log(JSON.stringify(result, null, 2));
@@ -170,7 +173,7 @@ const scrape = async () => {
 };
 
 const insert = async routes => {
-  const routesResult = await Promise.all(
+  const routesResult =
     routes.map(async route => {
       const { sailings, ...routePayload } = route;
       // console.log(JSON.stringify(route, null, 2));
@@ -186,22 +189,45 @@ const insert = async routes => {
         });
         // console.log(JSON.stringify(res, null, 2));
       });
+      
+      
 
       console.log(
         `Upserted ${sailingResults.length} sailings for ${route.route_name}`
       );
+      
+      return Promise.all(sailingResults)
     })
-  );
+  // console.log(await routesResult)
 
   console.log(`\nFinished updating ${routesResult.length} routes`);
+  
+  return Promise.all(routesResult)
 };
 
 const main = () => {
   scrape()
     .then(routes => insert(routes))
+    .then(routes => routes.map(route =>  route.map(async sailing => {
+     const {id, scheduled_departure, routeByrouteId} = sailing.insert_sailing.returning[0]
+     const {departure_term, route_num_str} = routeByrouteId
+     
+      const res = await getPercentFull({scheduled_departure, departure_term, route_num_str})
+      
+      if (res) {
+        const {percent, parking, carWaits, oversizeWaits} = res
+        const res2 = await request(uri, upsertSailingPercent, {id, percent_full: percent});
+        console.log(res2)
+
+      }
+      
+    }
+      )))
     .catch(err => {
       throw err;
     });
 };
+
+main()
 
 module.exports = { main };
