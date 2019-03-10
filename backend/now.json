@@ -1,0 +1,7 @@
+{
+    "version": 1,
+    "env": {
+        "ENDPOINT": "https://ferry-time.herokuapp.com/v1alpha1/graphql"
+    },
+    "alias": "ferrytime"
+}

@@ -17,7 +17,7 @@ const upsertSailing = gql`
       objects: $objects
       on_conflict: {
         constraint: sailing_pkey
-        update_columns: [scheduled_departure, actual_departure]
+        update_columns: [scheduled_departure, actual_departure, eta, sailing_status, vessel]
       }
     ) {
       affected_rows

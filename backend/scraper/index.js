@@ -1,115 +1,207 @@
-// scraper
-
 require('dotenv').config();
 
 const scraper = require('table-scraper');
-const { ApolloClient } = require('apollo-client');
-const { HttpLink } = require('apollo-link-http');
-const { InMemoryCache } = require('apollo-cache-inmemory');
-const fetch = require('isomorphic-fetch');
+const { request } = require('graphql-request');
 const moment = require('moment-timezone');
+const { flatten, merge } = require('lodash');
 
-const { upsertRouteMutation } = require('../queries/upsertRoute');
-const { upsertSailing } = require('../queries/upsertSailing');
+const { upsertRoute, upsertSailing } = require('../queries');
 
 const uri = process.env.ENDPOINT;
 
-const client = new ApolloClient({
-  link: new HttpLink({ uri }),
-  cache: new InMemoryCache(),
-  fetch,
-});
-
 const makeRouteInfo = array => ({
-  routeName: array[0][0].split('Sailing time: ')[0],
-  averageSailing: array[0][0].split('Sailing time: ')[1],
-  sailingDate: new Date(array[0][1]).toISOString().substr(0, 10),
+  route_name: array[0][0].split('Sailing time: ')[0],
+  average_sailing: array[0][0].split('Sailing time: ')[1],
+  sailing_date: new Date(array[0][1]).toISOString().substr(0, 10)
 });
 
-const validateTime = (date, time) => {
-  const isTime = /\d+:\d\d [AP]M/.test(time);
-  // console.log(time, isTime)
+const validateTime = time => {
+  const isTime = /\d+:\d\d[AP]M/i.test(time.replace(/\s/g, ''));
+  return isTime;
+};
+
+const getHourAndMinute = time =>
+  moment(time, 'hh:mm a')
+    .format('HH:mm')
+    .split(':');
+
+const getUTCTime = rawTime => {
+  const isTime = validateTime(rawTime);
   if (!isTime) return null;
-  const dateTime = moment.tz(
-    date.concat(' ', time),
-    'YYYY-MM-DD hh:mm a',
-    'America/Vancouver'
-  );
+  const [hour, minute] = getHourAndMinute(rawTime);
+  const dateTime = moment
+    .tz('America/Vancouver')
+    .hour(hour)
+    .minute(minute)
+    .second(0);
+  // console.log(
+  //   rawTime,
+  //   hour,
+  //   minute,
+  //   dateTime.format(),
+  //   dateTime.utc().format()
+  // );
   return dateTime.utc().format();
 };
 
-const makeSailing = (object, date) => {
+const makeSailing = object => {
   const [
     vessel,
-    scheduled_departure,
-    actual_departure,
-    eta,
-    sailing_status,
+    scheduled_departure_time,
+    actual_departure_time,
+    eta_time,
+    sailing_status
   ] = Object.values(object);
+  const scheduled_departure = getUTCTime(scheduled_departure_time);
+  const actual_departure = getUTCTime(actual_departure_time);
+  const eta = getUTCTime(eta_time);
+  // const percent_full = null;
   return {
     vessel,
     sailing_status,
-    scheduled_departure: validateTime(date, scheduled_departure),
-    actual_departure: validateTime(date, actual_departure),
-    eta: validateTime(date, eta),
+    scheduled_departure,
+    actual_departure,
+    eta
+    // percent_full
   };
 };
 
-const compileSailings = (rawSchedule, date) => {
+const objectifySailingArray = array =>
+  array.reduce(
+    (obj, sailing) => ((obj[sailing.scheduled_departure] = sailing), obj),
+    {}
+  );
+
+const compileSailings = rawSchedule => {
   rawSchedule.shift();
-  return rawSchedule.map(x => makeSailing(x, date));
+  const sailingsArray = rawSchedule.map(x => makeSailing(x));
+  const sailingsObject = objectifySailingArray(sailingsArray);
+  return sailingsObject;
 };
 
-function clean(data) {
+const getSailingsArray = data => {
   const l = data.length;
   const routesArray = [];
   for (let i = 2; i < l; i += 2) {
     const route = makeRouteInfo(data[i]);
-    route.sailings = compileSailings(data[i + 1], route.sailingDate);
+    route.sailings = compileSailings(data[i + 1]);
     routesArray.push(route);
   }
   return routesArray;
-}
+};
 
-const upsertSailingsOfRoute = async ({ route_id, sailings }) =>
-  sailings.map( sailing => {
-    const payload = { route_id, ...sailing }
-    return client.mutate({ mutation: upsertSailing, variables:  {objects: payload}  });
-  });
+const scrapeConditionsPage = async () =>
+  scraper.get('https://orca.bcferries.com/cc/marqui/at-a-glance.asp');
 
-const upsertRoute = async ({ routeInfo }) =>
-  client.mutate({ mutation: upsertRouteMutation, variables: routeInfo });
-
-const getRawSchedule = async () =>
+const scrapeSailingsPage = async () =>
   scraper.get('http://orca.bcferries.com:8080/cc/marqui/actualDepartures.asp');
 
-const scrapeSailings = async () => {
-  try {
-    const data = clean(await getRawSchedule());
-    data.map(async route => {
-      const { sailings, ...routeInfo } = route;
-      const { data } = await upsertRoute({ routeInfo });
-      const route_id = data.insert_route.returning[0].id;
-      upsertSailingsOfRoute({ route_id, sailings });
+const getRouteTables = pageData =>
+  pageData.filter(each => each[0][0] === 'Route');
 
+const splitTimeFromPercent = input => {
+  const regex = /(\d{1,2}:\d\d[ap]m)(\d+)%/g;
+  const res = regex.exec(input);
+  if (!res) return null;
+  const [_, time, percentage] = res;
+  const scheduled_departure = getUTCTime(time);
+  return {
+    scheduled_departure,
+    percent_full: parseInt(percentage)
+  };
+};
+
+const getSailingsObject = percentString => {
+  if (!/^\d/.test(percentString)) return {};
+  const percentArray = percentString
+    .split(' full')
+    .filter(Boolean)
+    .map(splitTimeFromPercent);
+  const percentObject = objectifySailingArray(percentArray);
+  return percentObject;
+};
+
+const createRouteObject = route => ({
+  route_name: route[0],
+  sailings: getSailingsObject(route[1]),
+  car_waits: parseInt(route[route.length - 3]),
+  oversize_waits: parseInt(route[route.length - 2])
+});
+
+const getConditionsArray = pageData => {
+  const routeTables = getRouteTables(pageData);
+  const removeBlankValues = row => Object.values(row).filter(Boolean);
+  const removeBlankRows = rows =>
+    rows.filter(element => Object.keys(element).length > 3 && element[0]);
+  return flatten(
+    routeTables.map(routeTable => {
+      const [headers, ...rows] = routeTable;
+      return removeBlankRows(rows).map(row => {
+        const route = removeBlankValues(row);
+        return createRouteObject(route);
+      });
+    })
+  );
+};
+
+const sort = routeArray =>
+  routeArray.sort((a, b) => {
+    const routeA = a.route_name.toUpperCase();
+    const routeB = b.route_name.toUpperCase();
+    if (routeA < routeB) return -1;
+    if (routeA > routeB) return 1;
+    return 0;
+  });
+
+const scrape = async () => {
+  console.log('\nScraping sailings schedule...');
+  const sailingPage = await scrapeSailingsPage();
+  const conditionsPage = await scrapeConditionsPage();
+
+  const sailings = getSailingsArray(sailingPage);
+  const conditions = getConditionsArray(conditionsPage);
+  // console.log(JSON.stringify(sailings, null, 2))
+
+  const result = merge(sort(sailings), sort(conditions));
+  // console.log(JSON.stringify(result, null, 2));
+
+  console.log(`Scraped ${result.length} routes`);
+  return result;
+};
+
+const insert = async routes => {
+  const routesResult = await Promise.all(
+    routes.map(async route => {
+      const { sailings, ...routePayload } = route;
+      // console.log(JSON.stringify(route, null, 2));
+      const routeResult = await request(uri, upsertRoute, routePayload);
+      console.log(`\nUpserted route info for ${route.route_name}`);
+      // console.log(JSON.stringify(routeResult, null, 2));
+
+      const route_id = routeResult.insert_route.returning[0].id;
+      const sailingResults = Object.values(sailings).map(async sailing => {
+        const sailingPayload = { ...sailing, route_id };
+        return request(uri, upsertSailing, {
+          objects: sailingPayload
+        });
+        // console.log(JSON.stringify(res, null, 2));
+      });
+
+      console.log(
+        `Upserted ${sailingResults.length} sailings for ${route.route_name}`
+      );
+    })
+  );
+
+  console.log(`\nFinished updating ${routesResult.length} routes`);
+};
+
+const main = () => {
+  scrape()
+    .then(routes => insert(routes))
+    .catch(err => {
+      throw err;
     });
-  } catch (err) {
-    throw err;
-  } finally {
-    console.log(`Scraped main at ${new Date()}`);
-  }
 };
 
-// scrapeSailings();
-
-const scrape = interval => setInterval(scrapeSailings, interval);
-
-module.exports = {
-  scrape,
-  makeSailing,
-  validateTime,
-  upsertRoute,
-  upsertSailingsOfRoute,
-  clean,
-  getRawSchedule,
-};
+module.exports = { main };

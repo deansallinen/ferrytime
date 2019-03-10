@@ -29,17 +29,11 @@
     "micro": "latest",
     "moment": "^2.22.2",
     "moment-timezone": "^0.5.21",
-    "node-fetch": "^2.2.0",
     "npm": "^6.4.1",
     "table-scraper": "^0.1.0"
   },
   "devDependencies": {
     "eslint-plugin-jest": "^21.22.1",
     "jest": "^23.6.0"
-  },
-  "now": {
-    "env": {
-      "TZ": "America/Vancouver"
-    }
   }
 }
