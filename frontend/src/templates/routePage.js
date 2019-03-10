@@ -80,7 +80,7 @@ const Sailing = ({ sailing }) => {
           : ''
       }`}
     >
-      <div className="">
+      <div className="w-1/4">
         <div className="text-3xl font-bold mb-2">
           {format(scheduled_departure, 'H:mm')}
         </div>
@@ -168,23 +168,26 @@ const RouteInfo = ({
   oversize_waits
 }) => {
   return (
-    <div className="rounded-lg bg-white px-4 py-4 shadow mb-12">
+    <div className="mb-8 text-white antialiased">
       <div className="relative float-right">
         <Favourite routeName={route_name} />
       </div>
       <div className="mb-2">
         <h1 className="leading-none">{route_name}</h1>
       </div>
-      <div className="">
-        <div className="mt-2">
-          <p className="text-xs text-grey-dark ">Duration</p>
-          {average_sailing}
+      
+      <div className="bg-blue-dark p-4 rounded-lg mt-4 flex justify-between ">
+        <div className="">
+          <p className="text-xs text-blue-lighter">Duration</p>
+          <p>{average_sailing.replace(/ou|utes/g, '')}</p>
         </div>
-        <div className="mt-2">
-          <p className="text-xs text-grey-dark ">Sailing waits</p>
-          Car: <span className="mr-2 font-bold">{car_waits || 0}</span>
-          Oversize:{' '}
-          <span className="mr-2 font-bold">{oversize_waits || 0}</span>
+        <div className="">
+          <p className="text-xs text-blue-lighter">Car waits</p>
+          <p className='text-right'>{car_waits || 0}</p>
+        </div>
+        <div className="">
+          <p className="text-xs text-blue-lighter">Oversize waits</p>
+          <p className='text-right'>{oversize_waits || 0}</p>
         </div>
       </div>
     </div>
