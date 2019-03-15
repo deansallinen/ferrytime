@@ -45,7 +45,7 @@ const Favourites = ({ edges }) => {
         .filter(each => /^\/route/.test(each.node.path))
         .filter(each => favourites.includes(each.node.context.route_name))
         .map(({ node }) => (
-          <Route {...node} />
+          <Route {...node} key={node.context.id} />
         ))}
     </div>
   ) : null;
@@ -57,11 +57,11 @@ const Route = ({ path, context, state }) => {
   return (
     <div
       className="my-4 bg-white rounded-lg px-4 py-4 shadow border-b-4 border-blue-light"
-      key={context.id}
+      key={id}
     >
       <Link
         to={path}
-        key={context.id}
+        key={id}
         state={state}
         className="no-underline hover:underline text-grey-darkest text-xl"
       >
@@ -92,7 +92,7 @@ function IndexPage({ data: { allSitePage } }) {
           {({ loading, error, data }) => {
             if (loading)
               return allSitePage.edges.map(({ node }) => {
-                return <Route {...node} />;
+                return <Route {...node} key={node.context.id} />;
               });
             if (error) return `Error! ${error.message}`;
 
@@ -100,8 +100,9 @@ function IndexPage({ data: { allSitePage } }) {
               const [routeInfo] = data.route.filter(
                 route => route.id === node.context.id
               );
-              console.log(routeInfo);
-              return <Route {...node} state={routeInfo} />;
+              return (
+                <Route {...node} state={routeInfo} key={node.context.id} />
+              );
             });
           }}
         </Query>
