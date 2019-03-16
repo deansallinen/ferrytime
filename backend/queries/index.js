@@ -45,14 +45,56 @@ const upsertSailing = /* GraphQL */ `
           eta
           sailing_status
           vessel
-          percent_full
         ]
       }
     ) {
       returning {
-        route_id
+        id
         scheduled_departure
-        vessel
+        routeByrouteId {
+          id
+          departure_term
+          route_num_str
+        }
+      }
+    }
+  }
+`;
+
+const upsertSailingPercent = /* GraphQL */ `
+  mutation updateSailingPercentage($id: uuid, $percent_full: Int) {
+    update_sailing(
+      where: { id: { _eq: $id } }
+      _set: { percent_full: $percent_full }
+    ) {
+      returning {
+        id
+        percent_full
+      }
+    }
+  }
+`;
+
+const upsertParkingAndWaits = /* GraphQL */ `
+  mutation updateParkingAndSailingWaits(
+    $id: uuid
+    $parking_full: Int
+    $oversize_waits: Int
+    $car_waits: Int
+  ) {
+    update_route(
+      where: { id: { _eq: $id } }
+      _set: {
+        parking_full: $parking_full
+        oversize_waits: $oversize_waits
+        car_waits: $car_waits
+      }
+    ) {
+      returning {
+        id
+        parking_full
+        oversize_waits
+        car_waits
       }
     }
   }
@@ -60,5 +102,7 @@ const upsertSailing = /* GraphQL */ `
 
 module.exports = {
   upsertRoute,
-  upsertSailing
+  upsertSailing,
+  upsertSailingPercent,
+  upsertParkingAndWaits,
 };
