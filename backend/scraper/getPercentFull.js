@@ -29,7 +29,7 @@ const getPercentFull = ({
       'table tbody tr td table tbody tr td form table tbody tr td div table tbody tr td table'
     )
       .attr('width')
-      .match(/\d{1,2}/);
+      .match(/\d{1,3}/);
 
     const [parking_full] = $('.ccInfoTitle')
       .parent()

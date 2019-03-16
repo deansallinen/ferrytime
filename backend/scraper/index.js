@@ -80,7 +80,8 @@ const secondaryInserts = routesResult =>
           request(uri, upsertSailingPercent, {
             id,
             percent_full,
-          });
+          })
+          // .then(x => console.log(x.update_sailing.returning[0]));
           // return parking and sailing waits so we can update the route table
           return { id: route_id, parking_full, car_waits, oversize_waits };
         }
@@ -94,7 +95,7 @@ const secondaryInserts = routesResult =>
     //insert additional route info
     const res = await request(uri, upsertParkingAndWaits, latestRouteInfo);
     console.log(
-      `Updated ${
+      `Updated route ${
         res.update_route.returning[0].id
       } with parking and sailing waits`
     );
