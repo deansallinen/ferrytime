@@ -87,22 +87,27 @@ const Sailing = ({ sailing }) => {
         <SailingStatus {...status} />
       </div>
 
-      <div className="ml-4 pl-4 leading-normal">
+      <div className="ml-4 pl-4 leading-normal text-grey-dark">
         <div className="">
           {eta && (
             <div className="flex items-center">
               {' '}
-              <RightArrow /> <span>&nbsp;{format(eta, 'H:mm')}</span>
+              <RightArrow />{' '}
+              <span className="text-grey-darkest">
+                &nbsp;{format(eta, 'H:mm')}
+              </span>
             </div>
           )}
         </div>
-        <div className="text-grey-dark text-sm" />
-        {percent_full && (
-          <div>
-            <span className="font-bold">{percent_full}</span>% full
-          </div>
-        )}
-        <div className="text-xs text-grey-dark">
+        <div className="percent-full text-sm">
+          {percent_full && (
+            <p>
+              <span className="font-bold text-grey-darker">{percent_full}</span>
+              % full
+            </p>
+          )}
+        </div>
+        <div className="text-xs">
           {isDelayed && <div>{sailing_status}</div>} {vessel}
           {actual_departure && (
             <div>
@@ -176,7 +181,7 @@ const RouteInfo = ({
       <div className="mb-2">
         <h1 className="leading-none">{route_name}</h1>
       </div>
-      
+
       <div className="bg-blue-dark p-4 rounded-lg mt-4 flex justify-between ">
         <div className="">
           <p className="text-xs text-blue-lighter">Duration</p>
@@ -184,14 +189,14 @@ const RouteInfo = ({
         </div>
         <div className="">
           <p className="text-xs text-blue-lighter">Car waits</p>
-          <p className='text-right'>{car_waits || 0}</p>
+          <p className="text-right">{car_waits || 0}</p>
         </div>
         <div className="">
           <p className="text-xs text-blue-lighter">Oversize waits</p>
-          <p className='text-right'>{oversize_waits || 0}</p>
+          <p className="text-right">{oversize_waits || 0}</p>
         </div>
-        <div className="mt-2">
-          <p className="text-xs text-grey-dark ">Current Status</p>
+        <div className="hidden">
+          <p className="text-xs text-blue-lighter">Current Status</p>
           {current_status}
         </div>
       </div>
@@ -213,7 +218,7 @@ function RoutePage(props) {
 
       <div className="">
         {/* <pre>{JSON.stringify(pageContext, null, 2)}</pre> */}
-        {/* <pre>{JSON.stringify(state, null, 2)}</pre> */}
+        {/* <pre>{JSON.stringify(props, null, 2)}</pre> */}
         <Query
           query={GET_ALL_SAILINGS}
           pollInterval={60000}
@@ -223,19 +228,24 @@ function RoutePage(props) {
           }}
         >
           {({ loading, error, data }) => {
-            if (loading)
+            if (loading) {
+              let current_status;
+              let sailings = [];
+              if (state && state.sailingsByrouteId) {
+                console.log(state);
+                const latestSailing = state.sailingsByrouteId
+                  .filter(sailing => sailing.actual_departure)
+                  .pop();
+                current_status = latestSailing.sailing_status;
+                sailings = state.sailingsByrouteId || [];
+              }
               return (
                 <>
-                  <RouteInfo {...pageContext} />
-                  <Sailings
-                    sailings={
-                      state && state.sailingsByrouteId
-                        ? state.sailingsByrouteId
-                        : []
-                    }
-                  />
+                  <RouteInfo {...pageContext} current_status={current_status} />
+                  <Sailings sailings={sailings} />
                 </>
               );
+            }
             if (error) return `Error! ${error.message}`;
 
             const [route] = data.route;
@@ -252,7 +262,7 @@ function RoutePage(props) {
                   current_status={current_status}
                 />
                 <pre className="text-white">
-                  {/* {JSON.stringify(props, null, 2)} */}
+                  {/* {JSON.stringify(route, null, 2)} */}
                   {/* {JSON.stringify(latestSailing, null, 2)} */}
                 </pre>
                 <Sailings sailings={route.sailingsByrouteId} />
