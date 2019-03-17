@@ -30,26 +30,19 @@ const GET_ALL_ROUTES = gql`
   }
 `;
 
-const Favourites = ({ edges }) => {
-  const favourites =
-    typeof localStorage !== 'undefined'
-      ? JSON.parse(localStorage.getItem('favourites')) || []
-      : [];
 
-  return favourites.length ? (
-    <div className="mb-12">
-      <h2 className="text-white text-lg font-semibold antialiased">
-        Favourites
-      </h2>
-      {edges
-        .filter(each => /^\/route/.test(each.node.path))
-        .filter(each => favourites.includes(each.node.context.route_name))
-        .map(({ node }) => (
-          <Route {...node} key={node.context.id} />
-        ))}
-    </div>
-  ) : null;
-};
+const Favourites = ({ edges, favourites }) =>
+  <div className="mb-12">
+    <h2 className="text-white text-lg font-semibold antialiased">
+      Favourites
+    </h2>
+    {edges
+      .filter(each => /^\/route/.test(each.node.path))
+      .filter(each => favourites.includes(each.node.context.route_name))
+      .map(({ node }) => (
+        <Route {...node} key={node.context.id} />
+      ))}
+  </div>
 
 const Route = ({ path, context, state }) => {
   const { route_name, id } = context;
@@ -73,6 +66,12 @@ const Route = ({ path, context, state }) => {
 };
 
 function IndexPage({ data: { allSitePage } }) {
+    const favourites =
+    typeof localStorage !== 'undefined'
+      ? JSON.parse(localStorage.getItem('favourites')) || []
+      : [];
+
+  
   return (
     <Layout>
       <SEO
@@ -81,7 +80,7 @@ function IndexPage({ data: { allSitePage } }) {
       />
 
       <div className="">
-        <Favourites {...allSitePage} />
+        {favourites.length > 0 && <Favourites {...allSitePage} favourites={favourites} />}
         <h2 className="text-white text-lg font-semibold antialiased">
           All routes
         </h2>
