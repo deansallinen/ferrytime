@@ -53,7 +53,7 @@ const Sailing = ({ sailing }) => {
     eta,
     percent_full,
     sailing_status,
-    vessel
+    vessel,
   } = sailing;
   const isCancelled = sailing_status === 'Cancelled';
   const isOnTime = sailing_status === 'On Time';
@@ -171,7 +171,7 @@ const RouteInfo = ({
   average_sailing,
   car_waits,
   oversize_waits,
-  current_status
+  current_status,
 }) => {
   return (
     <div className="mb-8 text-white antialiased">
@@ -207,7 +207,7 @@ const RouteInfo = ({
 function RoutePage(props) {
   const {
     pageContext,
-    location: { state }
+    location: { state },
   } = props;
   return (
     <Layout {...pageContext}>
@@ -224,7 +224,7 @@ function RoutePage(props) {
           pollInterval={60000}
           variables={{
             route_id: pageContext.id,
-            today: startOfDay(new Date())
+            today: startOfDay(new Date()),
           }}
         >
           {({ loading, error, data }) => {
@@ -233,9 +233,9 @@ function RoutePage(props) {
               let sailings = [];
               if (state && state.sailingsByrouteId) {
                 console.log(state);
-                const latestSailing = state.sailingsByrouteId
-                  .filter(sailing => sailing.actual_departure)
-                  .pop();
+                const latestSailing = state.sailingsByrouteId.reduce(
+                  (acc, cur) => (cur.actual_departure ? cur : acc)
+                );
                 current_status = latestSailing.sailing_status;
                 sailings = state.sailingsByrouteId || [];
               }
@@ -249,9 +249,11 @@ function RoutePage(props) {
             if (error) return `Error! ${error.message}`;
 
             const [route] = data.route;
-            const latestSailing = route.sailingsByrouteId
-              .filter(sailing => sailing.actual_departure)
-              .pop();
+            // console.log(route);
+            const latestSailing = route.sailingsByrouteId.reduce((acc, cur) =>
+              cur.actual_departure ? cur : acc
+            );
+            // console.log(latestSailing);
             const current_status = latestSailing.sailing_status;
             return (
               <>

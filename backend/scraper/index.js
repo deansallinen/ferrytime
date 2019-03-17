@@ -80,16 +80,15 @@ const secondaryInserts = routesResult =>
           request(uri, upsertSailingPercent, {
             id,
             percent_full,
-          })
-          // .then(x => console.log(x.update_sailing.returning[0]));
+          }).then(x => console.log(x.update_sailing.returning[0]));
           // return parking and sailing waits so we can update the route table
           return { id: route_id, parking_full, car_waits, oversize_waits };
         }
       })
     );
-    console.log(
-      `Updated ${additionalRouteInfo.length} sailings with percent full`
-    );
+    // console.log(
+    //   `Updated ${additionalRouteInfo.length} sailings with percent full`
+    // );
     const latestRouteInfo = additionalRouteInfo.pop();
 
     //insert additional route info
