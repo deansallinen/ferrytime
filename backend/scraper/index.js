@@ -34,18 +34,18 @@ const primaryInsert = async routes => {
     console.log(`Upserted route info for ${route.route_name}`);
 
     const route_id = routeResult.insert_route.returning[0].id;
-    const sailingResults = Object.values(sailings).map(async sailing => {
-      const sailingPayload = { ...sailing, route_id };
-      return request(uri, upsertSailing, {
-        objects: sailingPayload,
+    
+    const sailingsWithRouteID = Object.values(sailings).map(sailing => ({...sailing, route_id }))
+    
+    const sailingResults = await request(uri, upsertSailing, {
+        objects: sailingsWithRouteID,
       });
-    });
 
     console.log(
-      `Upserted ${sailingResults.length} sailings for ${route.route_name}`
+      `Upserted ${sailingResults.insert_sailing.returning.length} sailings for ${route.route_name}`
     );
 
-    return Promise.all(sailingResults);
+    return sailingResults.insert_sailing.returning;
   });
 
   console.log(`Finished updating ${routesResult.length} routes`);
@@ -60,7 +60,7 @@ const secondaryInserts = routesResult =>
           id,
           scheduled_departure,
           routeByrouteId,
-        } = sailing.insert_sailing.returning[0];
+        } = sailing;
         const { departure_term, route_num_str, id: route_id } = routeByrouteId;
 
         const futureSailing = await getPercentFull({
