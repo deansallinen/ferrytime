@@ -21,7 +21,9 @@ const getPercentFull = ({
 
     if (!sailingTime) return null;
 
-    const outputTime = moment(sailingTime[0], 'hh:mm aa').format('HHmm');
+    const outputTime = moment
+      .tz(sailingTime[0], 'hh:mm aa', 'America/Vancouver')
+      .format('HHmm');
 
     if (inputTime !== outputTime) return null;
 
@@ -29,7 +31,7 @@ const getPercentFull = ({
       'table tbody tr td table tbody tr td form table tbody tr td div table tbody tr td table'
     )
       .attr('width')
-      .match(/\d{1,3}/);
+      .match(/\d+/);
 
     const [parking_full] = $('.ccInfoTitle')
       .parent()
