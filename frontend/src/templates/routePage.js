@@ -276,7 +276,6 @@ function RoutePage(props) {
                 />
                 <pre className="text-white">
                   {/* {JSON.stringify(route, null, 2)} */}
-                  {/* {JSON.stringify(latestSailing, null, 2)} */}
                 </pre>
                 <Sailings sailings={route.sailingsByrouteId} />
               </>
