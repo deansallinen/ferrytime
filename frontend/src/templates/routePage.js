@@ -8,6 +8,7 @@ import Layout from '../components/layout';
 import SEO from '../components/seo';
 import Favourite from '../components/addFavourite';
 import SailingStatus from '../components/sailingStatus';
+import styles from '../css/loader.module.css'
 
 const GET_ALL_SAILINGS = gql`
   query getOneRoute($route_id: uuid, $today: timestamptz) {
@@ -45,6 +46,29 @@ const RightArrow = () => {
     </svg>
   );
 };
+
+const SailingPlaceholder = () =>
+  <div className='pb-8'>
+    <div className={styles.animatedbackground}>
+      <div className={styles.etaleft} />
+      <div className={styles.etaright} />
+      <div className={styles.splitone} />
+      <div className={styles.statusleft} />
+      <div className={styles.statusright} />
+    </div>
+  </div>
+
+const SailingsLoader = () =>
+<>
+  <h2 className="mb-4 text-xl font-semibold text-white antialiased ">
+    Sailings
+  </h2>
+  <div className='p-4 bg-white rounded-lg '>
+    <SailingPlaceholder />
+    <SailingPlaceholder />
+    <SailingPlaceholder />
+  </div>
+</>
 
 const Sailing = ({ sailing }) => {
   const {
@@ -172,6 +196,7 @@ const RouteInfo = ({
   car_waits,
   oversize_waits,
   current_status,
+  parking
 }) => {
   return (
     <div className="mb-8 text-white antialiased">
@@ -197,7 +222,11 @@ const RouteInfo = ({
         </div>
         <div className="hidden">
           <p className="text-xs text-blue-lighter">Current Status</p>
-          {current_status}
+          {current_status || null}
+        </div>
+        <div className="hidden">
+          <p className="text-xs text-blue-lighter">Current Status</p>
+          {parking || null}
         </div>
       </div>
     </div>
@@ -205,10 +234,7 @@ const RouteInfo = ({
 };
 
 function RoutePage(props) {
-  const {
-    pageContext,
-    location: { state },
-  } = props;
+  const {pageContext} = props;
   return (
     <Layout {...pageContext}>
       <SEO
@@ -228,32 +254,17 @@ function RoutePage(props) {
           }}
         >
           {({ loading, error, data }) => {
-            if (loading) {
-              let current_status;
-              let sailings = [];
-              if (state && state.sailingsByrouteId) {
-                console.log(state);
-                const latestSailing = state.sailingsByrouteId.reduce(
-                  (acc, cur) => (cur.actual_departure ? cur : acc)
-                );
-                current_status = latestSailing.sailing_status;
-                sailings = state.sailingsByrouteId || [];
-              }
-              return (
-                <>
-                  <RouteInfo {...pageContext} current_status={current_status} />
-                  <Sailings sailings={sailings} />
-                </>
-              );
-            }
+            if (loading) return (<>
+              <RouteInfo {...pageContext} />
+              <SailingsLoader />
+            </>)
+            
             if (error) return `Error! ${error.message}`;
 
             const [route] = data.route;
-            // console.log(route);
             const latestSailing = route.sailingsByrouteId.reduce((acc, cur) =>
               cur.actual_departure ? cur : acc
             );
-            // console.log(latestSailing);
             const current_status = latestSailing.sailing_status;
             return (
               <>

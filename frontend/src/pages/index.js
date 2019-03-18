@@ -6,12 +6,11 @@ import { startOfDay } from 'date-fns';
 import Layout from '../components/layout';
 import SEO from '../components/seo';
 
-const GET_ALL_ROUTES = gql`
-  query getAllRoutes($today: timestamptz) {
-    route(order_by: { route_name: asc }) {
+const GET_ALL_SAILINGS = gql`
+  query getOneRoute($route_id: uuid, $today: timestamptz) {
+    route(where: { id: { _eq: $route_id } }) {
       id
       route_name
-      average_sailing
       car_waits
       oversize_waits
       sailingsByrouteId(
@@ -22,14 +21,13 @@ const GET_ALL_ROUTES = gql`
         scheduled_departure
         actual_departure
         eta
-        percent_full
         sailing_status
+        percent_full
         vessel
       }
     }
   }
 `;
-
 
 const Favourites = ({ edges, favourites }) =>
   <div className="mb-12">
@@ -44,24 +42,34 @@ const Favourites = ({ edges, favourites }) =>
       ))}
   </div>
 
-const Route = ({ path, context, state }) => {
+const Route = ({ path, context }) => {
   const { route_name, id } = context;
   const [departureTerminal, arrivalTerminal] = route_name.split(' to ');
   return (
-    <div
-      className="my-4 bg-white rounded-lg px-4 py-4 shadow border-b-4 border-blue-light"
-      key={id}
+    <Query
+      query={GET_ALL_SAILINGS}
+      pollInterval={60000}
+      variables={{
+        route_id: id,
+        today: startOfDay(new Date()),
+      }}
     >
-      <Link
-        to={path}
-        key={id}
-        state={state}
-        className="no-underline hover:underline text-grey-darkest text-xl"
-      >
-        <div className="font-bold pb-1">{departureTerminal}</div>
-        <div className="text-grey-dark text-lg">to {arrivalTerminal}</div>
-      </Link>
-    </div>
+      {({ loading, error, data }) => {
+        return <div
+          className="my-4 bg-white rounded-lg px-4 py-4 shadow border-b-4 border-blue-light"
+          key={id}
+        >
+          <Link
+            to={path}
+            key={id}
+            className="no-underline hover:underline text-grey-darkest text-xl"
+          >
+            <div className="font-bold pb-1">{departureTerminal}</div>
+            <div className="text-grey-dark text-lg">to {arrivalTerminal}</div>
+          </Link>
+        </div>
+      }}
+    </Query>
   );
 };
 
@@ -80,31 +88,14 @@ function IndexPage({ data: { allSitePage } }) {
       />
 
       <div className="">
+      
         {favourites.length > 0 && <Favourites {...allSitePage} favourites={favourites} />}
         <h2 className="text-white text-lg font-semibold antialiased">
           All routes
         </h2>
-        <Query
-          query={GET_ALL_ROUTES}
-          variables={{ today: startOfDay(new Date()) }}
-        >
-          {({ loading, error, data }) => {
-            if (loading)
-              return allSitePage.edges.map(({ node }) => {
-                return <Route {...node} key={node.context.id} />;
-              });
-            if (error) return `Error! ${error.message}`;
+        
+        {allSitePage.edges.map(({ node }) =>  <Route {...node} key={node.context.id} /> )}
 
-            return allSitePage.edges.map(({ node }) => {
-              const [routeInfo] = data.route.filter(
-                route => route.id === node.context.id
-              );
-              return (
-                <Route {...node} state={routeInfo} key={node.context.id} />
-              );
-            });
-          }}
-        </Query>
       </div>
     </Layout>
   );
