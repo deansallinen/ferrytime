@@ -13,23 +13,23 @@
   "license": "ISC",
   "dependencies": {
     "apollo-boost": "^0.1.28",
-    "apollo-cache-inmemory": "^1.4.3",
-    "apollo-client": "^2.4.13",
-    "apollo-link-http": "^1.5.11",
-    "cheerio": "^1.0.0-rc.2",
+    "apollo-cache-inmemory": "^1.6.2",
+    "apollo-client": "^2.6.3",
+    "apollo-link-http": "^1.5.15",
+    "cheerio": "^1.0.0-rc.3",
     "date-fns": "^1.29.0",
     "dotenv": "^6.0.0",
-    "graphql": "^14.0.2",
+    "graphql": "^14.4.2",
     "graphql-request": "^1.8.2",
     "graphql-tag": "^2.10.1",
     "isomorphic-fetch": "^2.2.1",
     "koa": "^2.5.3",
-    "koa-helmet": "^4.0.0",
+    "koa-helmet": "^4.2.0",
     "koa-router": "^7.4.0",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.14",
     "micro": "latest",
     "moment": "^2.22.2",
-    "moment-timezone": "^0.5.21",
+    "moment-timezone": "^0.5.26",
     "npm": "^6.10.1",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
@@ -37,6 +37,6 @@
   },
   "devDependencies": {
     "eslint-plugin-jest": "^21.22.1",
-    "jest": "^23.6.0"
+    "jest": "^24.8.0"
   }
 }
