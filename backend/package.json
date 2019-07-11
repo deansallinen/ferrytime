@@ -30,7 +30,7 @@
     "micro": "latest",
     "moment": "^2.22.2",
     "moment-timezone": "^0.5.21",
-    "npm": "^6.4.1",
+    "npm": "^6.10.1",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
     "table-scraper": "^0.1.0"
