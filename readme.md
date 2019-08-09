@@ -1,4 +1,4 @@
-![Ferrytime app on a phone](https://github.com/deansallinen/deansallinen.ca/blob/master/src/img/ferrytime/three.png)
+![Ferrytime app on a phone](https://github.com/deansallinen/deansallinen.ca/blob/master/src/img/ferrytime/Component.png)
 
 # Ferrytime
 
