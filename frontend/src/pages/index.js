@@ -5,6 +5,7 @@ import { Link, graphql } from 'gatsby';
 import { startOfDay } from 'date-fns';
 import Layout from '../components/layout';
 import SEO from '../components/seo';
+import SailingStatus from '../components/Sailing/sailingStatus';
 
 const GET_ALL_SAILINGS = gql`
   query getOneRoute($route_id: uuid, $today: timestamptz) {
@@ -29,10 +30,10 @@ const GET_ALL_SAILINGS = gql`
   }
 `;
 
-const Favourites = ({ edges, favourites }) =>
+const Favourites = ({ edges, favourites }) => (
   <div className="mb-12">
     <h2 className="text-white text-lg font-semibold antialiased">
-      Favourites
+      Favourite Routes
     </h2>
     {edges
       .filter(each => /^\/route/.test(each.node.path))
@@ -41,6 +42,13 @@ const Favourites = ({ edges, favourites }) =>
         <Route {...node} key={node.context.id} />
       ))}
   </div>
+);
+
+const RouteCard = ({ children }) => (
+  <div className="max-w-md my-4 bg-white rounded-lg px-4 py-4 shadow border-b-4 border-blue-light flex">
+    {children}
+  </div>
+);
 
 const Route = ({ path, context }) => {
   const { route_name, id } = context;
@@ -55,31 +63,59 @@ const Route = ({ path, context }) => {
       }}
     >
       {({ loading, error, data }) => {
-        return <div
-          className="my-4 bg-white rounded-lg px-4 py-4 shadow border-b-4 border-blue-light"
-          key={id}
-        >
+        if (!loading && !error && data) {
+          const [route] = data.route;
+          const latestSailing = route.sailingsByrouteId.reduce((acc, cur) =>
+            cur.actual_departure ? cur : acc
+          );
+          const current_status = latestSailing.sailing_status;
+          return (
+            <Link
+              to={path}
+              key={id}
+              className="no-underline hover:underline text-grey-darkest text-xl"
+            >
+              <RouteCard>
+                <div className="w-3/4">
+                  <div className="text-grey-darkest font-bold pb-1">
+                    {departureTerminal}
+                  </div>
+
+                  <div className="text-grey-darker font-bold text-sm">
+                    <span className="text-xs text-grey pb-1">to </span>
+                    {arrivalTerminal}
+                  </div>
+                </div>
+                <div className="w-1/4 text-right">
+                  <SailingStatus sailing_status={current_status} />
+                </div>
+              </RouteCard>
+            </Link>
+          );
+        }
+        return (
           <Link
             to={path}
             key={id}
             className="no-underline hover:underline text-grey-darkest text-xl"
           >
-            <div className="font-bold pb-1">{departureTerminal}</div>
-            <div className="text-grey-dark text-lg">to {arrivalTerminal}</div>
+            <RouteCard>
+              <div className="font-bold pb-1">{departureTerminal}</div>
+              <div className="text-grey-dark text-lg">to {arrivalTerminal}</div>
+            </RouteCard>
           </Link>
-        </div>
+        );
       }}
     </Query>
   );
 };
 
 function IndexPage({ data: { allSitePage } }) {
-    const favourites =
+  const favourites =
     typeof localStorage !== 'undefined'
       ? JSON.parse(localStorage.getItem('favourites')) || []
       : [];
 
-  
   return (
     <Layout>
       <SEO
@@ -88,14 +124,16 @@ function IndexPage({ data: { allSitePage } }) {
       />
 
       <div className="">
-      
-        {favourites.length > 0 && <Favourites {...allSitePage} favourites={favourites} />}
+        {favourites.length > 0 && (
+          <Favourites {...allSitePage} favourites={favourites} />
+        )}
         <h2 className="text-white text-lg font-semibold antialiased">
           All routes
         </h2>
-        
-        {allSitePage.edges.map(({ node }) =>  <Route {...node} key={node.context.id} /> )}
 
+        {allSitePage.edges.map(({ node }) => (
+          <Route {...node} key={node.context.id} />
+        ))}
       </div>
     </Layout>
   );

@@ -21,30 +21,38 @@ const InfoIcon = () => (
 
 const Cancelled = () => (
   <div>
-    <span className="bg-red-lighter text-red-darker rounded text-xs px-2 py-1 ">
+    <span className="bg-red-lighter text-red-darker rounded font-bold text-xs px-2 py-1 ">
       Cancelled
     </span>
   </div>
 );
 const Delayed = () => (
   <div>
-    <span className="bg-yellow-light text-yellow-darker rounded text-xs px-2 py-1 ">
+    <span className="bg-yellow-light text-yellow-darker rounded font-bold text-xs px-2 py-1 ">
       Delayed
     </span>
   </div>
 );
 const OnTime = () => (
   <div>
-    <span className="bg-green-lightest text-green-dark rounded text-xs px-2 py-1 ">
+    <span className="bg-green-lightest text-green-dark rounded font-bold text-xs px-2 py-1 ">
       On Time
     </span>
   </div>
 );
 
-export default ({ isDelayed, isOnTime, isCancelled }) => (
-  <div className="">
-    {isCancelled && <Cancelled />}
-    {isOnTime && <OnTime />}
-    {isDelayed && <Delayed />}
-  </div>
-);
+export default ({ sailing_status }) => {
+  const isCancelled = sailing_status === 'Cancelled';
+  const isOnTime = sailing_status === 'On Time';
+  const isDelayed = !['On Time', 'Cancelled', '', null, undefined].includes(
+    sailing_status
+  );
+
+  return (
+    <>
+      {isCancelled && <Cancelled />}
+      {isOnTime && <OnTime />}
+      {isDelayed && <Delayed />}
+    </>
+  );
+};
