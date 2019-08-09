@@ -10,6 +10,15 @@ export default ({ routeName }) => {
     favourites && favourites.includes(routeName)
   );
 
+  const Button = ({ children }) => (
+    <button
+      className="text-white text-xs md:text-sm border rounded px-4 py-2"
+      onClick={toggleFavourite}
+    >
+      {children}
+    </button>
+  );
+
   const toggleFavourite = () => setFavourite(!isFavourite);
   useEffect(() => {
     if (favourites.includes(routeName) && !isFavourite) {
@@ -26,18 +35,12 @@ export default ({ routeName }) => {
   }, [isFavourite]);
 
   return isFavourite ? (
-    <button
-      className="text-white  text-3xl"
-      onClick={toggleFavourite}
-    >
-      <span>&#9733;</span>
-    </button>
+    <Button>
+      Remove Favourite
+    </Button>
   ) : (
-    <button
-      className="text-white  text-3xl"
-      onClick={toggleFavourite}
-    >
-      &#9734;
-    </button>
+    <Button>
+      Add to Favourites
+    </Button>
   );
 };
