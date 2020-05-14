@@ -123,18 +123,22 @@ function IndexPage({ data: { allSitePage } }) {
         keywords={[`gatsby`, `tailwind`, `react`, `tailwindcss`]}
       />
 
-      <div className="">
-        {favourites.length > 0 && (
-          <Favourites {...allSitePage} favourites={favourites} />
-        )}
-        <h2 className="text-white text-lg font-semibold antialiased">
-          All routes
-        </h2>
+//       <div className="">
+//         {favourites.length > 0 && (
+//           <Favourites {...allSitePage} favourites={favourites} />
+//         )}
+//         <h2 className="text-white text-lg font-semibold antialiased">
+//           All routes
+//         </h2>
 
-        {allSitePage.edges.map(({ node }) => (
-          <Route {...node} key={node.context.id} />
-        ))}
-      </div>
+//         {allSitePage.edges.map(({ node }) => (
+//           <Route {...node} key={node.context.id} />
+//         ))}
+//       </div>
+    <h1>Goodbye (for now)</h1>
+    <p>Unfortunately the service I've been using to host the Ferryti.me backend has made breaking changes, which means this site won't be functional without significant work.</p>
+    <p>As of right now, I don't have the time to overhaul the backend (something I've been meaning to do for a while). So I've made the decision to put this project on hold.</p>
+    <p>One day it'll come back, better than before. In the meantime: safe travels!</p>
     </Layout>
   );
 }
