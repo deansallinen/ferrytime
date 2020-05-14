@@ -117,12 +117,12 @@ function IndexPage({ data: { allSitePage } }) {
       : [];
 
   return (
-    <Layout>
-      <SEO
-        title="Home"
-        keywords={[`gatsby`, `tailwind`, `react`, `tailwindcss`]}
-      />
-
+//     <Layout>
+//       <SEO
+//         title="Home"
+//         keywords={[`gatsby`, `tailwind`, `react`, `tailwindcss`]}
+//       />
+// 
 //       <div className="">
 //         {favourites.length > 0 && (
 //           <Favourites {...allSitePage} favourites={favourites} />
@@ -130,7 +130,7 @@ function IndexPage({ data: { allSitePage } }) {
 //         <h2 className="text-white text-lg font-semibold antialiased">
 //           All routes
 //         </h2>
-
+// 
 //         {allSitePage.edges.map(({ node }) => (
 //           <Route {...node} key={node.context.id} />
 //         ))}
@@ -141,7 +141,7 @@ function IndexPage({ data: { allSitePage } }) {
     <p>As of right now, I don't have the time to overhaul the backend (something I've been meaning to do for a while). So I've made the decision to put this project on hold.</p>
     <p>One day it'll come back, better than before. In the meantime: safe travels!</p>
     </div>  
-  </Layout>
+//   </Layout>
   );
 }
 
