@@ -1,4 +1,6 @@
 <script>
+  import Sailing from './Sailing.svelte';
+
   export let route_name = "";
   export let average_sailing = "";
   export let sailing_date = "";
@@ -13,12 +15,7 @@
 <h2>{average_sailing}</h2>
 
 {#each Object.values(sailings) as sailing}
-  <p>{sailing.scheduled_departure}</p>
-  <p>{sailing.actual_departure}</p>
-  <p>{sailing.eta}</p>
-  <p>{sailing.sailing_status}</p>
-  <p>{sailing.vessel}</p>
-  <pre>{JSON.stringify(sailing, null, 2)}</pre>
+  <Sailing {...sailing} />
 {/each}
 
 <pre>{sailings}</pre>
