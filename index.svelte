@@ -1,10 +1,5 @@
 <script>
-  /* import {onMount} from 'svelte'; */
-
   import data from '../sailings.json';
-
-  console.log(data[0]);
-  /* onMount(async () => { }); */
 </script>
 <style> </style>
 
