@@ -1,0 +1,66 @@
+@keyframes placeHolderShimmer {
+  0% {
+    background-position: -468px 0;
+  }
+  100% {
+    background-position: 468px 0;
+  }
+}
+
+.animatedbackground {
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-name: placeHolderShimmer;
+  animation-timing-function: linear;
+  /*background: #f6f7f8;*/
+  background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
+  background-size: 800px 104px;
+  height: 50px;
+  position: relative;
+}
+
+.etaleft {
+  background: #fff;
+  position: absolute;
+  top: 0;
+  left: 80px;
+  width: 20px;
+  height: 20px;
+}
+
+.etaright {
+  background: #fff;
+  position: absolute;
+  top: 0;
+  left: 250px;
+  right: 0;
+  height: 20px;
+}
+
+.splitone {
+  background: #fff;
+  position: absolute;
+  top: 20px;
+  left: 80px;
+  right: 0;
+  height: 10px;
+}
+
+.statusleft {
+  background: #fff;
+  position: absolute;
+  top: 30px;
+  left: 80px;
+  width: 20px;
+  height: 20px;
+}
+
+.statusright {
+  background: #fff;
+  position: absolute;
+  top: 30px;
+  left: 350px;
+  right: 0;
+  height: 20px;
+}
