@@ -12,7 +12,11 @@
   },
   "dependencies": {
     "canvas-confetti": "^1.2.0",
-    "date-fns": "^2.15.0"
+    "date-fns": "^2.15.0",
+    "@actions/core": "^1.2.4",
+    "@actions/github": "^4.0.0",
+    "moment-timezone": "^0.5.31",
+    "table-scraper": "^1.0.3"
   },
   "devDependencies": {
     "@11ty/eleventy": "^0.10.0",

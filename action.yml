@@ -1,0 +1,13 @@
+name: 'Ferrytime Scraper'
+description: 'Scrape sailings'
+inputs:
+  who-to-greet: # id of input
+    description: 'Who to greet'
+    required: true
+    default: 'World'
+outputs:
+  sailings: # id of output
+    description: 'JSON of the sailings'
+runs:
+  using: 'node12'
+  main: 'action/index.js'
