@@ -11,10 +11,10 @@
     "lint": "prettier --check \"src/**/*.js\""
   },
   "dependencies": {
-    "canvas-confetti": "^1.2.0",
-    "date-fns": "^2.15.0",
     "@actions/core": "^1.2.4",
     "@actions/github": "^4.0.0",
+    "canvas-confetti": "^1.2.0",
+    "date-fns": "^2.15.0",
     "moment-timezone": "^0.5.31",
     "table-scraper": "^1.0.3"
   },
