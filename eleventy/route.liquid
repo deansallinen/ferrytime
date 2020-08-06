@@ -1,0 +1,23 @@
+---
+layout: base.liquid
+pagination:
+    addAllPagesToCollections: true
+    data: sailings
+    size: 1
+    alias: route
+permalink: "r/{{ route.route_name | slug }}/"
+tags: route
+---
+
+{{ route.route_name }} 
+{{ route.average_sailing }} 
+
+{%- for sailing in route.sailings -%}
+
+<p>{{sailing[1]["scheduled_departure"]}}</p>
+<p>{{sailing[1]["actual_departure"]}}</p>
+<p>{{sailing[1]["eta"]}}</p>
+<p>{{sailing[1]["sailing_status"]}}</p>
+<p>{{sailing[1]["vessel"]}}</p>
+
+{%- endfor -%}

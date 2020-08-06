@@ -1,0 +1,8 @@
+---
+layout: base.liquid
+title: index
+---
+<h2>Routes</h2>
+{%- for post in collections.route -%}
+<a href={{post.url}} ><p>{{post.url}}</p></a>
+{%- endfor -%}
