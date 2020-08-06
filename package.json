@@ -1,4 +1,8 @@
 {
+  "engines": {
+    "node": "12.x.x",
+    "npm": "6.x.x"
+  },
   "scripts": {
     "start": "snowpack dev",
     "build": "snowpack build",
