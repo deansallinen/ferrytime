@@ -40,14 +40,11 @@ var app = (function () {
     function detach(node) {
         node.parentNode.removeChild(node);
     }
-    function destroy_each(iterations, detaching) {
-        for (let i = 0; i < iterations.length; i += 1) {
-            if (iterations[i])
-                iterations[i].d(detaching);
-        }
-    }
     function element(name) {
         return document.createElement(name);
+    }
+    function svg_element(name) {
+        return document.createElementNS('http://www.w3.org/2000/svg', name);
     }
     function text(data) {
         return document.createTextNode(data);
@@ -55,9 +52,18 @@ var app = (function () {
     function space() {
         return text(' ');
     }
+    function empty() {
+        return text('');
+    }
     function listen(node, event, handler, options) {
         node.addEventListener(event, handler, options);
         return () => node.removeEventListener(event, handler, options);
+    }
+    function attr(node, attribute, value) {
+        if (value == null)
+            node.removeAttribute(attribute);
+        else if (node.getAttribute(attribute) !== value)
+            node.setAttribute(attribute, value);
     }
     function children(element) {
         return Array.from(element.childNodes);
@@ -71,6 +77,14 @@ var app = (function () {
     let current_component;
     function set_current_component(component) {
         current_component = component;
+    }
+    function get_current_component() {
+        if (!current_component)
+            throw new Error(`Function called outside component initialization`);
+        return current_component;
+    }
+    function onMount(fn) {
+        get_current_component().$$.on_mount.push(fn);
     }
 
     const dirty_components = [];
@@ -178,6 +192,96 @@ var app = (function () {
         : typeof globalThis !== 'undefined'
             ? globalThis
             : global);
+    function outro_and_destroy_block(block, lookup) {
+        transition_out(block, 1, 1, () => {
+            lookup.delete(block.key);
+        });
+    }
+    function update_keyed_each(old_blocks, dirty, get_key, dynamic, ctx, list, lookup, node, destroy, create_each_block, next, get_context) {
+        let o = old_blocks.length;
+        let n = list.length;
+        let i = o;
+        const old_indexes = {};
+        while (i--)
+            old_indexes[old_blocks[i].key] = i;
+        const new_blocks = [];
+        const new_lookup = new Map();
+        const deltas = new Map();
+        i = n;
+        while (i--) {
+            const child_ctx = get_context(ctx, list, i);
+            const key = get_key(child_ctx);
+            let block = lookup.get(key);
+            if (!block) {
+                block = create_each_block(key, child_ctx);
+                block.c();
+            }
+            else if (dynamic) {
+                block.p(child_ctx, dirty);
+            }
+            new_lookup.set(key, new_blocks[i] = block);
+            if (key in old_indexes)
+                deltas.set(key, Math.abs(i - old_indexes[key]));
+        }
+        const will_move = new Set();
+        const did_move = new Set();
+        function insert(block) {
+            transition_in(block, 1);
+            block.m(node, next);
+            lookup.set(block.key, block);
+            next = block.first;
+            n--;
+        }
+        while (o && n) {
+            const new_block = new_blocks[n - 1];
+            const old_block = old_blocks[o - 1];
+            const new_key = new_block.key;
+            const old_key = old_block.key;
+            if (new_block === old_block) {
+                // do nothing
+                next = new_block.first;
+                o--;
+                n--;
+            }
+            else if (!new_lookup.has(old_key)) {
+                // remove old block
+                destroy(old_block, lookup);
+                o--;
+            }
+            else if (!lookup.has(new_key) || will_move.has(new_key)) {
+                insert(new_block);
+            }
+            else if (did_move.has(old_key)) {
+                o--;
+            }
+            else if (deltas.get(new_key) > deltas.get(old_key)) {
+                did_move.add(new_key);
+                insert(new_block);
+            }
+            else {
+                will_move.add(old_key);
+                o--;
+            }
+        }
+        while (o--) {
+            const old_block = old_blocks[o];
+            if (!new_lookup.has(old_block.key))
+                destroy(old_block, lookup);
+        }
+        while (n)
+            insert(new_blocks[n - 1]);
+        return new_blocks;
+    }
+    function validate_each_keys(ctx, list, get_context, get_key) {
+        const keys = new Set();
+        for (let i = 0; i < list.length; i++) {
+            const key = get_key(get_context(ctx, list, i));
+            if (keys.has(key)) {
+                throw new Error(`Cannot have duplicate keys in a keyed each`);
+            }
+            keys.add(key);
+        }
+    }
 
     function get_spread_update(levels, updates) {
         const update = {};
@@ -360,6 +464,13 @@ var app = (function () {
             dispose();
         };
     }
+    function attr_dev(node, attribute, value) {
+        attr(node, attribute, value);
+        if (value == null)
+            dispatch_dev("SvelteDOMRemoveAttribute", { node, attribute });
+        else
+            dispatch_dev("SvelteDOMSetAttribute", { node, attribute, value });
+    }
     function set_data_dev(text, data) {
         data = '' + data;
         if (text.wholeText === data)
@@ -400,827 +511,692 @@ var app = (function () {
         $inject_state() { }
     }
 
-    var data = [
-    	{
-    		route_name: "Tsawwassen to Swartz Bay",
-    		average_sailing: "1 hour 35 minutes",
-    		sailing_date: "2020-07-25",
-    		sailings: {
-    			"2020-07-25T14:00:00Z": {
-    				vessel: "Spirit of British Columbia",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T14:00:00Z",
-    				actual_departure: "2020-07-25T14:00:00Z",
-    				eta: "2020-07-25T15:30:00Z"
-    			},
-    			"2020-07-25T16:00:00Z": {
-    				vessel: "Spirit of Vancouver Island",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T16:00:00Z",
-    				actual_departure: "2020-07-25T16:07:00Z",
-    				eta: "2020-07-25T17:32:00Z"
-    			},
-    			"2020-07-25T17:01:00Z": {
-    				vessel: "Coastal Celebration",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T17:01:00Z",
-    				actual_departure: "2020-07-25T17:03:00Z",
-    				eta: "2020-07-25T18:30:00Z"
-    			},
-    			"2020-07-25T18:00:00Z": {
-    				vessel: "Spirit of British Columbia",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T18:00:00Z",
-    				actual_departure: "2020-07-25T18:00:00Z",
-    				eta: "2020-07-25T19:30:00Z"
-    			},
-    			"2020-07-25T20:00:00Z": {
-    				vessel: "Spirit of Vancouver Island",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T20:00:00Z",
-    				actual_departure: "2020-07-25T20:05:00Z",
-    				eta: "2020-07-25T21:28:00Z"
-    			},
-    			"2020-07-25T21:00:00Z": {
-    				vessel: "Coastal Celebration",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T21:00:00Z",
-    				actual_departure: "2020-07-25T21:06:00Z",
-    				eta: "2020-07-25T22:28:00Z"
-    			},
-    			"2020-07-25T22:00:00Z": {
-    				vessel: "Spirit of British Columbia",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T22:00:00Z",
-    				actual_departure: "2020-07-25T22:00:00Z",
-    				eta: "2020-07-25T23:34:00Z"
-    			},
-    			"2020-07-26T00:00:00Z": {
-    				vessel: "Spirit of Vancouver Island",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-26T00:00:00Z",
-    				actual_departure: "2020-07-26T00:00:00Z",
-    				eta: "2020-07-26T01:30:00Z"
-    			},
-    			"2020-07-26T01:00:00Z": {
-    				vessel: "Coastal Celebration",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-26T01:00:00Z",
-    				actual_departure: "2020-07-26T01:05:00Z",
-    				eta: "2020-07-26T02:32:00Z"
-    			},
-    			"2020-07-26T02:00:00Z": {
-    				vessel: "Spirit of British Columbia",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-26T02:00:00Z",
-    				actual_departure: "2020-07-26T01:59:00Z",
-    				eta: "2020-07-26T03:32:00Z"
-    			},
-    			"2020-07-26T04:00:00Z": {
-    				vessel: "Spirit of Vancouver Island",
-    				sailing_status: "",
-    				scheduled_departure: "2020-07-26T04:00:00Z",
-    				actual_departure: null,
-    				eta: null
-    			}
+    /* src/SailingStatus.svelte generated by Svelte v3.24.0 */
+
+    const file = "src/SailingStatus.svelte";
+
+    // (27:2) {:else}
+    function create_else_block(ctx) {
+    	let div;
+    	let span;
+
+    	const block = {
+    		c: function create() {
+    			div = element("div");
+    			span = element("span");
+    			span.textContent = "On Time";
+    			add_location(span, file, 29, 6, 930);
+    			attr_dev(div, "class", "bg-green-200 text-green-700 rounded font-bold text-xs px-2 py-1 ");
+    			add_location(div, file, 27, 4, 839);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, div, anchor);
+    			append_dev(div, span);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(div);
     		}
-    	},
-    	{
-    		route_name: "Tsawwassen to Southern Gulf Islands",
-    		average_sailing: "Variable",
-    		sailing_date: "2020-07-25",
-    		sailings: {
-    			"2020-07-25T15:55:00Z": {
-    				vessel: "Salish Orca",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T15:55:00Z",
-    				actual_departure: "2020-07-25T15:54:00Z",
-    				eta: null
-    			},
-    			"2020-07-25T19:40:00Z": {
-    				vessel: "Salish Orca",
-    				sailing_status: "Earlier loading procedure is causing ongoing delay",
-    				scheduled_departure: "2020-07-25T19:40:00Z",
-    				actual_departure: "2020-07-25T19:55:00Z",
-    				eta: null
-    			},
-    			"2020-07-26T05:25:00Z": {
-    				vessel: "Salish Orca",
-    				sailing_status: "",
-    				scheduled_departure: "2020-07-26T05:25:00Z",
-    				actual_departure: null,
-    				eta: null
-    			}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_else_block.name,
+    		type: "else",
+    		source: "(27:2) {:else}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (10:84) 
+    function create_if_block_1(ctx) {
+    	let div;
+    	let span;
+    	let t1;
+    	let svg;
+    	let path;
+
+    	const block = {
+    		c: function create() {
+    			div = element("div");
+    			span = element("span");
+    			span.textContent = "Delayed";
+    			t1 = space();
+    			svg = svg_element("svg");
+    			path = svg_element("path");
+    			attr_dev(span, "class", "");
+    			add_location(span, file, 13, 6, 419);
+    			attr_dev(path, "d", "M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93\n          17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9\n          11V9h2v6H9v-4zm0-6h2v2H9V5z");
+    			add_location(path, file, 20, 8, 615);
+    			attr_dev(svg, "xmlns", "http://www.w3.org/2000/svg");
+    			attr_dev(svg, "viewBox", "0 0 20 20");
+    			attr_dev(svg, "width", "1em");
+    			attr_dev(svg, "height", "1em");
+    			attr_dev(svg, "class", "fill-current ml-1");
+    			add_location(svg, file, 14, 6, 455);
+    			attr_dev(div, "class", "flex items-center bg-yellow-200 text-yellow-700 font-bold text-xs\n      rounded px-2 py-1 ");
+    			add_location(div, file, 10, 4, 302);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, div, anchor);
+    			append_dev(div, span);
+    			append_dev(div, t1);
+    			append_dev(div, svg);
+    			append_dev(svg, path);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(div);
     		}
-    	},
-    	{
-    		route_name: "Tsawwassen to Duke Point",
-    		average_sailing: "2 hours",
-    		sailing_date: "2020-07-25",
-    		sailings: {
-    			"2020-07-25T12:15:00Z": {
-    				vessel: "Queen of Alberni",
-    				sailing_status: "We are waiting for a crew member to board",
-    				scheduled_departure: "2020-07-25T12:15:00Z",
-    				actual_departure: "2020-07-25T12:25:00Z",
-    				eta: "2020-07-25T14:18:00Z"
-    			},
-    			"2020-07-25T14:45:00Z": {
-    				vessel: "Coastal Inspiration",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T14:45:00Z",
-    				actual_departure: "2020-07-25T14:48:00Z",
-    				eta: "2020-07-25T16:42:00Z"
-    			},
-    			"2020-07-25T17:15:00Z": {
-    				vessel: "Queen of Alberni",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T17:15:00Z",
-    				actual_departure: "2020-07-25T17:15:00Z",
-    				eta: "2020-07-25T19:16:00Z"
-    			},
-    			"2020-07-25T19:45:00Z": {
-    				vessel: "Coastal Inspiration",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T19:45:00Z",
-    				actual_departure: "2020-07-25T19:49:00Z",
-    				eta: "2020-07-25T21:44:00Z"
-    			},
-    			"2020-07-25T22:15:00Z": {
-    				vessel: "Queen of Alberni",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T22:15:00Z",
-    				actual_departure: "2020-07-25T22:15:00Z",
-    				eta: "2020-07-26T00:12:00Z"
-    			},
-    			"2020-07-26T00:45:00Z": {
-    				vessel: "Coastal Inspiration",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-26T00:45:00Z",
-    				actual_departure: "2020-07-26T00:54:00Z",
-    				eta: "2020-07-26T02:48:00Z"
-    			},
-    			"2020-07-26T03:16:00Z": {
-    				vessel: "Queen of Alberni",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-26T03:16:00Z",
-    				actual_departure: "2020-07-26T03:13:00Z",
-    				eta: "2020-07-26T05:15:00Z"
-    			},
-    			"2020-07-26T05:46:00Z": {
-    				vessel: "Coastal Inspiration",
-    				sailing_status: "",
-    				scheduled_departure: "2020-07-26T05:46:00Z",
-    				actual_departure: null,
-    				eta: null
-    			}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block_1.name,
+    		type: "if",
+    		source: "(10:84) ",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (6:2) {#if sailing_status === 'cancelled'}
+    function create_if_block(ctx) {
+    	let div;
+    	let span;
+
+    	const block = {
+    		c: function create() {
+    			div = element("div");
+    			span = element("span");
+    			span.textContent = "Cancelled";
+    			add_location(span, file, 7, 6, 179);
+    			attr_dev(div, "class", "bg-red-200 text-red-700 rounded font-bold text-xs px-2 py-1 ");
+    			add_location(div, file, 6, 4, 98);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, div, anchor);
+    			append_dev(div, span);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(div);
     		}
-    	},
-    	{
-    		route_name: "Swartz Bay to Fulford Harbour (Saltspring Is.)",
-    		average_sailing: "35 minutes",
-    		sailing_date: "2020-07-25",
-    		sailings: {
-    			"2020-07-25T14:00:00Z": {
-    				vessel: "Skeena Queen",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T14:00:00Z",
-    				actual_departure: "2020-07-25T13:57:00Z",
-    				eta: "2020-07-25T14:28:00Z"
-    			},
-    			"2020-07-25T15:30:00Z": {
-    				vessel: "Skeena Queen",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T15:30:00Z",
-    				actual_departure: "2020-07-25T15:29:00Z",
-    				eta: "2020-07-25T15:58:00Z"
-    			},
-    			"2020-07-25T17:00:00Z": {
-    				vessel: "Skeena Queen",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T17:00:00Z",
-    				actual_departure: "2020-07-25T16:57:00Z",
-    				eta: "2020-07-25T17:26:00Z"
-    			},
-    			"2020-07-25T18:30:00Z": {
-    				vessel: "Skeena Queen",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T18:30:00Z",
-    				actual_departure: "2020-07-25T18:29:00Z",
-    				eta: "2020-07-25T18:58:00Z"
-    			},
-    			"2020-07-25T20:10:00Z": {
-    				vessel: "Skeena Queen",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T20:10:00Z",
-    				actual_departure: "2020-07-25T20:07:00Z",
-    				eta: "2020-07-25T20:34:00Z"
-    			},
-    			"2020-07-25T22:00:00Z": {
-    				vessel: "Skeena Queen",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T22:00:00Z",
-    				actual_departure: "2020-07-25T22:04:00Z",
-    				eta: "2020-07-25T22:34:00Z"
-    			},
-    			"2020-07-26T00:00:00Z": {
-    				vessel: "Skeena Queen",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-26T00:00:00Z",
-    				actual_departure: "2020-07-26T00:03:00Z",
-    				eta: "2020-07-26T00:32:00Z"
-    			},
-    			"2020-07-26T02:00:00Z": {
-    				vessel: "Skeena Queen",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-26T02:00:00Z",
-    				actual_departure: "2020-07-26T01:59:00Z",
-    				eta: "2020-07-26T02:28:00Z"
-    			},
-    			"2020-07-26T04:00:00Z": {
-    				vessel: "Skeena Queen",
-    				sailing_status: "",
-    				scheduled_departure: "2020-07-26T04:00:00Z",
-    				actual_departure: null,
-    				eta: null
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block.name,
+    		type: "if",
+    		source: "(6:2) {#if sailing_status === 'cancelled'}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function create_fragment(ctx) {
+    	let div;
+    	let show_if;
+
+    	function select_block_type(ctx, dirty) {
+    		if (/*sailing_status*/ ctx[0] === "cancelled") return create_if_block;
+    		if (show_if == null || dirty & /*sailing_status*/ 1) show_if = !!!["On Time", "Cancelled", "", null, undefined].includes(/*sailing_status*/ ctx[0]);
+    		if (show_if) return create_if_block_1;
+    		return create_else_block;
+    	}
+
+    	let current_block_type = select_block_type(ctx, -1);
+    	let if_block = current_block_type(ctx);
+
+    	const block = {
+    		c: function create() {
+    			div = element("div");
+    			if_block.c();
+    			add_location(div, file, 4, 0, 49);
+    		},
+    		l: function claim(nodes) {
+    			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, div, anchor);
+    			if_block.m(div, null);
+    		},
+    		p: function update(ctx, [dirty]) {
+    			if (current_block_type !== (current_block_type = select_block_type(ctx, dirty))) {
+    				if_block.d(1);
+    				if_block = current_block_type(ctx);
+
+    				if (if_block) {
+    					if_block.c();
+    					if_block.m(div, null);
+    				}
     			}
+    		},
+    		i: noop,
+    		o: noop,
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(div);
+    			if_block.d();
     		}
-    	},
-    	{
-    		route_name: "Swartz Bay to Southern Gulf Islands",
-    		average_sailing: "Variable",
-    		sailing_date: "2020-07-25",
-    		sailings: {
-    			"2020-07-25T12:40:00Z": {
-    				vessel: "Mayne Queen",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T12:40:00Z",
-    				actual_departure: "2020-07-25T12:37:00Z",
-    				eta: null
-    			},
-    			"2020-07-25T12:50:00Z": {
-    				vessel: "Queen of Cumberland",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T12:50:00Z",
-    				actual_departure: "2020-07-25T12:48:00Z",
-    				eta: null
-    			},
-    			"2020-07-25T15:15:00Z": {
-    				vessel: "Mayne Queen",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T15:15:00Z",
-    				actual_departure: "2020-07-25T15:16:00Z",
-    				eta: null
-    			},
-    			"2020-07-25T16:35:00Z": {
-    				vessel: "Queen of Cumberland",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T16:35:00Z",
-    				actual_departure: "2020-07-25T16:39:00Z",
-    				eta: null
-    			},
-    			"2020-07-25T20:50:00Z": {
-    				vessel: "Mayne Queen",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T20:50:00Z",
-    				actual_departure: "2020-07-25T20:49:00Z",
-    				eta: "2020-07-25T21:28:00Z"
-    			},
-    			"2020-07-25T21:40:00Z": {
-    				vessel: "Queen of Cumberland",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T21:40:00Z",
-    				actual_departure: "2020-07-25T21:40:00Z",
-    				eta: null
-    			},
-    			"2020-07-25T22:40:00Z": {
-    				vessel: "Mayne Queen",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T22:40:00Z",
-    				actual_departure: "2020-07-25T22:38:00Z",
-    				eta: null
-    			},
-    			"2020-07-26T01:45:00Z": {
-    				vessel: "Queen of Cumberland",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-26T01:45:00Z",
-    				actual_departure: "2020-07-26T01:43:00Z",
-    				eta: "2020-07-26T03:40:00Z"
-    			},
-    			"2020-07-26T02:25:00Z": {
-    				vessel: "Mayne Queen",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-26T02:25:00Z",
-    				actual_departure: "2020-07-26T02:22:00Z",
-    				eta: "2020-07-26T03:55:00Z"
-    			}
-    		}
-    	},
-    	{
-    		route_name: "Swartz Bay to Tsawwassen",
-    		average_sailing: "1 hour 35 minutes",
-    		sailing_date: "2020-07-25",
-    		sailings: {
-    			"2020-07-25T14:00:00Z": {
-    				vessel: "Spirit of Vancouver Island",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T14:00:00Z",
-    				actual_departure: "2020-07-25T14:02:00Z",
-    				eta: "2020-07-25T15:30:00Z"
-    			},
-    			"2020-07-25T15:01:00Z": {
-    				vessel: "Coastal Celebration",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T15:01:00Z",
-    				actual_departure: "2020-07-25T15:02:00Z",
-    				eta: "2020-07-25T16:30:00Z"
-    			},
-    			"2020-07-25T16:00:00Z": {
-    				vessel: "Spirit of British Columbia",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T16:00:00Z",
-    				actual_departure: "2020-07-25T16:05:00Z",
-    				eta: "2020-07-25T17:36:00Z"
-    			},
-    			"2020-07-25T18:00:00Z": {
-    				vessel: "Spirit of Vancouver Island",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T18:00:00Z",
-    				actual_departure: "2020-07-25T18:03:00Z",
-    				eta: "2020-07-25T19:30:00Z"
-    			},
-    			"2020-07-25T19:00:00Z": {
-    				vessel: "Coastal Celebration",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T19:00:00Z",
-    				actual_departure: "2020-07-25T19:02:00Z",
-    				eta: "2020-07-25T20:32:00Z"
-    			},
-    			"2020-07-25T20:00:00Z": {
-    				vessel: "Spirit of British Columbia",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T20:00:00Z",
-    				actual_departure: "2020-07-25T20:00:00Z",
-    				eta: "2020-07-25T21:30:00Z"
-    			},
-    			"2020-07-25T22:00:00Z": {
-    				vessel: "Spirit of Vancouver Island",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T22:00:00Z",
-    				actual_departure: "2020-07-25T22:02:00Z",
-    				eta: "2020-07-25T23:26:00Z"
-    			},
-    			"2020-07-25T23:00:00Z": {
-    				vessel: "Coastal Celebration",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T23:00:00Z",
-    				actual_departure: "2020-07-25T23:02:00Z",
-    				eta: "2020-07-26T00:28:00Z"
-    			},
-    			"2020-07-26T00:00:00Z": {
-    				vessel: "Spirit of British Columbia",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-26T00:00:00Z",
-    				actual_departure: "2020-07-26T00:01:00Z",
-    				eta: "2020-07-26T01:30:00Z"
-    			},
-    			"2020-07-26T02:00:00Z": {
-    				vessel: "Spirit of Vancouver Island",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-26T02:00:00Z",
-    				actual_departure: "2020-07-26T02:01:00Z",
-    				eta: "2020-07-26T03:30:00Z"
-    			},
-    			"2020-07-26T04:00:00Z": {
-    				vessel: "Spirit of British Columbia",
-    				sailing_status: "",
-    				scheduled_departure: "2020-07-26T04:00:00Z",
-    				actual_departure: null,
-    				eta: null
-    			}
-    		}
-    	},
-    	{
-    		route_name: "Duke Point to Tsawwassen",
-    		average_sailing: "2 hours",
-    		sailing_date: "2020-07-25",
-    		sailings: {
-    			"2020-07-25T12:15:00Z": {
-    				vessel: "Coastal Inspiration",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T12:15:00Z",
-    				actual_departure: "2020-07-25T12:15:00Z",
-    				eta: "2020-07-25T14:16:00Z"
-    			},
-    			"2020-07-25T14:45:00Z": {
-    				vessel: "Queen of Alberni",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T14:45:00Z",
-    				actual_departure: "2020-07-25T14:46:00Z",
-    				eta: "2020-07-25T16:46:00Z"
-    			},
-    			"2020-07-25T17:15:00Z": {
-    				vessel: "Coastal Inspiration",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T17:15:00Z",
-    				actual_departure: "2020-07-25T17:19:00Z",
-    				eta: "2020-07-25T19:16:00Z"
-    			},
-    			"2020-07-25T19:45:00Z": {
-    				vessel: "Queen of Alberni",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T19:45:00Z",
-    				actual_departure: "2020-07-25T19:47:00Z",
-    				eta: "2020-07-25T21:42:00Z"
-    			},
-    			"2020-07-25T22:15:00Z": {
-    				vessel: "Coastal Inspiration",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T22:15:00Z",
-    				actual_departure: "2020-07-25T22:19:00Z",
-    				eta: "2020-07-26T00:22:00Z"
-    			},
-    			"2020-07-26T00:45:00Z": {
-    				vessel: "Queen of Alberni",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-26T00:45:00Z",
-    				actual_departure: "2020-07-26T00:43:00Z",
-    				eta: "2020-07-26T02:42:00Z"
-    			},
-    			"2020-07-26T03:16:00Z": {
-    				vessel: "Coastal Inspiration",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-26T03:16:00Z",
-    				actual_departure: "2020-07-26T03:15:00Z",
-    				eta: "2020-07-26T05:16:00Z"
-    			},
-    			"2020-07-26T05:46:00Z": {
-    				vessel: "Queen of Alberni",
-    				sailing_status: "",
-    				scheduled_departure: "2020-07-26T05:46:00Z",
-    				actual_departure: null,
-    				eta: null
-    			}
-    		}
-    	},
-    	{
-    		route_name: "Departure Bay to Horseshoe Bay",
-    		average_sailing: "1 hour 40 minutes",
-    		sailing_date: "2020-07-25",
-    		sailings: {
-    			"2020-07-25T13:25:00Z": {
-    				vessel: "Queen of Cowichan",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T13:25:00Z",
-    				actual_departure: "2020-07-25T13:25:00Z",
-    				eta: "2020-07-25T15:10:00Z"
-    			},
-    			"2020-07-25T15:45:00Z": {
-    				vessel: "Queen of Oak Bay",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T15:45:00Z",
-    				actual_departure: "2020-07-25T15:53:00Z",
-    				eta: "2020-07-25T17:34:00Z"
-    			},
-    			"2020-07-25T18:05:00Z": {
-    				vessel: "Queen of Cowichan",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T18:05:00Z",
-    				actual_departure: "2020-07-25T18:14:00Z",
-    				eta: "2020-07-25T19:50:00Z"
-    			},
-    			"2020-07-25T20:25:00Z": {
-    				vessel: "Queen of Oak Bay",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T20:25:00Z",
-    				actual_departure: "2020-07-25T20:30:00Z",
-    				eta: "2020-07-25T22:12:00Z"
-    			},
-    			"2020-07-25T22:55:00Z": {
-    				vessel: "Queen of Cowichan",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T22:55:00Z",
-    				actual_departure: "2020-07-25T22:55:00Z",
-    				eta: "2020-07-26T00:34:00Z"
-    			},
-    			"2020-07-26T01:15:00Z": {
-    				vessel: "Queen of Oak Bay",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-26T01:15:00Z",
-    				actual_departure: "2020-07-26T01:16:00Z",
-    				eta: "2020-07-26T03:02:00Z"
-    			},
-    			"2020-07-26T03:30:00Z": {
-    				vessel: "Queen of Cowichan",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-26T03:30:00Z",
-    				actual_departure: "2020-07-26T03:30:00Z",
-    				eta: "2020-07-26T05:10:00Z"
-    			},
-    			"2020-07-26T05:40:00Z": {
-    				vessel: "Queen of Oak Bay",
-    				sailing_status: "",
-    				scheduled_departure: "2020-07-26T05:40:00Z",
-    				actual_departure: null,
-    				eta: null
-    			}
-    		}
-    	},
-    	{
-    		route_name: "Horseshoe Bay to Snug Cove (Bowen Is.)",
-    		average_sailing: "20 minutes",
-    		sailing_date: "2020-07-25",
-    		sailings: {
-    			"2020-07-25T12:50:00Z": {
-    				vessel: "Queen of Capilano",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T12:50:00Z",
-    				actual_departure: "2020-07-25T12:51:00Z",
-    				eta: null
-    			},
-    			"2020-07-25T13:50:00Z": {
-    				vessel: "Queen of Capilano",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T13:50:00Z",
-    				actual_departure: "2020-07-25T13:49:00Z",
-    				eta: "2020-07-25T14:10:00Z"
-    			},
-    			"2020-07-25T15:00:00Z": {
-    				vessel: "Queen of Capilano",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T15:00:00Z",
-    				actual_departure: "2020-07-25T14:58:00Z",
-    				eta: "2020-07-25T15:18:00Z"
-    			},
-    			"2020-07-25T16:05:00Z": {
-    				vessel: "Queen of Capilano",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T16:05:00Z",
-    				actual_departure: "2020-07-25T16:07:00Z",
-    				eta: "2020-07-25T16:24:00Z"
-    			},
-    			"2020-07-25T17:10:00Z": {
-    				vessel: "Queen of Capilano",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T17:10:00Z",
-    				actual_departure: "2020-07-25T17:17:00Z",
-    				eta: "2020-07-25T17:34:00Z"
-    			},
-    			"2020-07-25T18:15:00Z": {
-    				vessel: "Queen of Capilano",
-    				sailing_status: "We are loading as many vehicles as possible",
-    				scheduled_departure: "2020-07-25T18:15:00Z",
-    				actual_departure: "2020-07-25T18:29:00Z",
-    				eta: "2020-07-25T18:46:00Z"
-    			},
-    			"2020-07-25T19:45:00Z": {
-    				vessel: "Queen of Capilano",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T19:45:00Z",
-    				actual_departure: "2020-07-25T19:49:00Z",
-    				eta: "2020-07-25T20:06:00Z"
-    			},
-    			"2020-07-25T20:55:00Z": {
-    				vessel: "Queen of Capilano",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T20:55:00Z",
-    				actual_departure: "2020-07-25T20:55:00Z",
-    				eta: "2020-07-25T21:15:00Z"
-    			},
-    			"2020-07-25T22:20:00Z": {
-    				vessel: "Queen of Capilano",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T22:20:00Z",
-    				actual_departure: "2020-07-25T22:20:00Z",
-    				eta: "2020-07-25T22:36:00Z"
-    			},
-    			"2020-07-25T23:40:00Z": {
-    				vessel: "Queen of Capilano",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T23:40:00Z",
-    				actual_departure: "2020-07-25T23:40:00Z",
-    				eta: "2020-07-25T23:56:00Z"
-    			},
-    			"2020-07-26T00:45:00Z": {
-    				vessel: "Queen of Capilano",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-26T00:45:00Z",
-    				actual_departure: "2020-07-26T00:45:00Z",
-    				eta: "2020-07-26T01:00:00Z"
-    			},
-    			"2020-07-26T01:50:00Z": {
-    				vessel: "Queen of Capilano",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-26T01:50:00Z",
-    				actual_departure: "2020-07-26T01:50:00Z",
-    				eta: "2020-07-26T02:10:00Z"
-    			},
-    			"2020-07-26T04:20:00Z": {
-    				vessel: "Queen of Capilano",
-    				sailing_status: "",
-    				scheduled_departure: "2020-07-26T04:20:00Z",
-    				actual_departure: null,
-    				eta: null
-    			},
-    			"2020-07-26T05:20:00Z": {
-    				vessel: "Queen of Capilano",
-    				sailing_status: "",
-    				scheduled_departure: "2020-07-26T05:20:00Z",
-    				actual_departure: null,
-    				eta: null
-    			}
-    		}
-    	},
-    	{
-    		route_name: "Horseshoe Bay to Departure Bay",
-    		average_sailing: "1 hour 40 minutes",
-    		sailing_date: "2020-07-25",
-    		sailings: {
-    			"2020-07-25T13:25:00Z": {
-    				vessel: "Queen of Oak Bay",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T13:25:00Z",
-    				actual_departure: "2020-07-25T13:30:00Z",
-    				eta: "2020-07-25T15:12:00Z"
-    			},
-    			"2020-07-25T15:45:00Z": {
-    				vessel: "Queen of Cowichan",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T15:45:00Z",
-    				actual_departure: "2020-07-25T15:48:00Z",
-    				eta: "2020-07-25T17:32:00Z"
-    			},
-    			"2020-07-25T18:05:00Z": {
-    				vessel: "Queen of Oak Bay",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T18:05:00Z",
-    				actual_departure: "2020-07-25T18:10:00Z",
-    				eta: "2020-07-25T19:52:00Z"
-    			},
-    			"2020-07-25T20:25:00Z": {
-    				vessel: "Queen of Cowichan",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T20:25:00Z",
-    				actual_departure: "2020-07-25T20:27:00Z",
-    				eta: "2020-07-25T22:10:00Z"
-    			},
-    			"2020-07-25T22:55:00Z": {
-    				vessel: "Queen of Oak Bay",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T22:55:00Z",
-    				actual_departure: "2020-07-25T22:55:00Z",
-    				eta: "2020-07-26T00:40:00Z"
-    			},
-    			"2020-07-26T01:15:00Z": {
-    				vessel: "Queen of Cowichan",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-26T01:15:00Z",
-    				actual_departure: "2020-07-26T01:15:00Z",
-    				eta: "2020-07-26T02:54:00Z"
-    			},
-    			"2020-07-26T03:30:00Z": {
-    				vessel: "Queen of Oak Bay",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-26T03:30:00Z",
-    				actual_departure: "2020-07-26T03:30:00Z",
-    				eta: "2020-07-26T05:10:00Z"
-    			},
-    			"2020-07-26T05:40:00Z": {
-    				vessel: "Queen of Cowichan",
-    				sailing_status: "",
-    				scheduled_departure: "2020-07-26T05:40:00Z",
-    				actual_departure: null,
-    				eta: null
-    			}
-    		}
-    	},
-    	{
-    		route_name: "Horseshoe Bay to Langdale",
-    		average_sailing: "40 minutes",
-    		sailing_date: "2020-07-25",
-    		sailings: {
-    			"2020-07-25T14:30:00Z": {
-    				vessel: "Queen of Surrey",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T14:30:00Z",
-    				actual_departure: "2020-07-25T14:33:00Z",
-    				eta: "2020-07-25T15:12:00Z"
-    			},
-    			"2020-07-25T16:50:00Z": {
-    				vessel: "Queen of Surrey",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T16:50:00Z",
-    				actual_departure: "2020-07-25T16:51:00Z",
-    				eta: "2020-07-25T17:30:00Z"
-    			},
-    			"2020-07-25T19:10:00Z": {
-    				vessel: "Queen of Surrey",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T19:10:00Z",
-    				actual_departure: "2020-07-25T19:14:00Z",
-    				eta: "2020-07-25T19:52:00Z"
-    			},
-    			"2020-07-25T21:26:00Z": {
-    				vessel: "Queen of Surrey",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T21:26:00Z",
-    				actual_departure: "2020-07-25T21:27:00Z",
-    				eta: "2020-07-25T22:04:00Z"
-    			},
-    			"2020-07-25T23:45:00Z": {
-    				vessel: "Queen of Surrey",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T23:45:00Z",
-    				actual_departure: "2020-07-25T23:47:00Z",
-    				eta: "2020-07-26T00:26:00Z"
-    			},
-    			"2020-07-26T02:05:00Z": {
-    				vessel: "Queen of Surrey",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-26T02:05:00Z",
-    				actual_departure: "2020-07-26T02:06:00Z",
-    				eta: "2020-07-26T02:46:00Z"
-    			},
-    			"2020-07-26T04:25:00Z": {
-    				vessel: "Queen of Surrey",
-    				sailing_status: "",
-    				scheduled_departure: "2020-07-26T04:25:00Z",
-    				actual_departure: null,
-    				eta: null
-    			},
-    			"2020-07-26T06:30:00Z": {
-    				vessel: "Queen of Surrey",
-    				sailing_status: "",
-    				scheduled_departure: "2020-07-26T06:30:00Z",
-    				actual_departure: null,
-    				eta: null
-    			}
-    		}
-    	},
-    	{
-    		route_name: "Langdale to Horseshoe Bay",
-    		average_sailing: "40 minutes",
-    		sailing_date: "2020-07-25",
-    		sailings: {
-    			"2020-07-25T13:20:00Z": {
-    				vessel: "Queen of Surrey",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T13:20:00Z",
-    				actual_departure: "2020-07-25T13:20:00Z",
-    				eta: "2020-07-25T14:00:00Z"
-    			},
-    			"2020-07-25T15:40:00Z": {
-    				vessel: "Queen of Surrey",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T15:40:00Z",
-    				actual_departure: "2020-07-25T15:40:00Z",
-    				eta: "2020-07-25T16:18:00Z"
-    			},
-    			"2020-07-25T18:00:00Z": {
-    				vessel: "Queen of Surrey",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T18:00:00Z",
-    				actual_departure: "2020-07-25T18:02:00Z",
-    				eta: "2020-07-25T18:40:00Z"
-    			},
-    			"2020-07-25T20:15:00Z": {
-    				vessel: "Queen of Surrey",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T20:15:00Z",
-    				actual_departure: "2020-07-25T20:20:00Z",
-    				eta: "2020-07-25T20:58:00Z"
-    			},
-    			"2020-07-25T22:35:00Z": {
-    				vessel: "Queen of Surrey",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-25T22:35:00Z",
-    				actual_departure: "2020-07-25T22:36:00Z",
-    				eta: "2020-07-25T23:14:00Z"
-    			},
-    			"2020-07-26T00:55:00Z": {
-    				vessel: "Queen of Surrey",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-26T00:55:00Z",
-    				actual_departure: "2020-07-26T00:56:00Z",
-    				eta: "2020-07-26T01:38:00Z"
-    			},
-    			"2020-07-26T03:15:00Z": {
-    				vessel: "Queen of Surrey",
-    				sailing_status: "On Time",
-    				scheduled_departure: "2020-07-26T03:15:00Z",
-    				actual_departure: "2020-07-26T03:15:00Z",
-    				eta: "2020-07-26T03:55:00Z"
-    			},
-    			"2020-07-26T05:30:00Z": {
-    				vessel: "Queen of Surrey",
-    				sailing_status: "",
-    				scheduled_departure: "2020-07-26T05:30:00Z",
-    				actual_departure: null,
-    				eta: null
-    			}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_fragment.name,
+    		type: "component",
+    		source: "",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function instance($$self, $$props, $$invalidate) {
+    	let { sailing_status } = $$props;
+    	const writable_props = ["sailing_status"];
+
+    	Object.keys($$props).forEach(key => {
+    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console.warn(`<SailingStatus> was created with unknown prop '${key}'`);
+    	});
+
+    	let { $$slots = {}, $$scope } = $$props;
+    	validate_slots("SailingStatus", $$slots, []);
+
+    	$$self.$set = $$props => {
+    		if ("sailing_status" in $$props) $$invalidate(0, sailing_status = $$props.sailing_status);
+    	};
+
+    	$$self.$capture_state = () => ({ sailing_status });
+
+    	$$self.$inject_state = $$props => {
+    		if ("sailing_status" in $$props) $$invalidate(0, sailing_status = $$props.sailing_status);
+    	};
+
+    	if ($$props && "$$inject" in $$props) {
+    		$$self.$inject_state($$props.$$inject);
+    	}
+
+    	return [sailing_status];
+    }
+
+    class SailingStatus extends SvelteComponentDev {
+    	constructor(options) {
+    		super(options);
+    		init(this, options, instance, create_fragment, safe_not_equal, { sailing_status: 0 });
+
+    		dispatch_dev("SvelteRegisterComponent", {
+    			component: this,
+    			tagName: "SailingStatus",
+    			options,
+    			id: create_fragment.name
+    		});
+
+    		const { ctx } = this.$$;
+    		const props = options.props || {};
+
+    		if (/*sailing_status*/ ctx[0] === undefined && !("sailing_status" in props)) {
+    			console.warn("<SailingStatus> was created without expected prop 'sailing_status'");
     		}
     	}
-    ];
+
+    	get sailing_status() {
+    		throw new Error("<SailingStatus>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set sailing_status(value) {
+    		throw new Error("<SailingStatus>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+    }
+
+    /* src/IndexCard.svelte generated by Svelte v3.24.0 */
+
+    const { Object: Object_1 } = globals;
+    const file$1 = "src/IndexCard.svelte";
+
+    function create_fragment$1(ctx) {
+    	let button;
+    	let div2;
+    	let div0;
+    	let t1;
+    	let div1;
+    	let span;
+    	let t3;
+    	let t4;
+    	let t5;
+    	let div3;
+    	let sailingstatus;
+    	let current;
+    	let mounted;
+    	let dispose;
+
+    	sailingstatus = new SailingStatus({
+    			props: {
+    				sailing_status: /*latestStatus*/ ctx[4](/*route*/ ctx[0].sailings)
+    			},
+    			$$inline: true
+    		});
+
+    	const block = {
+    		c: function create() {
+    			button = element("button");
+    			div2 = element("div");
+    			div0 = element("div");
+    			div0.textContent = `${/*departureTerminal*/ ctx[2]}`;
+    			t1 = space();
+    			div1 = element("div");
+    			span = element("span");
+    			span.textContent = "to";
+    			t3 = space();
+    			t4 = text(/*arrivalTerminal*/ ctx[3]);
+    			t5 = space();
+    			div3 = element("div");
+    			create_component(sailingstatus.$$.fragment);
+    			attr_dev(div0, "class", "text-grey-darkest font-bold pb-1");
+    			add_location(div0, file$1, 26, 4, 751);
+    			attr_dev(span, "class", "text-xs text-grey-200 pb-1");
+    			add_location(span, file$1, 28, 6, 882);
+    			attr_dev(div1, "class", "text-grey-darker font-bold text-sm");
+    			add_location(div1, file$1, 27, 4, 827);
+    			attr_dev(div2, "class", "");
+    			add_location(div2, file$1, 25, 2, 732);
+    			attr_dev(div3, "class", " text-right");
+    			add_location(div3, file$1, 32, 2, 979);
+    			attr_dev(button, "class", "text-left w-full my-2 bg-white rounded-lg px-4 py-4 shadow border-b-4\n  border-blue-200 flex justify-between focus:outline-none");
+    			add_location(button, file$1, 21, 0, 531);
+    		},
+    		l: function claim(nodes) {
+    			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, button, anchor);
+    			append_dev(button, div2);
+    			append_dev(div2, div0);
+    			append_dev(div2, t1);
+    			append_dev(div2, div1);
+    			append_dev(div1, span);
+    			append_dev(div1, t3);
+    			append_dev(div1, t4);
+    			append_dev(button, t5);
+    			append_dev(button, div3);
+    			mount_component(sailingstatus, div3, null);
+    			current = true;
+
+    			if (!mounted) {
+    				dispose = listen_dev(button, "click", /*click_handler*/ ctx[5], false, false, false);
+    				mounted = true;
+    			}
+    		},
+    		p: function update(ctx, [dirty]) {
+    			const sailingstatus_changes = {};
+    			if (dirty & /*route*/ 1) sailingstatus_changes.sailing_status = /*latestStatus*/ ctx[4](/*route*/ ctx[0].sailings);
+    			sailingstatus.$set(sailingstatus_changes);
+    		},
+    		i: function intro(local) {
+    			if (current) return;
+    			transition_in(sailingstatus.$$.fragment, local);
+    			current = true;
+    		},
+    		o: function outro(local) {
+    			transition_out(sailingstatus.$$.fragment, local);
+    			current = false;
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(button);
+    			destroy_component(sailingstatus);
+    			mounted = false;
+    			dispose();
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_fragment$1.name,
+    		type: "component",
+    		source: "",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function instance$1($$self, $$props, $$invalidate) {
+    	let { route } = $$props;
+    	let { changeSelected } = $$props;
+    	let [departureTerminal, arrivalTerminal] = route.route_name.split(" to ");
+
+    	let latestStatus = sailings => {
+    		const { sailing_status } = Object.values(sailings).reduce((acc, cur) => cur.actual_departure ? cur : acc);
+
+    		if (!["On Time", "Cancelled", "", null, undefined].includes(sailing_status)) {
+    			return "Delayed";
+    		} else {
+    			return sailing_status;
+    		}
+    	};
+
+    	const writable_props = ["route", "changeSelected"];
+
+    	Object_1.keys($$props).forEach(key => {
+    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console.warn(`<IndexCard> was created with unknown prop '${key}'`);
+    	});
+
+    	let { $$slots = {}, $$scope } = $$props;
+    	validate_slots("IndexCard", $$slots, []);
+    	const click_handler = () => changeSelected(route.route_name);
+
+    	$$self.$set = $$props => {
+    		if ("route" in $$props) $$invalidate(0, route = $$props.route);
+    		if ("changeSelected" in $$props) $$invalidate(1, changeSelected = $$props.changeSelected);
+    	};
+
+    	$$self.$capture_state = () => ({
+    		SailingStatus,
+    		route,
+    		changeSelected,
+    		departureTerminal,
+    		arrivalTerminal,
+    		latestStatus
+    	});
+
+    	$$self.$inject_state = $$props => {
+    		if ("route" in $$props) $$invalidate(0, route = $$props.route);
+    		if ("changeSelected" in $$props) $$invalidate(1, changeSelected = $$props.changeSelected);
+    		if ("departureTerminal" in $$props) $$invalidate(2, departureTerminal = $$props.departureTerminal);
+    		if ("arrivalTerminal" in $$props) $$invalidate(3, arrivalTerminal = $$props.arrivalTerminal);
+    		if ("latestStatus" in $$props) $$invalidate(4, latestStatus = $$props.latestStatus);
+    	};
+
+    	if ($$props && "$$inject" in $$props) {
+    		$$self.$inject_state($$props.$$inject);
+    	}
+
+    	return [
+    		route,
+    		changeSelected,
+    		departureTerminal,
+    		arrivalTerminal,
+    		latestStatus,
+    		click_handler
+    	];
+    }
+
+    class IndexCard extends SvelteComponentDev {
+    	constructor(options) {
+    		super(options);
+    		init(this, options, instance$1, create_fragment$1, safe_not_equal, { route: 0, changeSelected: 1 });
+
+    		dispatch_dev("SvelteRegisterComponent", {
+    			component: this,
+    			tagName: "IndexCard",
+    			options,
+    			id: create_fragment$1.name
+    		});
+
+    		const { ctx } = this.$$;
+    		const props = options.props || {};
+
+    		if (/*route*/ ctx[0] === undefined && !("route" in props)) {
+    			console.warn("<IndexCard> was created without expected prop 'route'");
+    		}
+
+    		if (/*changeSelected*/ ctx[1] === undefined && !("changeSelected" in props)) {
+    			console.warn("<IndexCard> was created without expected prop 'changeSelected'");
+    		}
+    	}
+
+    	get route() {
+    		throw new Error("<IndexCard>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set route(value) {
+    		throw new Error("<IndexCard>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	get changeSelected() {
+    		throw new Error("<IndexCard>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set changeSelected(value) {
+    		throw new Error("<IndexCard>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+    }
+
+    /* src/Index.svelte generated by Svelte v3.24.0 */
+    const file$2 = "src/Index.svelte";
+
+    function get_each_context(ctx, list, i) {
+    	const child_ctx = ctx.slice();
+    	child_ctx[2] = list[i];
+    	return child_ctx;
+    }
+
+    // (11:2) {#each data as route (route.route_name)}
+    function create_each_block(key_1, ctx) {
+    	let first;
+    	let indexcard;
+    	let current;
+
+    	indexcard = new IndexCard({
+    			props: {
+    				route: /*route*/ ctx[2],
+    				changeSelected: /*changeSelected*/ ctx[1]
+    			},
+    			$$inline: true
+    		});
+
+    	const block = {
+    		key: key_1,
+    		first: null,
+    		c: function create() {
+    			first = empty();
+    			create_component(indexcard.$$.fragment);
+    			this.first = first;
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, first, anchor);
+    			mount_component(indexcard, target, anchor);
+    			current = true;
+    		},
+    		p: function update(ctx, dirty) {
+    			const indexcard_changes = {};
+    			if (dirty & /*data*/ 1) indexcard_changes.route = /*route*/ ctx[2];
+    			if (dirty & /*changeSelected*/ 2) indexcard_changes.changeSelected = /*changeSelected*/ ctx[1];
+    			indexcard.$set(indexcard_changes);
+    		},
+    		i: function intro(local) {
+    			if (current) return;
+    			transition_in(indexcard.$$.fragment, local);
+    			current = true;
+    		},
+    		o: function outro(local) {
+    			transition_out(indexcard.$$.fragment, local);
+    			current = false;
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(first);
+    			destroy_component(indexcard, detaching);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_each_block.name,
+    		type: "each",
+    		source: "(11:2) {#each data as route (route.route_name)}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function create_fragment$2(ctx) {
+    	let h2;
+    	let t1;
+    	let div;
+    	let each_blocks = [];
+    	let each_1_lookup = new Map();
+    	let current;
+    	let each_value = /*data*/ ctx[0];
+    	validate_each_argument(each_value);
+    	const get_key = ctx => /*route*/ ctx[2].route_name;
+    	validate_each_keys(ctx, each_value, get_each_context, get_key);
+
+    	for (let i = 0; i < each_value.length; i += 1) {
+    		let child_ctx = get_each_context(ctx, each_value, i);
+    		let key = get_key(child_ctx);
+    		each_1_lookup.set(key, each_blocks[i] = create_each_block(key, child_ctx));
+    	}
+
+    	const block = {
+    		c: function create() {
+    			h2 = element("h2");
+    			h2.textContent = "All Routes";
+    			t1 = space();
+    			div = element("div");
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].c();
+    			}
+
+    			attr_dev(h2, "class", "mb-4 text-xl font-semibold text-white antialiased ");
+    			add_location(h2, file$2, 7, 0, 115);
+    			attr_dev(div, "class", "w-full");
+    			add_location(div, file$2, 9, 0, 195);
+    		},
+    		l: function claim(nodes) {
+    			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, h2, anchor);
+    			insert_dev(target, t1, anchor);
+    			insert_dev(target, div, anchor);
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].m(div, null);
+    			}
+
+    			current = true;
+    		},
+    		p: function update(ctx, [dirty]) {
+    			if (dirty & /*data, changeSelected*/ 3) {
+    				const each_value = /*data*/ ctx[0];
+    				validate_each_argument(each_value);
+    				group_outros();
+    				validate_each_keys(ctx, each_value, get_each_context, get_key);
+    				each_blocks = update_keyed_each(each_blocks, dirty, get_key, 1, ctx, each_value, each_1_lookup, div, outro_and_destroy_block, create_each_block, null, get_each_context);
+    				check_outros();
+    			}
+    		},
+    		i: function intro(local) {
+    			if (current) return;
+
+    			for (let i = 0; i < each_value.length; i += 1) {
+    				transition_in(each_blocks[i]);
+    			}
+
+    			current = true;
+    		},
+    		o: function outro(local) {
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				transition_out(each_blocks[i]);
+    			}
+
+    			current = false;
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(h2);
+    			if (detaching) detach_dev(t1);
+    			if (detaching) detach_dev(div);
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].d();
+    			}
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_fragment$2.name,
+    		type: "component",
+    		source: "",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function instance$2($$self, $$props, $$invalidate) {
+    	let { data } = $$props;
+    	let { changeSelected } = $$props;
+    	const writable_props = ["data", "changeSelected"];
+
+    	Object.keys($$props).forEach(key => {
+    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console.warn(`<Index> was created with unknown prop '${key}'`);
+    	});
+
+    	let { $$slots = {}, $$scope } = $$props;
+    	validate_slots("Index", $$slots, []);
+
+    	$$self.$set = $$props => {
+    		if ("data" in $$props) $$invalidate(0, data = $$props.data);
+    		if ("changeSelected" in $$props) $$invalidate(1, changeSelected = $$props.changeSelected);
+    	};
+
+    	$$self.$capture_state = () => ({ IndexCard, data, changeSelected });
+
+    	$$self.$inject_state = $$props => {
+    		if ("data" in $$props) $$invalidate(0, data = $$props.data);
+    		if ("changeSelected" in $$props) $$invalidate(1, changeSelected = $$props.changeSelected);
+    	};
+
+    	if ($$props && "$$inject" in $$props) {
+    		$$self.$inject_state($$props.$$inject);
+    	}
+
+    	return [data, changeSelected];
+    }
+
+    class Index extends SvelteComponentDev {
+    	constructor(options) {
+    		super(options);
+    		init(this, options, instance$2, create_fragment$2, safe_not_equal, { data: 0, changeSelected: 1 });
+
+    		dispatch_dev("SvelteRegisterComponent", {
+    			component: this,
+    			tagName: "Index",
+    			options,
+    			id: create_fragment$2.name
+    		});
+
+    		const { ctx } = this.$$;
+    		const props = options.props || {};
+
+    		if (/*data*/ ctx[0] === undefined && !("data" in props)) {
+    			console.warn("<Index> was created without expected prop 'data'");
+    		}
+
+    		if (/*changeSelected*/ ctx[1] === undefined && !("changeSelected" in props)) {
+    			console.warn("<Index> was created without expected prop 'changeSelected'");
+    		}
+    	}
+
+    	get data() {
+    		throw new Error("<Index>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set data(value) {
+    		throw new Error("<Index>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	get changeSelected() {
+    		throw new Error("<Index>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set changeSelected(value) {
+    		throw new Error("<Index>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+    }
 
     function toInteger(dirtyNumber) {
       if (dirtyNumber === null || dirtyNumber === true || dirtyNumber === false) {
@@ -3883,101 +3859,137 @@ var app = (function () {
     }
 
     /* src/Sailing.svelte generated by Svelte v3.24.0 */
-    const file = "src/Sailing.svelte";
 
-    function create_fragment(ctx) {
-    	let p0;
-    	let t0_value = format(parseISO(/*scheduled_departure*/ ctx[0]), "H:mm") + "";
+    const { console: console_1 } = globals;
+    const file$3 = "src/Sailing.svelte";
+
+    function create_fragment$3(ctx) {
+    	let div8;
+    	let div1;
+    	let div0;
+    	let t0_value = /*formatTime*/ ctx[5](/*scheduled_departure*/ ctx[0]) + "";
     	let t0;
     	let t1;
-    	let p1;
-    	let t2_value = format(parseISO(/*actual_departure*/ ctx[1]), "H:mm") + "";
+    	let div7;
+    	let div2;
+    	let sailingstatus;
     	let t2;
+    	let div3;
     	let t3;
-    	let p2;
+    	let div4;
     	let t4;
     	let t5;
-    	let p3;
+    	let div6;
+    	let div5;
+    	let t6_value = /*formatTime*/ ctx[5](/*actual_departure*/ ctx[1]) + "";
     	let t6;
     	let t7;
-    	let p4;
+    	let t8_value = /*formatTime*/ ctx[5](/*eta*/ ctx[2]) + "";
     	let t8;
-    	let t9;
-    	let br;
+    	let current;
+
+    	sailingstatus = new SailingStatus({
+    			props: {
+    				sailing_status: /*sailing_status*/ ctx[3]
+    			},
+    			$$inline: true
+    		});
 
     	const block = {
     		c: function create() {
-    			p0 = element("p");
+    			div8 = element("div");
+    			div1 = element("div");
+    			div0 = element("div");
     			t0 = text(t0_value);
     			t1 = space();
-    			p1 = element("p");
-    			t2 = text(t2_value);
+    			div7 = element("div");
+    			div2 = element("div");
+    			create_component(sailingstatus.$$.fragment);
+    			t2 = space();
+    			div3 = element("div");
     			t3 = space();
-    			p2 = element("p");
-    			t4 = text(/*eta*/ ctx[2]);
+    			div4 = element("div");
+    			t4 = text(/*vessel*/ ctx[4]);
     			t5 = space();
-    			p3 = element("p");
-    			t6 = text(/*sailing_status*/ ctx[3]);
-    			t7 = space();
-    			p4 = element("p");
-    			t8 = text(/*vessel*/ ctx[4]);
-    			t9 = space();
-    			br = element("br");
-    			add_location(p0, file, 10, 0, 253);
-    			add_location(p1, file, 11, 0, 308);
-    			add_location(p2, file, 12, 0, 360);
-    			add_location(p3, file, 13, 0, 373);
-    			add_location(p4, file, 14, 0, 397);
-    			add_location(br, file, 15, 0, 413);
+    			div6 = element("div");
+    			div5 = element("div");
+    			t6 = text(t6_value);
+    			t7 = text(" to ");
+    			t8 = text(t8_value);
+    			attr_dev(div0, "class", "text-xl md:text-3xl font-bold bg-white rounded-lg md:pl-2");
+    			add_location(div0, file$3, 20, 4, 507);
+    			attr_dev(div1, "class", "w-10 md:w-24");
+    			add_location(div1, file$3, 19, 2, 476);
+    			attr_dev(div2, "class", "float-right");
+    			attr_dev(div2, "id", "sailing-status");
+    			add_location(div2, file$3, 26, 4, 692);
+    			attr_dev(div3, "class", "text-xs");
+    			attr_dev(div3, "id", "percent-full");
+    			add_location(div3, file$3, 30, 4, 795);
+    			attr_dev(div4, "class", "text-xs");
+    			attr_dev(div4, "id", "vessel");
+    			add_location(div4, file$3, 31, 4, 841);
+    			attr_dev(div5, "class", "text-xs");
+    			add_location(div5, file$3, 33, 6, 914);
+    			attr_dev(div6, "class", "");
+    			add_location(div6, file$3, 32, 4, 893);
+    			attr_dev(div7, "class", "flex-1 ml-4 pl-4 leading-normal");
+    			add_location(div7, file$3, 25, 2, 642);
+    			attr_dev(div8, "class", "flex mb-4 bg-white rounded-lg py-4 px-4 shadow");
+    			add_location(div8, file$3, 18, 0, 413);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, p0, anchor);
-    			append_dev(p0, t0);
-    			insert_dev(target, t1, anchor);
-    			insert_dev(target, p1, anchor);
-    			append_dev(p1, t2);
-    			insert_dev(target, t3, anchor);
-    			insert_dev(target, p2, anchor);
-    			append_dev(p2, t4);
-    			insert_dev(target, t5, anchor);
-    			insert_dev(target, p3, anchor);
-    			append_dev(p3, t6);
-    			insert_dev(target, t7, anchor);
-    			insert_dev(target, p4, anchor);
-    			append_dev(p4, t8);
-    			insert_dev(target, t9, anchor);
-    			insert_dev(target, br, anchor);
+    			insert_dev(target, div8, anchor);
+    			append_dev(div8, div1);
+    			append_dev(div1, div0);
+    			append_dev(div0, t0);
+    			append_dev(div8, t1);
+    			append_dev(div8, div7);
+    			append_dev(div7, div2);
+    			mount_component(sailingstatus, div2, null);
+    			append_dev(div7, t2);
+    			append_dev(div7, div3);
+    			append_dev(div7, t3);
+    			append_dev(div7, div4);
+    			append_dev(div4, t4);
+    			append_dev(div7, t5);
+    			append_dev(div7, div6);
+    			append_dev(div6, div5);
+    			append_dev(div5, t6);
+    			append_dev(div5, t7);
+    			append_dev(div5, t8);
+    			current = true;
     		},
     		p: function update(ctx, [dirty]) {
-    			if (dirty & /*scheduled_departure*/ 1 && t0_value !== (t0_value = format(parseISO(/*scheduled_departure*/ ctx[0]), "H:mm") + "")) set_data_dev(t0, t0_value);
-    			if (dirty & /*actual_departure*/ 2 && t2_value !== (t2_value = format(parseISO(/*actual_departure*/ ctx[1]), "H:mm") + "")) set_data_dev(t2, t2_value);
-    			if (dirty & /*eta*/ 4) set_data_dev(t4, /*eta*/ ctx[2]);
-    			if (dirty & /*sailing_status*/ 8) set_data_dev(t6, /*sailing_status*/ ctx[3]);
-    			if (dirty & /*vessel*/ 16) set_data_dev(t8, /*vessel*/ ctx[4]);
+    			if ((!current || dirty & /*scheduled_departure*/ 1) && t0_value !== (t0_value = /*formatTime*/ ctx[5](/*scheduled_departure*/ ctx[0]) + "")) set_data_dev(t0, t0_value);
+    			const sailingstatus_changes = {};
+    			if (dirty & /*sailing_status*/ 8) sailingstatus_changes.sailing_status = /*sailing_status*/ ctx[3];
+    			sailingstatus.$set(sailingstatus_changes);
+    			if (!current || dirty & /*vessel*/ 16) set_data_dev(t4, /*vessel*/ ctx[4]);
+    			if ((!current || dirty & /*actual_departure*/ 2) && t6_value !== (t6_value = /*formatTime*/ ctx[5](/*actual_departure*/ ctx[1]) + "")) set_data_dev(t6, t6_value);
+    			if ((!current || dirty & /*eta*/ 4) && t8_value !== (t8_value = /*formatTime*/ ctx[5](/*eta*/ ctx[2]) + "")) set_data_dev(t8, t8_value);
     		},
-    		i: noop,
-    		o: noop,
+    		i: function intro(local) {
+    			if (current) return;
+    			transition_in(sailingstatus.$$.fragment, local);
+    			current = true;
+    		},
+    		o: function outro(local) {
+    			transition_out(sailingstatus.$$.fragment, local);
+    			current = false;
+    		},
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(p0);
-    			if (detaching) detach_dev(t1);
-    			if (detaching) detach_dev(p1);
-    			if (detaching) detach_dev(t3);
-    			if (detaching) detach_dev(p2);
-    			if (detaching) detach_dev(t5);
-    			if (detaching) detach_dev(p3);
-    			if (detaching) detach_dev(t7);
-    			if (detaching) detach_dev(p4);
-    			if (detaching) detach_dev(t9);
-    			if (detaching) detach_dev(br);
+    			if (detaching) detach_dev(div8);
+    			destroy_component(sailingstatus);
     		}
     	};
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_fragment.name,
+    		id: create_fragment$3.name,
     		type: "component",
     		source: "",
     		ctx
@@ -3986,32 +3998,31 @@ var app = (function () {
     	return block;
     }
 
-    function instance($$self, $$props, $$invalidate) {
-    	let { route_name = "" } = $$props;
-    	let { scheduled_departure = "" } = $$props;
-    	let { actual_departure = "" } = $$props;
+    function instance$3($$self, $$props, $$invalidate) {
+    	let { scheduled_departure } = $$props;
+    	let { actual_departure } = $$props;
     	let { eta = "" } = $$props;
     	let { sailing_status = "" } = $$props;
     	let { vessel = "" } = $$props;
 
-    	const writable_props = [
-    		"route_name",
-    		"scheduled_departure",
-    		"actual_departure",
-    		"eta",
-    		"sailing_status",
-    		"vessel"
-    	];
+    	function formatTime(time) {
+    		try {
+    			return format(parseISO(time), "H:mm");
+    		} catch(error) {
+    			console.log(error);
+    		}
+    	}
+
+    	const writable_props = ["scheduled_departure", "actual_departure", "eta", "sailing_status", "vessel"];
 
     	Object.keys($$props).forEach(key => {
-    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console.warn(`<Sailing> was created with unknown prop '${key}'`);
+    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console_1.warn(`<Sailing> was created with unknown prop '${key}'`);
     	});
 
     	let { $$slots = {}, $$scope } = $$props;
     	validate_slots("Sailing", $$slots, []);
 
     	$$self.$set = $$props => {
-    		if ("route_name" in $$props) $$invalidate(5, route_name = $$props.route_name);
     		if ("scheduled_departure" in $$props) $$invalidate(0, scheduled_departure = $$props.scheduled_departure);
     		if ("actual_departure" in $$props) $$invalidate(1, actual_departure = $$props.actual_departure);
     		if ("eta" in $$props) $$invalidate(2, eta = $$props.eta);
@@ -4022,16 +4033,16 @@ var app = (function () {
     	$$self.$capture_state = () => ({
     		parseISO,
     		format,
-    		route_name,
+    		SailingStatus,
     		scheduled_departure,
     		actual_departure,
     		eta,
     		sailing_status,
-    		vessel
+    		vessel,
+    		formatTime
     	});
 
     	$$self.$inject_state = $$props => {
-    		if ("route_name" in $$props) $$invalidate(5, route_name = $$props.route_name);
     		if ("scheduled_departure" in $$props) $$invalidate(0, scheduled_departure = $$props.scheduled_departure);
     		if ("actual_departure" in $$props) $$invalidate(1, actual_departure = $$props.actual_departure);
     		if ("eta" in $$props) $$invalidate(2, eta = $$props.eta);
@@ -4043,15 +4054,14 @@ var app = (function () {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	return [scheduled_departure, actual_departure, eta, sailing_status, vessel, route_name];
+    	return [scheduled_departure, actual_departure, eta, sailing_status, vessel, formatTime];
     }
 
     class Sailing extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
 
-    		init(this, options, instance, create_fragment, safe_not_equal, {
-    			route_name: 5,
+    		init(this, options, instance$3, create_fragment$3, safe_not_equal, {
     			scheduled_departure: 0,
     			actual_departure: 1,
     			eta: 2,
@@ -4063,16 +4073,19 @@ var app = (function () {
     			component: this,
     			tagName: "Sailing",
     			options,
-    			id: create_fragment.name
+    			id: create_fragment$3.name
     		});
-    	}
 
-    	get route_name() {
-    		throw new Error("<Sailing>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
-    	}
+    		const { ctx } = this.$$;
+    		const props = options.props || {};
 
-    	set route_name(value) {
-    		throw new Error("<Sailing>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    		if (/*scheduled_departure*/ ctx[0] === undefined && !("scheduled_departure" in props)) {
+    			console_1.warn("<Sailing> was created without expected prop 'scheduled_departure'");
+    		}
+
+    		if (/*actual_departure*/ ctx[1] === undefined && !("actual_departure" in props)) {
+    			console_1.warn("<Sailing> was created without expected prop 'actual_departure'");
+    		}
     	}
 
     	get scheduled_departure() {
@@ -4118,20 +4131,21 @@ var app = (function () {
 
     /* src/Route.svelte generated by Svelte v3.24.0 */
 
-    const { Object: Object_1 } = globals;
-    const file$1 = "src/Route.svelte";
+    const { Object: Object_1$1 } = globals;
+    const file$4 = "src/Route.svelte";
 
-    function get_each_context(ctx, list, i) {
+    function get_each_context$1(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[4] = list[i];
+    	child_ctx[2] = list[i];
     	return child_ctx;
     }
 
-    // (17:0) {#each Object.values(sailings) as sailing}
-    function create_each_block(ctx) {
+    // (53:8) {#each Object.values(route.sailings) as sailing (sailing.scheduled_departure)}
+    function create_each_block$1(key_1, ctx) {
+    	let first;
     	let sailing;
     	let current;
-    	const sailing_spread_levels = [/*sailing*/ ctx[4]];
+    	const sailing_spread_levels = [/*sailing*/ ctx[2]];
     	let sailing_props = {};
 
     	for (let i = 0; i < sailing_spread_levels.length; i += 1) {
@@ -4141,16 +4155,21 @@ var app = (function () {
     	sailing = new Sailing({ props: sailing_props, $$inline: true });
 
     	const block = {
+    		key: key_1,
+    		first: null,
     		c: function create() {
+    			first = empty();
     			create_component(sailing.$$.fragment);
+    			this.first = first;
     		},
     		m: function mount(target, anchor) {
+    			insert_dev(target, first, anchor);
     			mount_component(sailing, target, anchor);
     			current = true;
     		},
     		p: function update(ctx, dirty) {
-    			const sailing_changes = (dirty & /*Object, sailings*/ 4)
-    			? get_spread_update(sailing_spread_levels, [get_spread_object(/*sailing*/ ctx[4])])
+    			const sailing_changes = (dirty & /*Object, route*/ 1)
+    			? get_spread_update(sailing_spread_levels, [get_spread_object(/*sailing*/ ctx[2])])
     			: {};
 
     			sailing.$set(sailing_changes);
@@ -4165,121 +4184,187 @@ var app = (function () {
     			current = false;
     		},
     		d: function destroy(detaching) {
+    			if (detaching) detach_dev(first);
     			destroy_component(sailing, detaching);
     		}
     	};
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_each_block.name,
+    		id: create_each_block$1.name,
     		type: "each",
-    		source: "(17:0) {#each Object.values(sailings) as sailing}",
+    		source: "(53:8) {#each Object.values(route.sailings) as sailing (sailing.scheduled_departure)}",
     		ctx
     	});
 
     	return block;
     }
 
-    function create_fragment$1(ctx) {
+    function create_fragment$4(ctx) {
     	let t0;
+    	let div1;
+    	let div0;
     	let h1;
+    	let t1_value = /*route*/ ctx[0].route_name + "";
     	let t1;
     	let t2;
-    	let h2;
-    	let t3;
+    	let div8;
+    	let aside;
+    	let div4;
+    	let div3;
+    	let h20;
     	let t4;
+    	let div2;
+    	let t5_value = /*route*/ ctx[0].average_sailing + "";
     	let t5;
-    	let pre;
     	let t6;
-    	let current;
-    	let each_value = Object.values(/*sailings*/ ctx[2]);
-    	validate_each_argument(each_value);
+    	let section;
+    	let div7;
+    	let div5;
+    	let h21;
+    	let t8;
+    	let button0;
+    	let t9;
+    	let t10;
+    	let button1;
+    	let t11;
+    	let t12;
+    	let div6;
     	let each_blocks = [];
+    	let each_1_lookup = new Map();
+    	let current;
+    	let each_value = Object.values(/*route*/ ctx[0].sailings);
+    	validate_each_argument(each_value);
+    	const get_key = ctx => /*sailing*/ ctx[2].scheduled_departure;
+    	validate_each_keys(ctx, each_value, get_each_context$1, get_key);
 
     	for (let i = 0; i < each_value.length; i += 1) {
-    		each_blocks[i] = create_each_block(get_each_context(ctx, each_value, i));
+    		let child_ctx = get_each_context$1(ctx, each_value, i);
+    		let key = get_key(child_ctx);
+    		each_1_lookup.set(key, each_blocks[i] = create_each_block$1(key, child_ctx));
     	}
-
-    	const out = i => transition_out(each_blocks[i], 1, 1, () => {
-    		each_blocks[i] = null;
-    	});
 
     	const block = {
     		c: function create() {
     			t0 = space();
+    			div1 = element("div");
+    			div0 = element("div");
     			h1 = element("h1");
-    			t1 = text(/*route_name*/ ctx[0]);
+    			t1 = text(t1_value);
     			t2 = space();
-    			h2 = element("h2");
-    			t3 = text(/*average_sailing*/ ctx[1]);
+    			div8 = element("div");
+    			aside = element("aside");
+    			div4 = element("div");
+    			div3 = element("div");
+    			h20 = element("h2");
+    			h20.textContent = "Route Info";
     			t4 = space();
+    			div2 = element("div");
+    			t5 = text(t5_value);
+    			t6 = space();
+    			section = element("section");
+    			div7 = element("div");
+    			div5 = element("div");
+    			h21 = element("h2");
+    			h21.textContent = "Sailings";
+    			t8 = space();
+    			button0 = element("button");
+    			t9 = text("Hide completed");
+    			t10 = space();
+    			button1 = element("button");
+    			t11 = text("Show completed");
+    			t12 = space();
+    			div6 = element("div");
 
     			for (let i = 0; i < each_blocks.length; i += 1) {
     				each_blocks[i].c();
     			}
 
-    			t5 = space();
-    			pre = element("pre");
-    			t6 = text(/*sailings*/ ctx[2]);
     			document.title = "Ferrytime";
-    			add_location(h1, file$1, 13, 0, 244);
-    			add_location(h2, file$1, 14, 0, 266);
-    			add_location(pre, file$1, 20, 0, 373);
+    			attr_dev(h1, "class", "leading-none text-2xl font-bold");
+    			add_location(h1, file$4, 13, 4, 242);
+    			attr_dev(div0, "class", "mb-2");
+    			add_location(div0, file$4, 12, 2, 219);
+    			attr_dev(div1, "class", "mb-4 md:mb-8 text-white antialiased");
+    			add_location(div1, file$4, 11, 0, 167);
+    			attr_dev(h20, "class", "mb-4 text-xl font-semibold text-white antialiased md:block ");
+    			add_location(h20, file$4, 21, 8, 496);
+    			attr_dev(div2, "class", "bg-blue-700 p-4 rounded-lg mt-4 flex md:flex-col\n          justify-between mb-4 text-white antialiased");
+    			add_location(div2, file$4, 24, 8, 612);
+    			add_location(div3, file$4, 20, 6, 482);
+    			attr_dev(div4, "class", "mt-4 md:mt-0 mb-8 flex flex-col");
+    			add_location(div4, file$4, 19, 4, 430);
+    			attr_dev(aside, "classname", "w-full md:w-1/4 md:pl-4");
+    			add_location(aside, file$4, 18, 2, 382);
+    			attr_dev(h21, "class", "mb-4 text-xl font-semibold text-white antialiased ");
+    			add_location(h21, file$4, 35, 8, 954);
+    			attr_dev(button0, "class", "hover:bg-blue-dark text-xs text-white antialiased rounded px-2\n          py-2");
+    			attr_dev(button0, "onclick", /*toggleShowCompleted*/ ctx[1]);
+    			add_location(button0, file$4, 38, 8, 1059);
+    			attr_dev(button1, "class", "hover:bg-blue-dark text-xs text-white antialiased rounded px-2\n          py-2");
+    			attr_dev(button1, "onclick", /*toggleShowCompleted*/ ctx[1]);
+    			add_location(button1, file$4, 44, 8, 1255);
+    			attr_dev(div5, "class", "flex justify-between items-baseline");
+    			add_location(div5, file$4, 34, 6, 896);
+    			attr_dev(div6, "class", "");
+    			add_location(div6, file$4, 51, 6, 1462);
+    			attr_dev(div7, "class", "");
+    			add_location(div7, file$4, 33, 4, 875);
+    			attr_dev(section, "classname", "w-full md:w-3/4 md:pr-4");
+    			add_location(section, file$4, 32, 2, 825);
+    			attr_dev(div8, "classname", "flex md:flex-row-reverse flex-wrap");
+    			add_location(div8, file$4, 17, 0, 327);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, t0, anchor);
-    			insert_dev(target, h1, anchor);
+    			insert_dev(target, div1, anchor);
+    			append_dev(div1, div0);
+    			append_dev(div0, h1);
     			append_dev(h1, t1);
     			insert_dev(target, t2, anchor);
-    			insert_dev(target, h2, anchor);
-    			append_dev(h2, t3);
-    			insert_dev(target, t4, anchor);
+    			insert_dev(target, div8, anchor);
+    			append_dev(div8, aside);
+    			append_dev(aside, div4);
+    			append_dev(div4, div3);
+    			append_dev(div3, h20);
+    			append_dev(div3, t4);
+    			append_dev(div3, div2);
+    			append_dev(div2, t5);
+    			append_dev(div8, t6);
+    			append_dev(div8, section);
+    			append_dev(section, div7);
+    			append_dev(div7, div5);
+    			append_dev(div5, h21);
+    			append_dev(div5, t8);
+    			append_dev(div5, button0);
+    			append_dev(button0, t9);
+    			append_dev(div5, t10);
+    			append_dev(div5, button1);
+    			append_dev(button1, t11);
+    			append_dev(div7, t12);
+    			append_dev(div7, div6);
 
     			for (let i = 0; i < each_blocks.length; i += 1) {
-    				each_blocks[i].m(target, anchor);
+    				each_blocks[i].m(div6, null);
     			}
 
-    			insert_dev(target, t5, anchor);
-    			insert_dev(target, pre, anchor);
-    			append_dev(pre, t6);
     			current = true;
     		},
     		p: function update(ctx, [dirty]) {
-    			if (!current || dirty & /*route_name*/ 1) set_data_dev(t1, /*route_name*/ ctx[0]);
-    			if (!current || dirty & /*average_sailing*/ 2) set_data_dev(t3, /*average_sailing*/ ctx[1]);
+    			if ((!current || dirty & /*route*/ 1) && t1_value !== (t1_value = /*route*/ ctx[0].route_name + "")) set_data_dev(t1, t1_value);
+    			if ((!current || dirty & /*route*/ 1) && t5_value !== (t5_value = /*route*/ ctx[0].average_sailing + "")) set_data_dev(t5, t5_value);
 
-    			if (dirty & /*Object, sailings*/ 4) {
-    				each_value = Object.values(/*sailings*/ ctx[2]);
+    			if (dirty & /*Object, route*/ 1) {
+    				const each_value = Object.values(/*route*/ ctx[0].sailings);
     				validate_each_argument(each_value);
-    				let i;
-
-    				for (i = 0; i < each_value.length; i += 1) {
-    					const child_ctx = get_each_context(ctx, each_value, i);
-
-    					if (each_blocks[i]) {
-    						each_blocks[i].p(child_ctx, dirty);
-    						transition_in(each_blocks[i], 1);
-    					} else {
-    						each_blocks[i] = create_each_block(child_ctx);
-    						each_blocks[i].c();
-    						transition_in(each_blocks[i], 1);
-    						each_blocks[i].m(t5.parentNode, t5);
-    					}
-    				}
-
     				group_outros();
-
-    				for (i = each_value.length; i < each_blocks.length; i += 1) {
-    					out(i);
-    				}
-
+    				validate_each_keys(ctx, each_value, get_each_context$1, get_key);
+    				each_blocks = update_keyed_each(each_blocks, dirty, get_key, 1, ctx, each_value, each_1_lookup, div6, outro_and_destroy_block, create_each_block$1, null, get_each_context$1);
     				check_outros();
     			}
-
-    			if (!current || dirty & /*sailings*/ 4) set_data_dev(t6, /*sailings*/ ctx[2]);
     		},
     		i: function intro(local) {
     			if (current) return;
@@ -4291,8 +4376,6 @@ var app = (function () {
     			current = true;
     		},
     		o: function outro(local) {
-    			each_blocks = each_blocks.filter(Boolean);
-
     			for (let i = 0; i < each_blocks.length; i += 1) {
     				transition_out(each_blocks[i]);
     			}
@@ -4301,19 +4384,19 @@ var app = (function () {
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(t0);
-    			if (detaching) detach_dev(h1);
+    			if (detaching) detach_dev(div1);
     			if (detaching) detach_dev(t2);
-    			if (detaching) detach_dev(h2);
-    			if (detaching) detach_dev(t4);
-    			destroy_each(each_blocks, detaching);
-    			if (detaching) detach_dev(t5);
-    			if (detaching) detach_dev(pre);
+    			if (detaching) detach_dev(div8);
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].d();
+    			}
     		}
     	};
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_fragment$1.name,
+    		id: create_fragment$4.name,
     		type: "component",
     		source: "",
     		ctx
@@ -4322,14 +4405,12 @@ var app = (function () {
     	return block;
     }
 
-    function instance$1($$self, $$props, $$invalidate) {
-    	let { route_name = "" } = $$props;
-    	let { average_sailing = "" } = $$props;
-    	let { sailing_date = "" } = $$props;
-    	let { sailings = {} } = $$props;
-    	const writable_props = ["route_name", "average_sailing", "sailing_date", "sailings"];
+    function instance$4($$self, $$props, $$invalidate) {
+    	let { route } = $$props;
+    	let toggleShowCompleted;
+    	const writable_props = ["route"];
 
-    	Object_1.keys($$props).forEach(key => {
+    	Object_1$1.keys($$props).forEach(key => {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console.warn(`<Route> was created with unknown prop '${key}'`);
     	});
 
@@ -4337,247 +4418,70 @@ var app = (function () {
     	validate_slots("Route", $$slots, []);
 
     	$$self.$set = $$props => {
-    		if ("route_name" in $$props) $$invalidate(0, route_name = $$props.route_name);
-    		if ("average_sailing" in $$props) $$invalidate(1, average_sailing = $$props.average_sailing);
-    		if ("sailing_date" in $$props) $$invalidate(3, sailing_date = $$props.sailing_date);
-    		if ("sailings" in $$props) $$invalidate(2, sailings = $$props.sailings);
+    		if ("route" in $$props) $$invalidate(0, route = $$props.route);
     	};
 
-    	$$self.$capture_state = () => ({
-    		Sailing,
-    		route_name,
-    		average_sailing,
-    		sailing_date,
-    		sailings
-    	});
+    	$$self.$capture_state = () => ({ Sailing, route, toggleShowCompleted });
 
     	$$self.$inject_state = $$props => {
-    		if ("route_name" in $$props) $$invalidate(0, route_name = $$props.route_name);
-    		if ("average_sailing" in $$props) $$invalidate(1, average_sailing = $$props.average_sailing);
-    		if ("sailing_date" in $$props) $$invalidate(3, sailing_date = $$props.sailing_date);
-    		if ("sailings" in $$props) $$invalidate(2, sailings = $$props.sailings);
+    		if ("route" in $$props) $$invalidate(0, route = $$props.route);
+    		if ("toggleShowCompleted" in $$props) $$invalidate(1, toggleShowCompleted = $$props.toggleShowCompleted);
     	};
 
     	if ($$props && "$$inject" in $$props) {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	return [route_name, average_sailing, sailings, sailing_date];
+    	return [route, toggleShowCompleted];
     }
 
     class Route extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-
-    		init(this, options, instance$1, create_fragment$1, safe_not_equal, {
-    			route_name: 0,
-    			average_sailing: 1,
-    			sailing_date: 3,
-    			sailings: 2
-    		});
+    		init(this, options, instance$4, create_fragment$4, safe_not_equal, { route: 0 });
 
     		dispatch_dev("SvelteRegisterComponent", {
     			component: this,
     			tagName: "Route",
     			options,
-    			id: create_fragment$1.name
+    			id: create_fragment$4.name
     		});
-    	}
 
-    	get route_name() {
-    		throw new Error("<Route>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
-    	}
+    		const { ctx } = this.$$;
+    		const props = options.props || {};
 
-    	set route_name(value) {
-    		throw new Error("<Route>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
-    	}
-
-    	get average_sailing() {
-    		throw new Error("<Route>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
-    	}
-
-    	set average_sailing(value) {
-    		throw new Error("<Route>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
-    	}
-
-    	get sailing_date() {
-    		throw new Error("<Route>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
-    	}
-
-    	set sailing_date(value) {
-    		throw new Error("<Route>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
-    	}
-
-    	get sailings() {
-    		throw new Error("<Route>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
-    	}
-
-    	set sailings(value) {
-    		throw new Error("<Route>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
-    	}
-    }
-
-    /* src/App.svelte generated by Svelte v3.24.0 */
-    const file$2 = "src/App.svelte";
-
-    function get_each_context$1(ctx, list, i) {
-    	const child_ctx = ctx.slice();
-    	child_ctx[1] = list[i];
-    	return child_ctx;
-    }
-
-    // (14:2) {#each data as route}
-    function create_each_block$1(ctx) {
-    	let li;
-    	let t_value = /*route*/ ctx[1].route_name + "";
-    	let t;
-    	let mounted;
-    	let dispose;
-
-    	function click_handler(...args) {
-    		return /*click_handler*/ ctx[2](/*route*/ ctx[1], ...args);
-    	}
-
-    	const block = {
-    		c: function create() {
-    			li = element("li");
-    			t = text(t_value);
-    			add_location(li, file$2, 14, 4, 278);
-    		},
-    		m: function mount(target, anchor) {
-    			insert_dev(target, li, anchor);
-    			append_dev(li, t);
-
-    			if (!mounted) {
-    				dispose = listen_dev(li, "click", click_handler, false, false, false);
-    				mounted = true;
-    			}
-    		},
-    		p: function update(new_ctx, dirty) {
-    			ctx = new_ctx;
-    		},
-    		d: function destroy(detaching) {
-    			if (detaching) detach_dev(li);
-    			mounted = false;
-    			dispose();
+    		if (/*route*/ ctx[0] === undefined && !("route" in props)) {
+    			console.warn("<Route> was created without expected prop 'route'");
     		}
-    	};
+    	}
 
-    	dispatch_dev("SvelteRegisterBlock", {
-    		block,
-    		id: create_each_block$1.name,
-    		type: "each",
-    		source: "(14:2) {#each data as route}",
-    		ctx
-    	});
+    	get route() {
+    		throw new Error("<Route>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
 
-    	return block;
+    	set route(value) {
+    		throw new Error("<Route>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
     }
 
-    function create_fragment$2(ctx) {
-    	let t0;
-    	let ul;
-    	let t1;
-    	let route_1;
-    	let current;
-    	let each_value = data;
-    	validate_each_argument(each_value);
-    	let each_blocks = [];
+    /* src/Tailwind.svelte generated by Svelte v3.24.0 */
 
-    	for (let i = 0; i < each_value.length; i += 1) {
-    		each_blocks[i] = create_each_block$1(get_each_context$1(ctx, each_value, i));
-    	}
-
-    	const route_1_spread_levels = [/*route*/ ctx[1]];
-    	let route_1_props = {};
-
-    	for (let i = 0; i < route_1_spread_levels.length; i += 1) {
-    		route_1_props = assign(route_1_props, route_1_spread_levels[i]);
-    	}
-
-    	route_1 = new Route({ props: route_1_props, $$inline: true });
-
+    function create_fragment$5(ctx) {
     	const block = {
-    		c: function create() {
-    			t0 = space();
-    			ul = element("ul");
-
-    			for (let i = 0; i < each_blocks.length; i += 1) {
-    				each_blocks[i].c();
-    			}
-
-    			t1 = space();
-    			create_component(route_1.$$.fragment);
-    			document.title = "Ferrytime";
-    			add_location(ul, file$2, 12, 0, 244);
-    		},
+    		c: noop,
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
-    		m: function mount(target, anchor) {
-    			insert_dev(target, t0, anchor);
-    			insert_dev(target, ul, anchor);
-
-    			for (let i = 0; i < each_blocks.length; i += 1) {
-    				each_blocks[i].m(ul, null);
-    			}
-
-    			insert_dev(target, t1, anchor);
-    			mount_component(route_1, target, anchor);
-    			current = true;
-    		},
-    		p: function update(ctx, [dirty]) {
-    			if (dirty & /*selected, data*/ 1) {
-    				each_value = data;
-    				validate_each_argument(each_value);
-    				let i;
-
-    				for (i = 0; i < each_value.length; i += 1) {
-    					const child_ctx = get_each_context$1(ctx, each_value, i);
-
-    					if (each_blocks[i]) {
-    						each_blocks[i].p(child_ctx, dirty);
-    					} else {
-    						each_blocks[i] = create_each_block$1(child_ctx);
-    						each_blocks[i].c();
-    						each_blocks[i].m(ul, null);
-    					}
-    				}
-
-    				for (; i < each_blocks.length; i += 1) {
-    					each_blocks[i].d(1);
-    				}
-
-    				each_blocks.length = each_value.length;
-    			}
-
-    			const route_1_changes = (dirty & /*route*/ 2)
-    			? get_spread_update(route_1_spread_levels, [get_spread_object(/*route*/ ctx[1])])
-    			: {};
-
-    			route_1.$set(route_1_changes);
-    		},
-    		i: function intro(local) {
-    			if (current) return;
-    			transition_in(route_1.$$.fragment, local);
-    			current = true;
-    		},
-    		o: function outro(local) {
-    			transition_out(route_1.$$.fragment, local);
-    			current = false;
-    		},
-    		d: function destroy(detaching) {
-    			if (detaching) detach_dev(t0);
-    			if (detaching) detach_dev(ul);
-    			destroy_each(each_blocks, detaching);
-    			if (detaching) detach_dev(t1);
-    			destroy_component(route_1, detaching);
-    		}
+    		m: noop,
+    		p: noop,
+    		i: noop,
+    		o: noop,
+    		d: noop
     	};
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_fragment$2.name,
+    		id: create_fragment$5.name,
     		type: "component",
     		source: "",
     		ctx
@@ -4586,58 +4490,388 @@ var app = (function () {
     	return block;
     }
 
-    function instance$2($$self, $$props, $$invalidate) {
-    	let selected = "";
+    function instance$5($$self, $$props) {
     	const writable_props = [];
 
     	Object.keys($$props).forEach(key => {
-    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console.warn(`<App> was created with unknown prop '${key}'`);
+    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console.warn(`<Tailwind> was created with unknown prop '${key}'`);
+    	});
+
+    	let { $$slots = {}, $$scope } = $$props;
+    	validate_slots("Tailwind", $$slots, []);
+    	return [];
+    }
+
+    class Tailwind extends SvelteComponentDev {
+    	constructor(options) {
+    		super(options);
+    		init(this, options, instance$5, create_fragment$5, safe_not_equal, {});
+
+    		dispatch_dev("SvelteRegisterComponent", {
+    			component: this,
+    			tagName: "Tailwind",
+    			options,
+    			id: create_fragment$5.name
+    		});
+    	}
+    }
+
+    /* src/App.svelte generated by Svelte v3.24.0 */
+
+    const { console: console_1$1 } = globals;
+    const file$5 = "src/App.svelte";
+
+    // (48:4) {:else}
+    function create_else_block$1(ctx) {
+    	let index;
+    	let current;
+
+    	index = new Index({
+    			props: {
+    				data: /*data*/ ctx[1],
+    				changeSelected: /*changeSelected*/ ctx[0]
+    			},
+    			$$inline: true
+    		});
+
+    	const block = {
+    		c: function create() {
+    			create_component(index.$$.fragment);
+    		},
+    		m: function mount(target, anchor) {
+    			mount_component(index, target, anchor);
+    			current = true;
+    		},
+    		p: function update(ctx, dirty) {
+    			const index_changes = {};
+    			if (dirty & /*data*/ 2) index_changes.data = /*data*/ ctx[1];
+    			if (dirty & /*changeSelected*/ 1) index_changes.changeSelected = /*changeSelected*/ ctx[0];
+    			index.$set(index_changes);
+    		},
+    		i: function intro(local) {
+    			if (current) return;
+    			transition_in(index.$$.fragment, local);
+    			current = true;
+    		},
+    		o: function outro(local) {
+    			transition_out(index.$$.fragment, local);
+    			current = false;
+    		},
+    		d: function destroy(detaching) {
+    			destroy_component(index, detaching);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_else_block$1.name,
+    		type: "else",
+    		source: "(48:4) {:else}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (46:4) {#if selected}
+    function create_if_block$1(ctx) {
+    	let route;
+    	let current;
+
+    	route = new Route({
+    			props: { route: /*selected*/ ctx[2] },
+    			$$inline: true
+    		});
+
+    	const block = {
+    		c: function create() {
+    			create_component(route.$$.fragment);
+    		},
+    		m: function mount(target, anchor) {
+    			mount_component(route, target, anchor);
+    			current = true;
+    		},
+    		p: function update(ctx, dirty) {
+    			const route_changes = {};
+    			if (dirty & /*selected*/ 4) route_changes.route = /*selected*/ ctx[2];
+    			route.$set(route_changes);
+    		},
+    		i: function intro(local) {
+    			if (current) return;
+    			transition_in(route.$$.fragment, local);
+    			current = true;
+    		},
+    		o: function outro(local) {
+    			transition_out(route.$$.fragment, local);
+    			current = false;
+    		},
+    		d: function destroy(detaching) {
+    			destroy_component(route, detaching);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block$1.name,
+    		type: "if",
+    		source: "(46:4) {#if selected}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function create_fragment$6(ctx) {
+    	let tailwind;
+    	let t0;
+    	let t1;
+    	let div3;
+    	let nav;
+    	let div0;
+    	let button;
+    	let span;
+    	let t3;
+    	let div1;
+    	let current_block_type_index;
+    	let if_block;
+    	let t4;
+    	let footer;
+    	let div2;
+    	let p;
+    	let t5;
+    	let a;
+    	let current;
+    	let mounted;
+    	let dispose;
+    	tailwind = new Tailwind({ $$inline: true });
+    	const if_block_creators = [create_if_block$1, create_else_block$1];
+    	const if_blocks = [];
+
+    	function select_block_type(ctx, dirty) {
+    		if (/*selected*/ ctx[2]) return 0;
+    		return 1;
+    	}
+
+    	current_block_type_index = select_block_type(ctx);
+    	if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+
+    	const block = {
+    		c: function create() {
+    			create_component(tailwind.$$.fragment);
+    			t0 = space();
+    			t1 = space();
+    			div3 = element("div");
+    			nav = element("nav");
+    			div0 = element("div");
+    			button = element("button");
+    			span = element("span");
+    			span.textContent = "Ferrytime";
+    			t3 = space();
+    			div1 = element("div");
+    			if_block.c();
+    			t4 = space();
+    			footer = element("footer");
+    			div2 = element("div");
+    			p = element("p");
+    			t5 = text("Created by\n        ");
+    			a = element("a");
+    			a.textContent = "Dean Sallinen";
+    			document.title = "Ferrytime";
+    			attr_dev(span, "class", "font-bold text-xl tracking-tight");
+    			add_location(span, file$5, 37, 8, 1025);
+    			attr_dev(button, "class", "flex items-center no-underline text-white focus:outline-none");
+    			add_location(button, file$5, 34, 6, 891);
+    			attr_dev(div0, "class", "flex flex-wrap items-center justify-between max-w-xl mx-auto p-4\n      md:p-8");
+    			add_location(div0, file$5, 31, 4, 787);
+    			attr_dev(nav, "class", "bg-blue antialiased");
+    			add_location(nav, file$5, 30, 2, 749);
+    			attr_dev(div1, "class", "flex flex-col flex-1 max-w-xl mx-auto px-3 py-8 md:p-8 w-full ");
+    			add_location(div1, file$5, 42, 2, 1128);
+    			attr_dev(a, "href", "https://github.com/deansallinen/ferrytime");
+    			attr_dev(a, "class", "font-bold no-underline text-white");
+    			add_location(a, file$5, 58, 8, 1542);
+    			attr_dev(p, "class", "text-white text-center");
+    			add_location(p, file$5, 56, 6, 1480);
+    			attr_dev(div2, "class", "max-w-xl mx-auto p-4 md:p-8 text-sm");
+    			add_location(div2, file$5, 55, 4, 1424);
+    			attr_dev(footer, "class", "bg-blue-500 antialiased");
+    			add_location(footer, file$5, 54, 2, 1379);
+    			attr_dev(div3, "class", "flex flex-col font-sans min-h-screen text-grey-darkest bg-blue-500");
+    			add_location(div3, file$5, 28, 0, 665);
+    		},
+    		l: function claim(nodes) {
+    			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+    		},
+    		m: function mount(target, anchor) {
+    			mount_component(tailwind, target, anchor);
+    			insert_dev(target, t0, anchor);
+    			insert_dev(target, t1, anchor);
+    			insert_dev(target, div3, anchor);
+    			append_dev(div3, nav);
+    			append_dev(nav, div0);
+    			append_dev(div0, button);
+    			append_dev(button, span);
+    			append_dev(div3, t3);
+    			append_dev(div3, div1);
+    			if_blocks[current_block_type_index].m(div1, null);
+    			append_dev(div3, t4);
+    			append_dev(div3, footer);
+    			append_dev(footer, div2);
+    			append_dev(div2, p);
+    			append_dev(p, t5);
+    			append_dev(p, a);
+    			current = true;
+
+    			if (!mounted) {
+    				dispose = listen_dev(
+    					button,
+    					"click",
+    					function () {
+    						if (is_function(/*changeSelected*/ ctx[0](null))) /*changeSelected*/ ctx[0](null).apply(this, arguments);
+    					},
+    					false,
+    					false,
+    					false
+    				);
+
+    				mounted = true;
+    			}
+    		},
+    		p: function update(new_ctx, [dirty]) {
+    			ctx = new_ctx;
+    			let previous_block_index = current_block_type_index;
+    			current_block_type_index = select_block_type(ctx);
+
+    			if (current_block_type_index === previous_block_index) {
+    				if_blocks[current_block_type_index].p(ctx, dirty);
+    			} else {
+    				group_outros();
+
+    				transition_out(if_blocks[previous_block_index], 1, 1, () => {
+    					if_blocks[previous_block_index] = null;
+    				});
+
+    				check_outros();
+    				if_block = if_blocks[current_block_type_index];
+
+    				if (!if_block) {
+    					if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+    					if_block.c();
+    				}
+
+    				transition_in(if_block, 1);
+    				if_block.m(div1, null);
+    			}
+    		},
+    		i: function intro(local) {
+    			if (current) return;
+    			transition_in(tailwind.$$.fragment, local);
+    			transition_in(if_block);
+    			current = true;
+    		},
+    		o: function outro(local) {
+    			transition_out(tailwind.$$.fragment, local);
+    			transition_out(if_block);
+    			current = false;
+    		},
+    		d: function destroy(detaching) {
+    			destroy_component(tailwind, detaching);
+    			if (detaching) detach_dev(t0);
+    			if (detaching) detach_dev(t1);
+    			if (detaching) detach_dev(div3);
+    			if_blocks[current_block_type_index].d();
+    			mounted = false;
+    			dispose();
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_fragment$6.name,
+    		type: "component",
+    		source: "",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function instance$6($$self, $$props, $$invalidate) {
+    	let data = [];
+    	let selected;
+
+    	onMount(async () => {
+    		let res = await fetch("https://raw.githubusercontent.com/deansallinen/ferrytime-action/master/sailings.json");
+    		$$invalidate(1, data = await res.json());
+    		console.log(`Fetched data: ${new Date()}`);
+    	});
+
+    	let { changeSelected = routeName => {
+    		$$invalidate(2, selected = data.filter(route => route.route_name === routeName)[0]);
+    		window.scrollTo(0, 0);
+    	} } = $$props;
+
+    	const writable_props = ["changeSelected"];
+
+    	Object.keys($$props).forEach(key => {
+    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console_1$1.warn(`<App> was created with unknown prop '${key}'`);
     	});
 
     	let { $$slots = {}, $$scope } = $$props;
     	validate_slots("App", $$slots, []);
-    	const click_handler = (route, e) => $$invalidate(0, selected = route.route_name);
-    	$$self.$capture_state = () => ({ data, Route, selected, route });
 
-    	$$self.$inject_state = $$props => {
-    		if ("selected" in $$props) $$invalidate(0, selected = $$props.selected);
-    		if ("route" in $$props) $$invalidate(1, route = $$props.route);
+    	$$self.$set = $$props => {
+    		if ("changeSelected" in $$props) $$invalidate(0, changeSelected = $$props.changeSelected);
     	};
 
-    	let route;
+    	$$self.$capture_state = () => ({
+    		onMount,
+    		Index,
+    		Route,
+    		Tailwind,
+    		data,
+    		selected,
+    		changeSelected
+    	});
+
+    	$$self.$inject_state = $$props => {
+    		if ("data" in $$props) $$invalidate(1, data = $$props.data);
+    		if ("selected" in $$props) $$invalidate(2, selected = $$props.selected);
+    		if ("changeSelected" in $$props) $$invalidate(0, changeSelected = $$props.changeSelected);
+    	};
 
     	if ($$props && "$$inject" in $$props) {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	$$self.$$.update = () => {
-    		if ($$self.$$.dirty & /*selected*/ 1) {
-    			 $$invalidate(1, route = data.filter(route => route.route_name === selected)[0]);
-    		}
-    	};
-
-    	return [selected, route, click_handler];
+    	return [changeSelected, data, selected];
     }
 
     class App extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init(this, options, instance$2, create_fragment$2, safe_not_equal, {});
+    		init(this, options, instance$6, create_fragment$6, safe_not_equal, { changeSelected: 0 });
 
     		dispatch_dev("SvelteRegisterComponent", {
     			component: this,
     			tagName: "App",
     			options,
-    			id: create_fragment$2.name
+    			id: create_fragment$6.name
     		});
+    	}
+
+    	get changeSelected() {
+    		throw new Error("<App>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set changeSelected(value) {
+    		throw new Error("<App>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
     }
 
     const app = new App({
-    	target: document.body,
-    	props: {
-    		name: 'world'
-    	}
+      target: document.body,
+      props: {},
     });
 
     return app;
